@@ -4,6 +4,17 @@ title: Shared SDK Architecture
 nav_order: 2
 has_children: true
 ---
+# Shared SDK Architecture
+
+The "Shared" layer acts as the hardware abstraction and boot-strapping engine for the entire platform.
+
+### The Boot Handshake
+The Linker Script (`linker.ld`) defines where memory starts, and the Startup Code (`startup.c`) performs the manual labor of:
+1. Setting the **Stack Pointer**.
+2. Copying the **.data** section from Flash to RAM.
+3. Zeroing the **.bss** section.
+4. Calling `main()`.
+
 # Shared Startup & Interrupt Vector Table
 
 ### 🧠 The Strategy: Weak vs. Strong Symbols
