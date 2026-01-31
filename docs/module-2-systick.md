@@ -1,13 +1,13 @@
 # Module 02: Precision Timing & Interrupts
 
-### 🧠 The "Why"
-Loop-based delays (`delay(500000)`) are frequency-dependent and block the CPU. To build an RTOS, we need a frequency-independent "Heartbeat."
+### 🧠 Strategic Objective
+Transitioning from blocking "loop-based" delays to non-blocking, frequency-independent "hardware-timed" heartbeats.
 
-### 🧱 Architectural Pillars
-1. **SysTick Peripheral:** A 24-bit down-counter built into the ARM Core. 
-   
+### 🧱 Technical Deep-Dive
+1. **The Vector Table Update:** Added the `SysTick_Handler` at index 15.
+2. **Deterministic Ticks:** Configured the 24-bit down-counter for 1ms intervals based on the 4MHz MSI clock.
+3. **The `volatile` Contract:** Declared `ms_ticks` as volatile to prevent the compiler from caching its value during the `while` loop, ensuring the main thread "sees" the change made by the interrupt handler.
 
-2. **Interrupt Service Routines (ISRs):** Updating the Vector Table at index 15 to handle the `SysTick_Handler`.
-
-3. **Atomicity & Volatile:**
-   Using the `volatile` keyword to prevent compiler optimization on variables changed within an interrupt context.
+### ⚙️ Register Configuration
+* `SYSTICK->LOAD`: Calculated as `(CPU_FREQ / 1000) - 1`.
+* `SYSTICK->CTRL`: Set to `0x7` (Internal Clock, Interrupt Enable, Counter Enable).

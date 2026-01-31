@@ -10,6 +10,12 @@ extern uint32_t _ebss;    // End of .bss in RAM
 
 // Declaration of the main function
 extern int main(void);
+extern void SysTick_Handler(void);
+
+// Alias all unused interrupts to the Default_Handler
+void NMI_Handler(void)          __attribute__ ((weak, alias ("Default_Handler")));
+void HardFault_Handler(void)    __attribute__ ((weak, alias ("Default_Handler")));
+// ... add others as needed ...
 
 void Reset_Handler(void) {
     // 1. Copy .data section from FLASH to RAM
@@ -39,5 +45,7 @@ void Reset_Handler(void) {
 __attribute__((section(".isr_vector")))
 uint32_t *vector_table[] = {
     (uint32_t *)&_estack,      // 0: Initial Stack Pointer
-    (uint32_t *)Reset_Handler  // 1: Reset Vector (Code starts here)
+    (uint32_t *)Reset_Handler,  // 1: Reset Vector (Code starts here)
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 2-14: Reserved/Exceptions
+    (uint32_t *)SysTick_Handler // 15: SysTick Timer
 };

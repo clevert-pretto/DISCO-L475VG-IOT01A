@@ -1,16 +1,11 @@
 # Module 01: The Silicon Handshake
 
-### 🧠 The "Why"
-In safety-critical firmware, you cannot rely on vendor-provided abstraction layers (HAL) which may contain non-deterministic code. This project establishes a 100% controlled boot sequence.
+### 🧠 Strategic Objective
+Establishing the first line of code execution on raw silicon without vendor abstraction.
 
-### 🧱 Architectural Pillars
-1. **The Linker Script (`.ld`):** Defining the physical boundaries of Flash (`0x08000000`) and SRAM (`0x20000000`).
-   
+### 🧱 Implementation Highlights
+* **Manual Memory Zeroing:** Implemented the `.bss` loop to ensure a zeroed state for uninitialized globals.
+* **Data Relocation:** Managed the LMA (Flash) to VMA (RAM) copy for initialized variables.
+* **Direct Register Access:** Used the `RCC` and `GPIO` memory-mapped addresses to drive the LD2 Green LED.
 
-2. **The Startup Flow:**
-   - Copying `.data` from Flash (LMA) to RAM (VMA).
-   - Zeroing out `.bss`.
-   - Initializing the Stack Pointer (MSP).
-
-3. **Register Mapping:**
-   Direct manipulation of `RCC_AHB2ENR` and `GPIOB_MODER`.
+**Refactor Note:** This project now inherits its boot logic from the global `shared/startup.c`.
