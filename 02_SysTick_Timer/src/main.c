@@ -26,6 +26,6 @@ int main(void) {
 
     while(1) {
         GPIOB_ODR ^= (1UL << 14); // Toggle LED
-        delay_ms(1000);           // Exact 1 second delay
+        delay_ms(500);           // Exact 1 second delay
     }
 }

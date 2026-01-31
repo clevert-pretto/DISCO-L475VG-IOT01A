@@ -20,7 +20,7 @@ int main(void) {
         // 3. Toggle PB14 using ODR (Output Data Register)
         GPIOB_ODR ^= (1UL << LED_PIN);
         
-        delay(125000);
+        delay(500000);
     }
 
     return 0; // Should never reach here

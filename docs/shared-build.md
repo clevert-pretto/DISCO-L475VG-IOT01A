@@ -1,3 +1,9 @@
+---
+layout: default
+title: Build System (Makefile)
+parent: Shared SDK Architecture
+nav_order: 1
+---
 # Shared SDK Architecture
 
 ### 🛠 The Unified Build System

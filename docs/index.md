@@ -1,3 +1,10 @@
+---
+layout: default
+title: Home
+nav_order: 1
+description: "Bare-Metal Firmware Engineering Portfolio"
+permalink: /
+---
 # STM32L475 Platform Architecture
 **Principal Engineer Candidate Knowledge Base**
 

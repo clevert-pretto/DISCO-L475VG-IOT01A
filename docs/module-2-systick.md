@@ -1,13 +1,17 @@
-# Module 02: Precision Timing & Interrupts
+---
+layout: default
+title: 02. Precision Timing
+nav_order: 4
+---
+# Module 02: Hardware-Accelerated Precision Timing
 
-### 🧠 Strategic Objective
-Transitioning from blocking "loop-based" delays to non-blocking, frequency-independent "hardware-timed" heartbeats.
+### 🧠 The Evolution
+Project 01 used software delay loops which were blocking and non-deterministic. Project 02 implements a **Global Heartbeat** using the ARM SysTick timer.
 
-### 🧱 Technical Deep-Dive
-1. **The Vector Table Update:** Added the `SysTick_Handler` at index 15.
-2. **Deterministic Ticks:** Configured the 24-bit down-counter for 1ms intervals based on the 4MHz MSI clock.
-3. **The `volatile` Contract:** Declared `ms_ticks` as volatile to prevent the compiler from caching its value during the `while` loop, ensuring the main thread "sees" the change made by the interrupt handler.
+### ⚙️ Technical Specs
+- **Clock Source:** MSI @ 4MHz.
+- **Interrupt Frequency:** 1000Hz (1ms).
+- **Control Register:** `0x7` (Processor Clock, Exception Enable, Counter Enable).
 
-### ⚙️ Register Configuration
-* `SYSTICK->LOAD`: Calculated as `(CPU_FREQ / 1000) - 1`.
-* `SYSTICK->CTRL`: Set to `0x7` (Internal Clock, Interrupt Enable, Counter Enable).
+### 🚀 Key Learning: The `volatile` Keyword
+The `ms_ticks` variable is shared between the **Background** (Interrupt Context) and the **Foreground** (Main Loop). Declaring it as `volatile` prevents the compiler from optimizing out "redundant" reads, ensuring the `delay_ms()` function always sees the most recent tick count.

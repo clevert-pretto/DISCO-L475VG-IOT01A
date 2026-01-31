@@ -1,3 +1,9 @@
+---
+layout: default
+title: Shared SDK Architecture
+nav_order: 2
+has_children: true
+---
 # Shared Startup & Interrupt Vector Table
 
 ### 🧠 The Strategy: Weak vs. Strong Symbols

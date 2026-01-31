@@ -1,3 +1,8 @@
+---
+layout: default
+title: 01. Bare Metal Blinky
+nav_order: 3
+---
 # Module 01: The Silicon Handshake
 
 ### 🧠 Strategic Objective
