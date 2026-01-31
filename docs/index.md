@@ -1,18 +1,30 @@
 # STM32L475 Platform Architecture
 **Principal Engineer Candidate Knowledge Base**
 
-This repository contains a modular firmware ecosystem for the STM32L475 (ARM Cortex-M4). Instead of isolated projects, I have engineered a **Shared SDK** model to ensure deterministic boot sequences and memory safety across all modules.
+This repository documents the transition from vendor-dependent HAL layers to a custom, deterministic **Bare-Metal SDK**.
 
-## 🏛 Platform Architecture (The `shared/` SDK)
-To minimize technical debt and maximize code reuse, the following core components are centralized:
-* **[Linker Specification](./shared-linker):** Physical memory mapping and section allocation.
-* **[The Startup Sequence](./shared-startup):** C-Runtime initialization and Vector Table management.
-* **[Hardware Abstraction](./shared-map):** Low-level register mapping (MMIO).
-* **[Unified Build System](./shared-build):** A modular Makefile framework.
+---
+
+## 🏛 Core SDK Architecture (The `shared/` Layer)
+These components form the foundation of every project in this repository. 
+
+* **[Shared Startup Logic](./shared-startup)**: Handles the Vector Table, Reset Handler, and Weak Interrupt Aliasing.
+* **[Linker Specification](./shared-linker)**: Defines the LMA/VMA memory regions for Flash and RAM.
+* **[Memory Map](./shared-map)**: Hardware abstraction of the STM32L475 MMIO registers.
+* **[Modular Build System](./shared-build)**: The `base.mk` framework for path-agnostic builds.
+
+---
 
 ## 🚀 Engineering Modules
-| Module | Focus | Learning Outcome |
+| Module | Title | Technical Focus |
 | :--- | :--- | :--- |
-| [01: Bare Metal](./module-1-baremetal) | Bootstrapping | Reset handlers and GPIO control. |
-| [02: Precision Timing](./module-2-systick) | Interrupts | SysTick hardware and asynchronous heartbeats. |
-| [03: UART/Debug](./module-3-uart) | Serial I/O | *In Progress* |
+| **01** | [Silicon Handshake](./module-1-baremetal) | Bootstrapping, GPIO, and Modular Makefiles. |
+| **02** | [Precision Timing](./module-2-systick) | SysTick Hardware, ISRs, and `volatile` memory safety. |
+| **03** | [Serial Communication](./module-3-uart) | *Upcoming: UART Peripheral and Clock Trees.* |
+
+---
+
+## 🛠 Tech Stack
+- **Hardware:** Discovery kit IoT node (B-L475E-IOT01A)
+- **Compiler:** `arm-none-eabi-gcc` (Optimization: `-O0` for debug clarity)
+- **Debugger:** OpenOCD via ST-Link V2-1
