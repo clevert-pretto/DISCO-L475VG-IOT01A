@@ -1,0 +1,11 @@
+cat <<EOF > .gitignore
+# Build artifacts
+*.o
+*.elf
+*.bin
+*.map
+
+# IDE files
+.vscode/
+.history/
+EOF
