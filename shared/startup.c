@@ -8,14 +8,27 @@ extern uint32_t _sidata;  // Start of .data in FLASH (the values)
 extern uint32_t _sbss;    // Start of .bss in RAM
 extern uint32_t _ebss;    // End of .bss in RAM
 
-// Declaration of the main function
+// 0. Declaration of the main function
 extern int main(void);
-extern void SysTick_Handler(void);
 
-// Alias all unused interrupts to the Default_Handler
+// 1. Define the handler first
+void Default_Handler(void) {
+    while(1);
+}
+
+// 2. Now define the aliases (Ensure the string "Default_Handler" matches exactly)
 void NMI_Handler(void)          __attribute__ ((weak, alias ("Default_Handler")));
 void HardFault_Handler(void)    __attribute__ ((weak, alias ("Default_Handler")));
-// ... add others as needed ...
+void MemManage_Handler(void)    __attribute__ ((weak, alias ("Default_Handler")));
+void BusFault_Handler(void)     __attribute__ ((weak, alias ("Default_Handler")));
+void UsageFault_Handler(void)   __attribute__ ((weak, alias ("Default_Handler")));
+void SVC_Handler(void)          __attribute__ ((weak, alias ("Default_Handler")));
+void DebugMon_Handler(void)     __attribute__ ((weak, alias ("Default_Handler")));
+void PendSV_Handler(void)       __attribute__ ((weak, alias ("Default_Handler")));
+
+// 3. SysTick is special—we want to define it in main.c
+// Add this line to provide a "safety net" for the SysTick_Handler
+void SysTick_Handler(void) __attribute__ ((weak, alias ("Default_Handler")));
 
 void Reset_Handler(void) {
     // 1. Copy .data section from FLASH to RAM
