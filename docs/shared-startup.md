@@ -27,3 +27,5 @@ In this platform, the `startup.c` provides a complete Vector Table for the Corte
 
 ### 🧱 Safety-First Default Handler
 All unused interrupts are aliased to a `Default_Handler`. This ensures that if the hardware triggers an unexpected interrupt (e.g., a BusFault or a stray NMI), the system enters a predictable infinite loop rather than executing garbage memory.
+
+**Update:** The vector table has been expanded to support **External Interrupts (IRQs)**. Specifically, **Index 53** is now mapped to the `USART1_IRQHandler` to support asynchronous serial communication on the B-L475E-IOT01A platform.

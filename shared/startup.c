@@ -25,6 +25,7 @@ void UsageFault_Handler(void)   __attribute__ ((weak, alias ("Default_Handler"))
 void SVC_Handler(void)          __attribute__ ((weak, alias ("Default_Handler")));
 void DebugMon_Handler(void)     __attribute__ ((weak, alias ("Default_Handler")));
 void PendSV_Handler(void)       __attribute__ ((weak, alias ("Default_Handler")));
+void USART1_IRQHandler(void)    __attribute__ ((weak, alias ("Default_Handler")));
 
 // 3. SysTick is special—we want to define it in main.c
 // Add this line to provide a "safety net" for the SysTick_Handler
@@ -57,8 +58,12 @@ void Reset_Handler(void) {
 // Place it in the ".isr_vector" section as defined in linker.ld
 __attribute__((section(".isr_vector")))
 uint32_t *vector_table[] = {
-    (uint32_t *)&_estack,      // 0: Initial Stack Pointer
-    (uint32_t *)Reset_Handler,  // 1: Reset Vector (Code starts here)
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 2-14: Reserved/Exceptions
-    (uint32_t *)SysTick_Handler // 15: SysTick Timer
+    (uint32_t *)&_estack,       // 0: Initial Stack Pointer
+    (uint32_t *)Reset_Handler,   // 1: Reset Vector
+    [2 ... 14] = 0, // 2-14: Exceptions
+    (uint32_t *)SysTick_Handler, // 15: SysTick Timer (Offset 0x3C)
+
+    /* --- External Interrupts (IRQs) start here --- */
+    [16 ... 52] = 0,          // 16-52: ...
+    (uint32_t *)USART1_IRQHandler // 53: USART1 (IRQ 37)
 };

@@ -5,7 +5,7 @@ OBJCOPY = arm-none-eabi-objcopy
 
 # Flags: Added -I. and -I../shared to find headers in both places
 CFLAGS = -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -g -Wall -I. -I../shared
-LDFLAGS = -nostdlib -T ../shared/linker.ld
+LDFLAGS = -nostdlib -T ../shared/linker.ld -nostartfiles
 
 # 1. Define Common Sources
 COMMON_SRCS = ../shared/startup.c
