@@ -28,7 +28,8 @@ These components form the foundation of every project in this repository.
 | **01** | [Silicon Handshake](./module-1-baremetal) | Bootstrapping, GPIO, and Modular Makefiles. |
 | **02** | [Precision Timing](./module-2-systick) | SysTick Hardware, ISRs, and `volatile` memory safety. |
 | **03** | [Serial Communication](./module-3-uart) | *Upcoming: UART Peripheral and Clock Trees.* |
-
+| **04** | [Environmental Sensing](./module-4-i2c) | I2C, Hardware FPU, and Sensor Interpolation. |
+| **05** | [DMA Acceleration](./module-5-dma) | DMA Controller , DMA1_CH4, IRQ Handlers, Background Telemetry, and CPU Offloading. |
 ---
 
 ## 🛠 Tech Stack

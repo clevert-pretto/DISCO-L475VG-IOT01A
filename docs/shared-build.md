@@ -4,12 +4,16 @@ title: Build System (Makefile)
 parent: Shared SDK Architecture
 nav_order: 1
 ---
-# Shared SDK Architecture
+# Unified Build System (`base.mk`)
 
-### 🛠 The Unified Build System
-To ensure every project uses the same optimization (`-O0`) and safety flags (`-Wall`), I implemented a `base.mk` strategy.
+To ensure consistent optimization and hardware acceleration across all projects, I utilized a shared Makefile logic.
 
-**Benefits:**
-* **Consistency:** Every binary produced shares the same Linker Script and memory layout.
-* **Scalability:** Adding a new project only requires a 2-line Makefile.
-* **Maintainability:** Fixes in the `startup.c` logic propagate to all projects instantly.
+### ⚙️ Compiler & Linker Configuration
+* **Optimization**: `-O0` is used for debugging clarity and register-level visibility.
+* **FPU Acceleration**: Flags `-mfloat-abi=hard` and `-mfpu=fpv4-sp-d16` enable the hardware FPU.
+* **Standard Library Management**: Used `-nostdlib` but explicitly linked `-lm` (math) and `-lgcc` (helpers) to support floating-point to integer conversions.
+
+### 🛠 VPATH Strategy
+The build system uses a `VPATH` to pull in shared drivers automatically:
+```makefile
+COMMON_SRCS = startup.c uart.c i2c.c dma.c hts221.c
