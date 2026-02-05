@@ -19,6 +19,7 @@ These components form the foundation of every project in this repository.
 * **[Linker Specification](./shared-linker)**: Defines the LMA/VMA memory regions for Flash and RAM.
 * **[Memory Map](./shared-map)**: Hardware abstraction of the STM32L475 MMIO registers.
 * **[Modular Build System](./shared-build)**: The `base.mk` framework for path-agnostic builds.
+* **[Lesson learned](./lesson-learned)**: Everything that I learned - The references, the logic, the hurdles and outcomes.
 
 ---
 
@@ -30,6 +31,8 @@ These components form the foundation of every project in this repository.
 | **03** | [Serial Communication](./module-3-uart) | *Upcoming: UART Peripheral and Clock Trees.* |
 | **04** | [Environmental Sensing](./module-4-i2c) | I2C, Hardware FPU, and Sensor Interpolation. |
 | **05** | [DMA Acceleration](./module-5-dma) | DMA Controller , DMA1_CH4, IRQ Handlers, Background Telemetry, and CPU Offloading. |
+| **06** | [Independant Watchdog](./module-6-watchdog) | System Reliability IWDG, LSI Clocking, Fail-safe mechanisms. |
+| **07** | [SPI Bluetooth Hello](./module-07-spi-BLE) | High-Speed Serial - Full-duplex SPI, FIFO management, Reset sequencing. |
 ---
 
 ## 🛠 Tech Stack

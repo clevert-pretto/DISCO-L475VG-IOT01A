@@ -5,12 +5,19 @@
 
 /* Base Addresses */
 #define RCC_BASE      0x40021000UL
+
 #define GPIOA_BASE    0x48000000UL
 #define GPIOB_BASE    0x48000400UL
+#define GPIOC_BASE    0x48000800UL
+#define GPIOD_BASE    0x48000C00UL
+#define GPIOE_BASE    0x48001000UL
+
 #define USART1_BASE   0x40013800UL
 #define I2C2_BASE     0x40005800UL
 #define DMA1_BASE     0x40020000UL
 #define DMA2_BASE     0x40020400UL
+#define IWDG_BASE     0x40003000UL
+#define SPI3_BASE     0x40003C00UL
 
 #define CPACR         (*(volatile uint32_t *)(0xE000ED88UL))
 
@@ -34,17 +41,38 @@
                                                                         11: LSE clock selected as USART2 clock*/
 #define RCC_CFGR        (*(volatile uint32_t *)(RCC_BASE + 0x08)) /* Bit 0:1 for PLL SRC*/
 /* GPIOB Registers */
+#define GPIOA_MODER   (*(volatile uint32_t *)(GPIOA_BASE + 0x00))
 #define GPIOB_MODER   (*(volatile uint32_t *)(GPIOB_BASE + 0x00))
+#define GPIOC_MODER   (*(volatile uint32_t *)(GPIOC_BASE + 0x00))
+#define GPIOD_MODER   (*(volatile uint32_t *)(GPIOD_BASE + 0x00))
+#define GPIOE_MODER   (*(volatile uint32_t *)(GPIOE_BASE + 0x00))
 #define GPIOB_OTYPER  (*(volatile uint32_t *)(GPIOB_BASE + 0x04))
+#define GPIOA_ODR     (*(volatile uint32_t *)(GPIOA_BASE + 0x14))
 #define GPIOB_ODR     (*(volatile uint32_t *)(GPIOB_BASE + 0x14))
+#define GPIOD_ODR     (*(volatile uint32_t *)(GPIOD_BASE + 0x14))
+#define GPIOE_ODR     (*(volatile uint32_t *)(GPIOE_BASE + 0x14))
 #define GPIOB_AFRL    (*(volatile uint32_t *)(GPIOB_BASE + 0x20))
 #define GPIOB_AFRH    (*(volatile uint32_t *)(GPIOB_BASE + 0x24))
-
+#define GPIOC_AFRH    (*(volatile uint32_t *)(GPIOC_BASE + 0x24))
 /* Bit positions */
 #define GPIOB_EN      (1 << 1)     // Bit 1 in RCC_AHB2ENR enables GPIOB
 #define LED_PIN       14           // The LED is on Pin 14
 #define VCP_TX_PIN    6            // USART1 VCP Pin PB6
 #define VCP_RX_PIN    7            // USART1 VCP Pin PB7
+
+//SPI3 SPBTLE Bluetooth Pins
+#define SPI3_SCK_PIN        10       // SPI3 SCK Pin PC10
+#define SPI3_MISO_PIN       11       // SPI3 MISO Pin PC11
+#define SPI3_MOSI_PIN       12       // SPI3 MOSI Pin PC12
+
+//#define SPI3_BLE_CSN_PIN    13     // SPI3 BLE CSN Pin PD13
+#define BLE_RST             8        // PA8
+//#define BLE_IRQ                    // EXTI6 PE6
+
+#define SPI3_BLE_CSN_PIN    0        // SPI3 BLE CSN Pin PE0
+#define BLE_IRQ             1        // EXTI6 PE1
+
+
 #define I2C_2_SCL_PIN 10           // I2C2 SCL Pin PB10
 #define I2C_2_SDA_PIN 11           // I2C2 SDA Pin PB11
 
@@ -101,3 +129,34 @@ typedef struct{
 #define DMA1_CH4_CNDTR (*(volatile uint32_t *)(DMA1_BASE + 0x48))
 #define DMA1_CH4_CPAR (*(volatile uint32_t *)(DMA1_BASE + 0x4C))
 #define DMA1_CH4_CMAR (*(volatile uint32_t *)(DMA1_BASE + 0x50))
+
+typedef struct{
+    volatile uint32_t KR;   //key register
+    volatile uint32_t PR;   //prescaler register
+    volatile uint32_t RLR;  //reload register
+    volatile uint32_t SR;   //status register
+    volatile uint32_t WINR; //window register
+
+} IWDG_TypeDef;
+
+#define IWDG    ((IWDG_TypeDef *)(IWDG_BASE))
+
+
+//BLuetooth 
+//PC11 - SPI3 MISO
+//PC10 - SPI3 SCK
+//PC12 - SPI3 MOSI
+//PD13 - SPI3 BLE CSN
+
+typedef struct{
+    volatile uint32_t CR1;  //Control register 1
+    volatile uint32_t CR2;  //control register 2
+    volatile uint32_t SR;  //status register 
+    volatile uint32_t DR;  //Data register 
+    volatile uint32_t CRCPR;  //CRC polynomial register 
+    volatile uint32_t RXCRCR;  //RX CRC register 
+    volatile uint32_t TXCRCR;  //TX CRC register 
+
+} SPI_TypeDef;
+
+#define SPI3    ((SPI_TypeDef *) (SPI3_BASE))

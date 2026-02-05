@@ -11,6 +11,14 @@ Instead of using magic numbers, `my_stm32_map.h` defines the hardware architectu
 * **I2C2_BASE**: `0x40005800` (Mapped to sensor bus)
 * **DMA1_BASE**: `0x40020000` (Mapped for UART TX offloading)
 * **FPU_CPACR**: `0xE000ED88` (Enables hardware math coprocessors CP10 and CP11)
+* **IWDG_BASE**: `0x40003000` (Independent Watchdog)
+* **SPI3_BASE**: `0x40003C00UL` (SPI3)
+* **GPIOA_BASE**: `0x48000000UL` (GPIOA base address)
+* **GPIOB_BASE**: `0x48000400UL` (GPIOB base address)
+* **GPIOC_BASE**: `0x48000800UL` (GPIOC base address)
+* **GPIOD_BASE**: `0x48000C00UL` (GPIOD base address)
+* **GPIOE_BASE**: `0x48001000UL` (GPIOE base address)
+
 
 ### Peripheral Mapping
 | Peripheral | Pin | Function |
@@ -19,3 +27,11 @@ Instead of using magic numbers, `my_stm32_map.h` defines the hardware architectu
 | I2C2_SCL | PB10 | Sensor Clock (AF4) |
 | I2C2_SDA | PB11 | Sensor Data (AF4) |
 | LED_GREEN | PB14 | Heartbeat Indicator |
+
+### **Hardware Pinout (Wireless)**
+* **PE0**: BT_CSN (Chip Select)
+* **PA8**: BT_RST (Reset)
+* **PE1**: BT_IRQ (Interrupt)
+* **PC10**: SPI3_SCK_PIN (SPI3 Clock pin)
+* **PC11**: SPI3_MISO_PIN (SPI3 MISO pin)
+* **PC12**: SPI3_MOSI_PIN (SPI3 MOSI pin)

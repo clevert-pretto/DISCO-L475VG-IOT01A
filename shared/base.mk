@@ -8,7 +8,7 @@ CFLAGS = -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -g -Wall
 LDFLAGS = -nostdlib -T ../shared/linker.ld -nostartfiles -lm -lgcc
 
 # 1. Define Common Sources
-COMMON_SRCS = ../shared/startup.c ../shared/uart.c ../shared/i2c.c ../shared/dma.c ../shared/hts221.c
+COMMON_SRCS = ../shared/startup.c ../shared/uart.c ../shared/i2c.c ../shared/dma.c ../shared/hts221.c ../shared/iwdg.c ../shared/spi.c
 
 # 2. Combine with Project Sources (passed from Project Makefile)
 ALL_SRCS = $(SRCS) $(COMMON_SRCS)

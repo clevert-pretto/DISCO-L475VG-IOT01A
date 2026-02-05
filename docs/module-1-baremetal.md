@@ -14,3 +14,4 @@ Establishing the first line of code execution on raw silicon without vendor abst
 * **Direct Register Access:** Used the `RCC` and `GPIO` memory-mapped addresses to drive the LD2 Green LED.
 
 **Refactor Note:** This project now inherits its boot logic from the global `shared/startup.c`.
+
