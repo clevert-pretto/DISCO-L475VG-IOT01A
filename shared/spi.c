@@ -1,17 +1,18 @@
 #include "my_stm32_map.h"
 #include "spi.h"
 
+volatile uint8_t EXTI_IRQ_Check = 0;
+
 void spi3_init (void)
 {
-    // 1. Enable SPI3 Clock and Pulse Reset
-    RCC_APB1ENR1 &= ~(1 << 15);  //Clear SPI3 bit
+    /* 1. Peripheral Clocks */
     RCC_APB1ENR1 |= (1 << 15);  //Enable SPI3 Clock
-    
+    RCC_APB2ENR |= (1 << 0);    //Enable SYSCFG Clock
+    RCC_AHB2ENR |= (1UL << 0) | (1UL << 2) | (1UL << 4); // Port A, C, E
     RCC_APB1RSTR1 |= (1 << 15); //Reset SPI3
     RCC_APB1RSTR1 &= ~(1 << 15); //Clear SPI3
 
-    // 2. Configure PC10, PC11, PC12 (SPI3 Pins) as AF (2UL)
-    RCC_AHB2ENR |= (1UL << 0) | (1UL << 2) | (1UL << 4); // Port A, C, E
+    // 2. Configure PC10, PC11, PC12 (SPI3 Pins) as AF6 (2UL)
     GPIOC_MODER &= ~((3UL << (SPI3_SCK_PIN * 2)) | (3UL << (SPI3_MISO_PIN * 2))
                                                  | (3UL << (SPI3_MOSI_PIN * 2)));
 
@@ -25,7 +26,7 @@ void spi3_init (void)
                     (6UL << ((SPI3_MOSI_PIN- 8) * 4)));
 
     
-    // 4. Configure PE0 (BT CS) and PA8 (BT RST) as Outputs
+    /* 3. Bluetooth Control Pins Configure PE0 (BT CS), PE1 (BT EXTI) and PA8 (BT RST) as Outputs */
     GPIOE_MODER &= ~((3UL << (SPI3_BLE_CSN_PIN * 2)));
     GPIOE_MODER |= ((1UL << (SPI3_BLE_CSN_PIN * 2)));
     GPIOE_ODR   |=  (1UL << SPI3_BLE_CSN_PIN); // Deselect (High)
@@ -33,8 +34,8 @@ void spi3_init (void)
     GPIOA_MODER &= ~(3UL << (BLE_RST * 2));
     GPIOA_MODER |=  (1UL << (BLE_RST * 2));
     GPIOA_ODR   &= ~(1UL << BLE_RST); // Keep in reset initially
-
-    // 5. SPI Peripheral Config
+    
+    // 4. SPI Peripheral Config
     SPI3->CR1 = 0; // Clear CR1 completely to ensure a clean state
     SPI3->CR2 = 0; // Clear CR2 completely
     
@@ -49,7 +50,7 @@ void spi3_init (void)
     // Bit 12: FRXTH (FIFO reception threshold) - Trip RXNE on 8-bit
     SPI3->CR2 |= ((0x7 << 8) | (1 << 12)); 
 
-    // 6. Enable SPI3
+    // 5. Enable SPI3
     SPI3->CR1 |= (1 << 6); // SPE (SPI Enable)
 }
 

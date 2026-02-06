@@ -41,6 +41,7 @@ void USART1_IRQHandler(void)    __attribute__ ((weak, alias ("Default_Handler"))
 // Add this line to provide a "safety net" for the SysTick_Handler
 void SysTick_Handler(void)      __attribute__ ((weak, alias ("Default_Handler")));
 void DMA1_CH4_IRQHandler(void)  __attribute__ ((weak, alias ("Default_Handler")));
+void EXTI15_10_IRQHandler(void) __attribute__ ((weak, alias ("Default_Handler")));
 
 void Reset_Handler(void) {
     
@@ -84,7 +85,11 @@ uint32_t *vector_table[] = {
     [16 ... 29] = 0,          // 16-29: ...
     (uint32_t *)DMA1_CH4_IRQHandler, // 30 : DMA1 CH4
     [31 ... 52] = 0,
-    (uint32_t *)USART1_IRQHandler // 53: USART1 (IRQ 37)
+    (uint32_t *)USART1_IRQHandler, // 53: USART1 (IRQ 37)
+    0, //54
+    0, //55
+    (uint32_t *)EXTI15_10_IRQHandler // 56 (IRQ 40)
+
 };
 
 

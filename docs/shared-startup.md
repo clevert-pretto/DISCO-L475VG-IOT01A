@@ -22,7 +22,9 @@ The vector table supports both core exceptions and peripheral IRQs:
 * **SysTick (Offset 0x3C)**: Powers the precision timing system.
 * **DMA1 Channel 4 (IRQ 14)**: Added for high-speed UART TX acceleration.
 * **USART1 (IRQ 37)**: Handles asynchronous serial events.
-* 
+* **Index 56 (IRQ 40)**: Mapped to `EXTI15_10_IRQHandler` for the User Button (PC13).
+
+
 ### 🧠 The Strategy: Weak vs. Strong Symbols
 In this platform, the `startup.c` provides a complete Vector Table for the Cortex-M4. To maintain a single source of truth while allowing project-specific flexibility, I utilized **Weak Aliases**.
 
@@ -35,3 +37,4 @@ All unused interrupts are aliased to a `Default_Handler`. This ensures that if t
 **Update:** The vector table has been expanded to support **External Interrupts (IRQs)**. Specifically, 
 **Index 53** is now mapped to the `USART1_IRQHandler` to support asynchronous serial communication on the B-L475E-IOT01A platform.
 **Index 30** is now mapped to the `DMA1_CH4_IRQHandler` to support DMA1 CH4 interrupt on the B-L475E-IOT01A platform.
+**Update:** To ensure stability, the `Reset_Handler` now explicitly sets the **VTOR** (Vector Table Offset Register) to $0x08000000$. This prevents "silent" ISR failures caused by the CPU looking for handlers in the wrong memory landmark.

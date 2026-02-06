@@ -8,6 +8,11 @@ void SysTick_Handler(void) {
     if (msTicks % 500 == 0) GPIOB_ODR ^= (1UL << LED_PIN); // Heartbeat
 }
 
+void delay_ms(uint32_t ms) {
+    uint32_t startTick = msTicks;
+    while ((msTicks - startTick) < ms); // Precise wait based on 1ms interrupt
+}
+
 int main (void)
 {
      // 1. Hardware Init
@@ -33,8 +38,7 @@ int main (void)
 
     // 1. Release Bluetooth Reset (PA8)
     GPIOA_ODR |= (1UL << BLE_RST); //
-    for(int i=0; i<500000; i++)
-        __asm("nop");   // Short delay for boot
+    delay_ms(200);   // Short delay for boot
 
     // 2. Chip Select LOW to start communication
     GPIOE_ODR &= ~(1UL << SPI3_BLE_CSN_PIN);
@@ -55,5 +59,4 @@ int main (void)
     }
 
     while(1);
-
 }

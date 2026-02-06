@@ -18,6 +18,8 @@
 #define DMA2_BASE     0x40020400UL
 #define IWDG_BASE     0x40003000UL
 #define SPI3_BASE     0x40003C00UL
+#define SYSCFG_BASE   0x40010000UL
+#define EXTI_BASE     0x40010400UL
 
 #define CPACR         (*(volatile uint32_t *)(0xE000ED88UL))
 
@@ -51,6 +53,7 @@
 #define GPIOB_ODR     (*(volatile uint32_t *)(GPIOB_BASE + 0x14))
 #define GPIOD_ODR     (*(volatile uint32_t *)(GPIOD_BASE + 0x14))
 #define GPIOE_ODR     (*(volatile uint32_t *)(GPIOE_BASE + 0x14))
+#define GPIOE_IDR     (*(volatile uint32_t *)(GPIOE_BASE + 0x10))
 #define GPIOB_AFRL    (*(volatile uint32_t *)(GPIOB_BASE + 0x20))
 #define GPIOB_AFRH    (*(volatile uint32_t *)(GPIOB_BASE + 0x24))
 #define GPIOC_AFRH    (*(volatile uint32_t *)(GPIOC_BASE + 0x24))
@@ -59,16 +62,13 @@
 #define LED_PIN       14           // The LED is on Pin 14
 #define VCP_TX_PIN    6            // USART1 VCP Pin PB6
 #define VCP_RX_PIN    7            // USART1 VCP Pin PB7
+#define USER_BUTTON_PIN   13  // PC13
 
 //SPI3 SPBTLE Bluetooth Pins
 #define SPI3_SCK_PIN        10       // SPI3 SCK Pin PC10
 #define SPI3_MISO_PIN       11       // SPI3 MISO Pin PC11
 #define SPI3_MOSI_PIN       12       // SPI3 MOSI Pin PC12
-
-//#define SPI3_BLE_CSN_PIN    13     // SPI3 BLE CSN Pin PD13
 #define BLE_RST             8        // PA8
-//#define BLE_IRQ                    // EXTI6 PE6
-
 #define SPI3_BLE_CSN_PIN    0        // SPI3 BLE CSN Pin PE0
 #define BLE_IRQ             1        // EXTI6 PE1
 
@@ -160,3 +160,21 @@ typedef struct{
 } SPI_TypeDef;
 
 #define SPI3    ((SPI_TypeDef *) (SPI3_BASE))
+
+#define SYSCFG_EXTICR4    (*(volatile uint32_t *)(SYSCFG_BASE + 0x14))
+#define EXTI15_10_IRQn    40 // The IRQ number for lines 10 to 15
+
+#define SYSCFG_EXTICR1    (*(volatile uint32_t *)(SYSCFG_BASE + 0x08))
+
+#define EXTI_IMR1         (*(volatile uint32_t *)(EXTI_BASE + 0x00))
+#define EXTI_EMR1         (*(volatile uint32_t *)(EXTI_BASE + 0x04))
+#define EXTI_RTSR1        (*(volatile uint32_t *)(EXTI_BASE + 0x08))
+#define EXTI_FTSR1        (*(volatile uint32_t *)(EXTI_BASE + 0x0C))
+#define EXTI_SWIER1       (*(volatile uint32_t *)(EXTI_BASE + 0x10))
+#define EXTI_PR1          (*(volatile uint32_t *)(EXTI_BASE + 0x14))
+#define EXTI_IMR2         (*(volatile uint32_t *)(EXTI_BASE + 0x20))
+#define EXTI_EMR2         (*(volatile uint32_t *)(EXTI_BASE + 0x24))
+#define EXTI_RTSR2        (*(volatile uint32_t *)(EXTI_BASE + 0x28))
+#define EXTI_FTSR2        (*(volatile uint32_t *)(EXTI_BASE + 0x2C))
+#define EXTI_SWIER2       (*(volatile uint32_t *)(EXTI_BASE + 0x30))
+#define EXTI_PR2          (*(volatile uint32_t *)(EXTI_BASE + 0x34))

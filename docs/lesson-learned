@@ -55,3 +55,12 @@ nav_order: 1
 * **The Register Trap (MODER)**: Identified that using a pin-number constant (like 10) in a 2-bit `MODER` field causes a "bit spill," corrupting the settings of adjacent pins. Mode values must strictly be `0-3`.
 * **The Deadlock Trap**: I encountered a "silent hang" where the UART printed the header but nothing else. I traced this to a `while(!(SR & TXE))` loop. This happens if the peripheral clock is not enabled; the register returns `0`, causing an infinite wait.
 * **The BSY Flag Logic**: I learned that `TXE` (Transmit Empty) only means the FIFO has room. To safely raise the Chip Select (CS) line without truncating the last bit, I must wait for the `BSY` (Busy) flag to clear.
+
+### **Module 08: Interrupt Pipeline & Diagnostic Baselines** 
+* **Reference Manual:** RM0351 (EXTI & SYSCFG Sections).
+* **Registers:** SYSCFG_EXTICR4 (`0x40010014`), EXTI_IMR1 (`0x40010400`), NVIC_ISER1 (`0xE000E104`).
+
+* **Logic:** Established a **Known-Good Baseline** using the User Button (PC13) to isolate the MCU's interrupt pipeline from other tasks.
+    * **ISER Banking:** Learned that IRQ 40 (EXTI15_10) requires `NVIC_ISER1` as `ISER0` only covers IRQs 0-31.
+* **Lesson:** **Peripheral Boundary Accuracy.** `SYSCFG` and `EXTI` are adjacent but distinct peripherals. Correcting the base address to `0x40010400UL` was the "Final Boss" of the interrupt diagnostic.
+* **Lesson:** **VTOR Stability.** Manually setting the **Vector Table Offset Register (VTOR)** to `0x08000000` ensures the CPU locates the ISR jump-table even if the bootloader offset changes.

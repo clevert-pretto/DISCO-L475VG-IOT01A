@@ -33,6 +33,7 @@ These components form the foundation of every project in this repository.
 | **05** | [DMA Acceleration](./module-5-dma) | DMA Controller , DMA1_CH4, IRQ Handlers, Background Telemetry, and CPU Offloading. |
 | **06** | [Independant Watchdog](./module-6-watchdog) | System Reliability IWDG, LSI Clocking, Fail-safe mechanisms. |
 | **07** | [SPI Bluetooth Hello](./module-07-spi-BLE) | High-Speed Serial - Full-duplex SPI, FIFO management, Reset sequencing. |
+| **08** | [External Interupt via User Button](./module-8-ext_intrrupt_usr_btn) | Verified EXTI/NVIC pipeline & VTOR. |
 ---
 
 ## 🛠 Tech Stack

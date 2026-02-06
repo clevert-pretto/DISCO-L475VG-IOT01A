@@ -1,0 +1,48 @@
+# Module 08: User Button EXTI Diagnostic
+
+### 🧠 Strategic Objective
+This project was established as a **Known-Good Baseline** to verify the core interrupt pipeline of the STM32L475. By utilizing a simple mechanical input (the Blue User Button) instead of a complex SPI peripheral, I was able to confirm that the **Linker Script**, **Vector Table**, **NVIC**, and **EXTI** logic were fundamentally sound.
+
+### ⚙️ Technical Specs
+* **Input**: GPIO Port C, Pin 13 (User Button B1).
+* **Interrupt Line**: EXTI13 (routed via `SYSCFG_EXTICR4`).
+* **Trigger**: Falling Edge (Active-Low button logic).
+* **NVIC Vector**: IRQ 40 (`EXTI15_10_IRQHandler`).
+* **Visual Feedback**: Green LED (PB14) toggles on every successful trigger.
+
+
+
+---
+
+### 🧱 Engineering Challenges & Solutions
+
+#### **1. The Peripheral Base Address Mismatch**
+The most significant hurdle identified during this module was the distinction between `SYSCFG` and `EXTI` memory boundaries.
+* **Problem**: EXTI configuration registers were initially being written to the `SYSCFG_BASE` address, causing the hardware to ignore interrupt masks.
+* **Solution**: Corrected the memory map to point to `EXTI_BASE` ($0x40010400UL$), ensuring `EXTI_IMR1` and `EXTI_RTSR1` reached the correct hardware controller.
+
+#### **2. Vector Table Alignment & VTOR**
+Ensuring the CPU "looks" in the right place during an asynchronous event is critical for bare-metal stability.
+* **Solution**: Manually configured the **Vector Table Offset Register (VTOR)** to $0x08000000$ in the `Reset_Handler`. This guarantees that the hardware jump-table is correctly referenced from the start of Flash memory.
+
+#### **3. NVIC Register Banking (ISER1)**
+The User Button (IRQ 40) sits beyond the range of the primary Interrupt Set-Enable Register.
+* **Solution**: Implemented logic to access `NVIC_ISER1` (managing IRQs 32-63) and calculated the specific bit offset ($40 - 32 = 8$) to enable the line at the processor level.
+
+---
+
+### 📊 Verification Results
+* **Hardware Confirmation**: Pressing the Blue Button successfully triggers the `EXTI15_10_IRQHandler`.
+* **Terminal Output**: The system prints `DEBUG: Button Interrupt OK! Pipeline is valid.`, proving that global interrupts are unmuted (`cpsie i`) and the vector table is correctly indexed.
+
+
+
+---
+
+### 📓 Lessons Learned
+
+* **Hurdle: Silent Overwrites**: Finding correct addresses for interrupt going back and forth on ARM acrhcitecture document and RM0351 reference manual.
+* **Logic: Deterministic Debugging**: Confirmed that establishing a simple, verifiable baseline (like a button) is faster than debugging complex protocol-driven interrupts (like SPI/BLE).
+* **Hurdle: Interrupt Multiplexing**: Identified that multiple EXTI lines (10-15) share a single NVIC vector, requiring the software handler to poll the Pending Register (`EXTI_PR1`) to identify the specific source.
+
+---
