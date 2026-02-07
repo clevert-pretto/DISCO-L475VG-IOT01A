@@ -2,6 +2,7 @@
 layout: default
 title: Lesson Learned
 nav_order: 99
+has children: false
 ---
 # Module 01 & 02: The Bare-Metal Foundation
 
