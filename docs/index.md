@@ -7,10 +7,13 @@ permalink: /
 ---
 # STM32L475 Platform Architecture
 
-This repository documents follwing phases.
-* **Phase 1: Bare-Metal SDK** - The transition from vendor-dependent HAL layers to a custom, deterministic Bare-MEtal SDK.
-* **Phase 2: Advanced RTOS & scheduling** - Context Switching Internals, Priority Inversion & Inheritance, Stack Overflow Analysis, Multicore (SMP) concepts.
-
+## 📂 Knowledge Base Roadmap
+1. **Phase 1: Bare-Metal SDK**
+   - From Silicon Handshake to Interrupt-Driven Bluetooth.
+2. **Phase 2: Advanced RTOS & Scheduling**
+   - Context Switching, Priority Inversion, and SMP concepts.
+3. **Shared SDK Architecture**
+   - The reusable `shared/` layer: Startup, Linker, and Build System.
 ---
 
 ## 🏛 Core SDK Architecture (The `shared/` Layer)

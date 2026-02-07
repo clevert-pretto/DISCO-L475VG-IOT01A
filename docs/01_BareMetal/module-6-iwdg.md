@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 06. Independent Watchdog (IWDG)
-parent: Phase 1. Bare_Metal architecture - Cortex M4
+parent: Phase 1. Bare-Metal architecture
 nav_order: 6
 ---
 # Module 06: System Reliability & Fail-Safe Design

@@ -2,7 +2,7 @@
 layout: default
 title: 08. User Button EXTI Diagnostic
 nav_order: 8
-parent: Phase 1. Bare_Metal architecture - Cortex M4
+parent: Phase 1. Bare-Metal architecture
 ---
 
 # Module 08: User Button EXTI Diagnostic

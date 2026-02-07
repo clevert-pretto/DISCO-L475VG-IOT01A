@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 05. DMA Acceleration
-parent: Phase 1. Bare_Metal architecture - Cortex M4
+parent: Phase 1. Bare-Metal architecture
 nav_order: 5
 ---
 # Module 05: DMA-Accelerated Telemetry
