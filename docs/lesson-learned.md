@@ -11,6 +11,7 @@ This journal documents the technical hurdles, register-level insights, and archi
 
 <details>
 <summary><b>Module 01 & 02: The Bare-Metal Foundation</b></summary>
+<br>
 
 * **Reference Manual:** RM0351 (STM32L4x5).
 * **Registers:** `RCC_AHB2ENR` (0x4002104C), `GPIOB_MODER` (0x48000400), `USART1_BRR` (0x4001380C).
@@ -22,6 +23,7 @@ This journal documents the technical hurdles, register-level insights, and archi
 
 <details>
 <summary><b>Module 03 & 04: Precision Timing & HTS221 Sensing</b></summary>
+<br>
 
 * **Reference Manual:** RM0351 & Cortex-M4 Programming Manual.
 * **Registers:** `SYSTICK_LOAD` (0xE000E014), `CPACR` (0xE000ED88), `I2C2_TIMINGR` (0x40005810).
@@ -34,6 +36,7 @@ This journal documents the technical hurdles, register-level insights, and archi
 
 <details>
 <summary><b>Module 05: DMA Acceleration & Interrupts</b></summary>
+<br>
 
 * **Reference Manual:** RM0351 (DMA & NVIC Sections).
 * **Registers:** `DMA1_CSELR` (0x400200A8), `DMA1_IFCR` (0x40020004), `NVIC_ISER0` (0xE000E100).
@@ -45,6 +48,7 @@ This journal documents the technical hurdles, register-level insights, and archi
 
 <details>
 <summary><b>Module 06: System Reliability (IWDG)</b></summary>
+<br>
 
 * **Reference Manual:** RM0351 Section 32.
 * **Registers:** `IWDG_KR` (Key), `IWDG_PR` (Prescaler), `IWDG_RLR` (Reload).
@@ -56,7 +60,23 @@ This journal documents the technical hurdles, register-level insights, and archi
 
 <details>
 <summary><b>Module 07: SPI & The Silent Bluetooth Chip</b></summary>
+<br>
 
 * **Reference Manual:** RM0351 Section 38.
-* **The Register Trap (MODER):** Identified that using a pin-number constant in a 2-bit `MODER` field causes a "bit spill," corrupting adjacent pins.
-* **The
+* **Register Trap (MODER)**: Identified that using a pin-number constant in a 2-bit `MODER` field causes a "bit spill," corrupting adjacent pins.
+* **Deadlock Trap**: Traced a "silent hang" to a disabled peripheral clock; the register returns `0`, causing an infinite `while(!(SR & TXE))` wait.
+* **BSY Flag Logic**: Wait for the `BSY` (Busy) flag to clear before raising Chip Select (CS) to avoid truncating the last bit.
+
+</details>
+<details>
+<summary><b>Module 08: Interrupt Pipeline & Diagnostic Baselines</b></summary>
+<br>
+
+* **Reference Manual**: RM0351 (EXTI & SYSCFG Sections).
+* **Registers**: `SYSCFG_EXTICR4` (0x40010014), `EXTI_IMR1` (0x40010400), `NVIC_ISER1` (0xE000E104).
+* **Logic**: Verified the core interrupt pipeline using the User Button (PC13) as a baseline.
+* **Hurdle**: EXTI registers were initially mapped to `SYSCFG_BASE`, creating a "silent failure".
+* **Solution**: Corrected mapping to `EXTI_BASE` ($0x40010400UL$) and configured `VTOR` to $0x08000000$.
+* **NVIC**: Used `NVIC_ISER1` to enable IRQ 40 (Bit 8) for the User Button.
+
+</details>
