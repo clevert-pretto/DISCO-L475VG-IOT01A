@@ -1,106 +1,62 @@
 ---
 layout: default
 title: Lesson Learned
-nav_order: 99
+nav_order: 95
 has_children: false
 ---
-<details>
-<summary>
 
-# Module 01 & 02: The Bare-Metal Foundation
-</summary>
+# 📓 Engineering Journal
+
+This journal documents the technical hurdles, register-level insights, and architectural breakthroughs encountered during the development of the STM32L475 Bare-Metal SDK.
+
+<details>
+<summary><b>Module 01 & 02: The Bare-Metal Foundation</b></summary>
 
 * **Reference Manual:** RM0351 (STM32L4x5).
-
-* **Registers:** RCC_AHB2ENR (0x4002104C), GPIOB_MODER (0x48000400), USART1_BRR (`0x4001380C`).
-
+* **Registers:** `RCC_AHB2ENR` (0x4002104C), `GPIOB_MODER` (0x48000400), `USART1_BRR` (0x4001380C).
 * **Logic:** Manual calculation of Baud Rate divisors and bit-masking for GPIO Alternative Functions (`AF7 for UART`).
-
 * **Hurdles:** Initial attempts failed because the peripheral clock gating was not enabled before configuring registers.
-
 * **Lesson:** Always enable the clock in RCC before touching peripheral registers, or the writes will be ignored by the silicon.
 
 </details>
 
 <details>
-<summary>
-
-# Module 03 & 04: Precision Timing & HTS221 Sensing
-</summary>
+<summary><b>Module 03 & 04: Precision Timing & HTS221 Sensing</b></summary>
 
 * **Reference Manual:** RM0351 & Cortex-M4 Programming Manual.
-
-* **Registers:** SYSTICK_LOAD (`0xE000E014`), CPACR (`0xE000ED88`), I2C2_TIMINGR (`0x40005810`).
-
+* **Registers:** `SYSTICK_LOAD` (0xE000E014), `CPACR` (0xE000ED88), `I2C2_TIMINGR` (0x40005810).
 * **Logic:** Implemented linear interpolation using factory-stored calibration coefficients.
-
 * **Hurdles:** The system hung immediately upon performing float math because the hardware Floating Point Unit (FPU) is disabled by default.
-
-* **Lesson:** Enabling the FPU requires a specific "Coprocessor Access" sequence in the Reset_Handler. Additionally, I learned to use HSI16 (`16MHz`) as a stable clock source for I2C timing to ensure a consistent `100kHz` bus speed.
+* **Lesson:** Enabling the FPU requires a specific "Coprocessor Access" sequence in the Reset_Handler.
+* **Clocking:** Used HSI16 (16MHz) as a stable clock source for I2C timing to ensure a consistent 100kHz bus speed.
 
 </details>
 
-
 <details>
-<summary>
-
-# Module 05: DMA Acceleration & Interrupts
-</summary>
+<summary><b>Module 05: DMA Acceleration & Interrupts</b></summary>
 
 * **Reference Manual:** RM0351 (DMA & NVIC Sections).
-
-* **Registers:** DMA1_CSELR (`0x400200A8`), DMA1_IFCR (`0x40020004`), NVIC_ISER0 (`0xE000E100`).
-
+* **Registers:** `DMA1_CSELR` (0x400200A8), `DMA1_IFCR` (0x40020004), `NVIC_ISER0` (0xE000E100).
 * **Logic:** Configured DMA1 Channel 4 to offload UART transmissions from the CPU.
-
-* **Hurdles:** The "One-Shot" bug—DMA would only send data once. I discovered that simply enabling the channel isn't enough; the hardware requires a manual flag clear.
-
-* **Lesson:** The Transfer Complete (TC) flag in IFCR must be cleared via a direct assignment (=), not a bitwise OR (|=), because IFCR is a write-only register. This "hard reset" of the channel is essential for continuous data streams.
+* **Hurdles:** Encountered the "One-Shot" bug where DMA would only send data once.
+* **Lesson:** The Transfer Complete (TC) flag in `IFCR` must be cleared via a direct assignment (`=`), not a bitwise OR (`|=`), because `IFCR` is a write-only register.
 
 </details>
 
 <details>
-<summary>
+<summary><b>Module 06: System Reliability (IWDG)</b></summary>
 
-# Module 06: System Reliability (IWDG)
-</summary>
-
-* **Reference Manual:** RM0351 (Independent Watchdog) Section 32.
-
-* **Registers:** IWDG_KR (Key), IWDG_PR (Prescaler), IWDG_RLR (Reload).
-
-* **Logic:** Implemented a fail-safe timer that resets the CPU if the main loop hangs for more than 2 seconds.
-
-* **Hurdles:** Understanding that the IWDG runs on the LSI (`32kHz`) clock, which is independent of the main HSI16 clock, providing a true secondary safety layer. 
-* Ensuring the watchdog timeout was long enough to accommodate the I2C sensor read and DMA telemetry duration, but short enough to prevent system damage in a real failure.
-
+* **Reference Manual:** RM0351 Section 32.
+* **Registers:** `IWDG_KR` (Key), `IWDG_PR` (Prescaler), `IWDG_RLR` (Reload).
+* **Logic:** Implemented a fail-safe timer that resets the CPU if the main loop hangs.
+* **Hurdles:** Verified that the IWDG runs on the LSI (32kHz) clock, making it independent of the main HSI16 clock tree.
 * **Lesson:** Security through isolation. By running on the LSI, the watchdog can rescue the system even if the main oscillator fails or the PLL loses lock.
 
-<details>
-<summary>
-
-### **Module 07: SPI & The Silent Bluetooth Chip**
-</summary>
-
-* **Reference Manual**: RM0351 Section 38.
-* **The Register Trap (MODER)**: Identified that using a pin-number constant (like 10) in a 2-bit `MODER` field causes a "bit spill," corrupting the settings of adjacent pins. Mode values must strictly be `0-3`.
-* **The Deadlock Trap**: I encountered a "silent hang" where the UART printed the header but nothing else. I traced this to a `while(!(SR & TXE))` loop. This happens if the peripheral clock is not enabled; the register returns `0`, causing an infinite wait.
-* **The BSY Flag Logic**: I learned that `TXE` (Transmit Empty) only means the FIFO has room. To safely raise the Chip Select (CS) line without truncating the last bit, I must wait for the `BSY` (Busy) flag to clear.
-
 </details>
 
 <details>
-<summary>
+<summary><b>Module 07: SPI & The Silent Bluetooth Chip</b></summary>
 
-### **Module 08: Interrupt Pipeline & Diagnostic Baselines** 
-</summary>
-
-* **Reference Manual:** RM0351 (EXTI & SYSCFG Sections).
-* **Registers:** SYSCFG_EXTICR4 (`0x40010014`), EXTI_IMR1 (`0x40010400`), NVIC_ISER1 (`0xE000E104`).
-
-* **Logic:** Established a **Known-Good Baseline** using the User Button (PC13) to isolate the MCU's interrupt pipeline from other tasks.
-    * **ISER Banking:** Learned that IRQ 40 (EXTI15_10) requires `NVIC_ISER1` as `ISER0` only covers IRQs 0-31.
-* **Lesson:** **Peripheral Boundary Accuracy.** `SYSCFG` and `EXTI` are adjacent but distinct peripherals. Correcting the base address to `0x40010400UL` was the "Final Boss" of the interrupt diagnostic.
-* **Lesson:** **VTOR Stability.** Manually setting the **Vector Table Offset Register (VTOR)** to `0x08000000` ensures the CPU locates the ISR jump-table even if the bootloader offset changes.
-
-</details>
+* **Reference Manual:** RM0351 Section 38.
+* **The Register Trap (MODER):** Identified that using a pin-number constant in a 2-bit `MODER` field causes a "bit spill," corrupting adjacent pins.
+* **The
