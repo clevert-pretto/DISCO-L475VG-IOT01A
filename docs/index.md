@@ -2,7 +2,7 @@
 layout: default
 title: Home
 nav_order: 1
-description: "Bare-Metal Firmware Engineering Portfolio"
+description: "STM32L475 Platform Architecture"
 permalink: /
 ---
 # STM32L475 Platform Architecture
@@ -21,7 +21,6 @@ These components form the foundation of every project in this repository.
 * **[Linker Specification](./shared-linker)**: Defines the LMA/VMA memory regions for Flash and RAM.
 * **[Memory Map](./shared-map)**: Hardware abstraction of the STM32L475 MMIO registers.
 * **[Modular Build System](./shared-build)**: The `base.mk` framework for path-agnostic builds.
-* **[Lesson learned](./lesson-learned)**: Everything that I learned - The references, the logic, the hurdles and outcomes.
 
 ---
 
@@ -43,3 +42,7 @@ These components form the foundation of every project in this repository.
 - **Hardware:** Discovery kit IoT node (B-L475E-IOT01A)
 - **Compiler:** `arm-none-eabi-gcc` (Optimization: `-O0` for debug clarity)
 - **Debugger:** OpenOCD via ST-Link V2-1
+
+
+## Lesson learned
+In [this](./lesson-learned) section - Everything that I learned - The references, the logic, the hurdles and outcomes.

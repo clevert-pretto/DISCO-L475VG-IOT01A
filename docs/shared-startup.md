@@ -1,10 +1,10 @@
 ---
 layout: default
-title: Shared SDK Architecture
-nav_order: 2
-has_children: true
+title: startup file
+parent: Shared SDK Architecture
+nav_order: 4
 ---
-# Shared SDK Architecture
+# Shared Startup
 
 The "Shared" layer acts as the hardware abstraction and boot-strapping engine for the entire platform.
 

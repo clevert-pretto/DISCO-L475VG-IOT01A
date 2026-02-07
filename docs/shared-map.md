@@ -2,7 +2,7 @@
 layout: default
 title: Memory Map (MMIO)
 parent: Shared SDK Architecture
-nav_order: 2
+nav_order: 3
 ---
 # Memory Mapped I/O
 Instead of using magic numbers, `my_stm32_map.h` defines the hardware architecture for the STM32L475VG:

@@ -1,7 +1,8 @@
 ---
 layout: default
 title: 02. Precision Timing
-nav_order: 4
+parent: Phase 1. Bare_Metal architecture (Cortex M4)
+nav_order: 2
 ---
 # Module 02: Hardware-Accelerated Precision Timing
 

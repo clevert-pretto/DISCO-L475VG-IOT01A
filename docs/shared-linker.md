@@ -2,7 +2,7 @@
 layout: default
 title: Linker Specification
 parent: Shared SDK Architecture
-nav_order: 3
+nav_order: 2
 ---
 # Linker Script Architecture
 

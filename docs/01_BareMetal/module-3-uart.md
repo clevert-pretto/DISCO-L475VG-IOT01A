@@ -1,7 +1,8 @@
 ---
 layout: default
 title: 03. Interrupt-Driven UART
-nav_order: 5
+parent: Phase 1. Bare_Metal architecture (Cortex M4)
+nav_order: 3
 ---
 # Module 03: Asynchronous Serial Communication
 
