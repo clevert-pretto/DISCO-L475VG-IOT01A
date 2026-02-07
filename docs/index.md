@@ -47,4 +47,4 @@ These components form the foundation of every project in this repository.
 
 
 ## Lesson learned
-In [Lesson Learned](./lesson-learned) section - Everything that I learned - The references, the logic, the hurdles and outcomes.
+In [Lesson Learned](./lesson-learned.md) section - Everything that I learned - The references, the logic, the hurdles and outcomes.
