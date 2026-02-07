@@ -1,8 +1,8 @@
 ---
 layout: default
 title: 07. SPI & Bluetooth Verification
-parent: Phase 1. Bare_Metal architecture (Cortex M4)
 nav_order: 7
+parent: Phase 1. Bare_Metal architecture - Cortex M4
 ---
 # Module 07: SPI Protocol & Bluetooth LE Hardware Handshake
 

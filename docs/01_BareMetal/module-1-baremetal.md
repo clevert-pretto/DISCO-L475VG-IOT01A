@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 01. Bare Metal Blinky
-parent: Phase 1. Bare_Metal architecture (Cortex M4)
+parent: Phase 1. Bare_Metal architecture - Cortex M4
 nav_order: 1
 ---
 # Module 01: The Silicon Handshake

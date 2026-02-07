@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 04. I2C & Floating Point Math
-parent: Phase 1. Bare_Metal architecture (Cortex M4)
+parent: Phase 1. Bare_Metal architecture - Cortex M4
 nav_order: 4
 ---
 # Module 04: Hardware-Accelerated Environmental Sensing

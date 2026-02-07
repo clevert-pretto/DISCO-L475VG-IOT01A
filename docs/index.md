@@ -6,7 +6,6 @@ description: "STM32L475 Platform Architecture"
 permalink: /
 ---
 # STM32L475 Platform Architecture
-**Principal Engineer Candidate Knowledge Base**
 
 This repository documents follwing phases.
 * **Phase 1: Bare-Metal SDK** - The transition from vendor-dependent HAL layers to a custom, deterministic Bare-MEtal SDK.
@@ -17,10 +16,10 @@ This repository documents follwing phases.
 ## 🏛 Core SDK Architecture (The `shared/` Layer)
 These components form the foundation of every project in this repository. 
 
-* **[Shared Startup Logic](./shared-startup)**: Handles the Vector Table, Reset Handler, and Weak Interrupt Aliasing.
-* **[Linker Specification](./shared-linker)**: Defines the LMA/VMA memory regions for Flash and RAM.
-* **[Memory Map](./shared-map)**: Hardware abstraction of the STM32L475 MMIO registers.
-* **[Modular Build System](./shared-build)**: The `base.mk` framework for path-agnostic builds.
+* **[Shared Startup Logic](./shared/shared-startup)**: Handles the Vector Table, Reset Handler, and Weak Interrupt Aliasing.
+* **[Linker Specification](./shared/shared-linker)**: Defines the LMA/VMA memory regions for Flash and RAM.
+* **[Memory Map](./shared/shared-map)**: Hardware abstraction of the STM32L475 MMIO registers.
+* **[Modular Build System](./shared/shared-build)**: The `base.mk` framework for path-agnostic builds.
 
 ---
 
@@ -45,4 +44,4 @@ These components form the foundation of every project in this repository.
 
 
 ## Lesson learned
-In [this](./lesson-learned) section - Everything that I learned - The references, the logic, the hurdles and outcomes.
+In [Lesson Learned](./lesson-learned) section - Everything that I learned - The references, the logic, the hurdles and outcomes.

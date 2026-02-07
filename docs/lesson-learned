@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Lesson Learned
-nav_order: 3
+nav_order: 2
+permalink: /
 ---
 # Module 01 & 02: The Bare-Metal Foundation
 

@@ -1,4 +1,4 @@
 # _config.yml
 remote_theme: pmarsceill/just-the-docs
 title: STM32L475 Platform Knowledge Base
-description: Bare-Metal Firmware Engineering Portfolio
+description: STM32L475 Platform Architecture Portfolio
