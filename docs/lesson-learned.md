@@ -9,22 +9,15 @@ has_children: false
 
 This journal documents the technical hurdles, register-level insights, and architectural breakthroughs encountered during the development of the STM32L475 Bare-Metal SDK.
 
-<details>
-<summary><b>Module 01 & 02: The Bare-Metal Foundation</b></summary>
-<br>
 
+## Module 01 & 02: The Bare-Metal Foundation
 * **Reference Manual:** RM0351 (STM32L4x5).
 * **Registers:** `RCC_AHB2ENR` (0x4002104C), `GPIOB_MODER` (0x48000400), `USART1_BRR` (0x4001380C).
 * **Logic:** Manual calculation of Baud Rate divisors and bit-masking for GPIO Alternative Functions (`AF7 for UART`).
 * **Hurdles:** Initial attempts failed because the peripheral clock gating was not enabled before configuring registers.
 * **Lesson:** Always enable the clock in RCC before touching peripheral registers, or the writes will be ignored by the silicon.
 
-</details>
-
-<details>
-<summary><b>Module 03 & 04: Precision Timing & HTS221 Sensing</b></summary>
-<br>
-
+## Module 03 & 04: Precision Timing & HTS221 Sensing
 * **Reference Manual:** RM0351 & Cortex-M4 Programming Manual.
 * **Registers:** `SYSTICK_LOAD` (0xE000E014), `CPACR` (0xE000ED88), `I2C2_TIMINGR` (0x40005810).
 * **Logic:** Implemented linear interpolation using factory-stored calibration coefficients.
@@ -32,51 +25,30 @@ This journal documents the technical hurdles, register-level insights, and archi
 * **Lesson:** Enabling the FPU requires a specific "Coprocessor Access" sequence in the Reset_Handler.
 * **Clocking:** Used HSI16 (16MHz) as a stable clock source for I2C timing to ensure a consistent 100kHz bus speed.
 
-</details>
-
-<details>
-<summary><b>Module 05: DMA Acceleration & Interrupts</b></summary>
-<br>
-
+## Module 05: DMA Acceleration & Interrupts
 * **Reference Manual:** RM0351 (DMA & NVIC Sections).
 * **Registers:** `DMA1_CSELR` (0x400200A8), `DMA1_IFCR` (0x40020004), `NVIC_ISER0` (0xE000E100).
 * **Logic:** Configured DMA1 Channel 4 to offload UART transmissions from the CPU.
 * **Hurdles:** Encountered the "One-Shot" bug where DMA would only send data once.
 * **Lesson:** The Transfer Complete (TC) flag in `IFCR` must be cleared via a direct assignment (`=`), not a bitwise OR (`|=`), because `IFCR` is a write-only register.
 
-</details>
-
-<details>
-<summary><b>Module 06: System Reliability (IWDG)</b></summary>
-<br>
-
+## Module 06: System Reliability (IWDG)
 * **Reference Manual:** RM0351 Section 32.
 * **Registers:** `IWDG_KR` (Key), `IWDG_PR` (Prescaler), `IWDG_RLR` (Reload).
 * **Logic:** Implemented a fail-safe timer that resets the CPU if the main loop hangs.
 * **Hurdles:** Verified that the IWDG runs on the LSI (32kHz) clock, making it independent of the main HSI16 clock tree.
 * **Lesson:** Security through isolation. By running on the LSI, the watchdog can rescue the system even if the main oscillator fails or the PLL loses lock.
 
-</details>
-
-<details>
-<summary><b>Module 07: SPI & The Silent Bluetooth Chip</b></summary>
-<br>
-
+## Module 07: SPI & The Silent Bluetooth Chip
 * **Reference Manual:** RM0351 Section 38.
 * **Register Trap (MODER)**: Identified that using a pin-number constant in a 2-bit `MODER` field causes a "bit spill," corrupting adjacent pins.
 * **Deadlock Trap**: Traced a "silent hang" to a disabled peripheral clock; the register returns `0`, causing an infinite `while(!(SR & TXE))` wait.
 * **BSY Flag Logic**: Wait for the `BSY` (Busy) flag to clear before raising Chip Select (CS) to avoid truncating the last bit.
 
-</details>
-<details>
-<summary><b>Module 08: Interrupt Pipeline & Diagnostic Baselines</b></summary>
-<br>
-
+## Module 08: Interrupt Pipeline & Diagnostic Baselines
 * **Reference Manual**: RM0351 (EXTI & SYSCFG Sections).
 * **Registers**: `SYSCFG_EXTICR4` (0x40010014), `EXTI_IMR1` (0x40010400), `NVIC_ISER1` (0xE000E104).
 * **Logic**: Verified the core interrupt pipeline using the User Button (PC13) as a baseline.
 * **Hurdle**: EXTI registers were initially mapped to `SYSCFG_BASE`, creating a "silent failure".
 * **Solution**: Corrected mapping to `EXTI_BASE` ($0x40010400UL$) and configured `VTOR` to $0x08000000$.
 * **NVIC**: Used `NVIC_ISER1` to enable IRQ 40 (Bit 8) for the User Button.
-
-</details>
