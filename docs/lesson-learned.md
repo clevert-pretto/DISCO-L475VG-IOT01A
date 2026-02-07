@@ -4,7 +4,11 @@ title: Lesson Learned
 nav_order: 99
 has_children: false
 ---
+<details>
+<summary>
+
 # Module 01 & 02: The Bare-Metal Foundation
+</summary>
 
 * **Reference Manual:** RM0351 (STM32L4x5).
 
@@ -16,7 +20,13 @@ has_children: false
 
 * **Lesson:** Always enable the clock in RCC before touching peripheral registers, or the writes will be ignored by the silicon.
 
+</details>
+
+<details>
+<summary>
+
 # Module 03 & 04: Precision Timing & HTS221 Sensing
+</summary>
 
 * **Reference Manual:** RM0351 & Cortex-M4 Programming Manual.
 
@@ -28,7 +38,15 @@ has_children: false
 
 * **Lesson:** Enabling the FPU requires a specific "Coprocessor Access" sequence in the Reset_Handler. Additionally, I learned to use HSI16 (`16MHz`) as a stable clock source for I2C timing to ensure a consistent `100kHz` bus speed.
 
+</details>
+
+
+<details>
+<summary>
+
 # Module 05: DMA Acceleration & Interrupts
+</summary>
+
 * **Reference Manual:** RM0351 (DMA & NVIC Sections).
 
 * **Registers:** DMA1_CSELR (`0x400200A8`), DMA1_IFCR (`0x40020004`), NVIC_ISER0 (`0xE000E100`).
@@ -39,7 +57,14 @@ has_children: false
 
 * **Lesson:** The Transfer Complete (TC) flag in IFCR must be cleared via a direct assignment (=), not a bitwise OR (|=), because IFCR is a write-only register. This "hard reset" of the channel is essential for continuous data streams.
 
+</details>
+
+<details>
+<summary>
+
 # Module 06: System Reliability (IWDG)
+</summary>
+
 * **Reference Manual:** RM0351 (Independent Watchdog) Section 32.
 
 * **Registers:** IWDG_KR (Key), IWDG_PR (Prescaler), IWDG_RLR (Reload).
@@ -51,13 +76,25 @@ has_children: false
 
 * **Lesson:** Security through isolation. By running on the LSI, the watchdog can rescue the system even if the main oscillator fails or the PLL loses lock.
 
+<details>
+<summary>
+
 ### **Module 07: SPI & The Silent Bluetooth Chip**
+</summary>
+
 * **Reference Manual**: RM0351 Section 38.
 * **The Register Trap (MODER)**: Identified that using a pin-number constant (like 10) in a 2-bit `MODER` field causes a "bit spill," corrupting the settings of adjacent pins. Mode values must strictly be `0-3`.
 * **The Deadlock Trap**: I encountered a "silent hang" where the UART printed the header but nothing else. I traced this to a `while(!(SR & TXE))` loop. This happens if the peripheral clock is not enabled; the register returns `0`, causing an infinite wait.
 * **The BSY Flag Logic**: I learned that `TXE` (Transmit Empty) only means the FIFO has room. To safely raise the Chip Select (CS) line without truncating the last bit, I must wait for the `BSY` (Busy) flag to clear.
 
+</details>
+
+<details>
+<summary>
+
 ### **Module 08: Interrupt Pipeline & Diagnostic Baselines** 
+</summary>
+
 * **Reference Manual:** RM0351 (EXTI & SYSCFG Sections).
 * **Registers:** SYSCFG_EXTICR4 (`0x40010014`), EXTI_IMR1 (`0x40010400`), NVIC_ISER1 (`0xE000E104`).
 
@@ -65,3 +102,5 @@ has_children: false
     * **ISER Banking:** Learned that IRQ 40 (EXTI15_10) requires `NVIC_ISER1` as `ISER0` only covers IRQs 0-31.
 * **Lesson:** **Peripheral Boundary Accuracy.** `SYSCFG` and `EXTI` are adjacent but distinct peripherals. Correcting the base address to `0x40010400UL` was the "Final Boss" of the interrupt diagnostic.
 * **Lesson:** **VTOR Stability.** Manually setting the **Vector Table Offset Register (VTOR)** to `0x08000000` ensures the CPU locates the ISR jump-table even if the bootloader offset changes.
+
+</details>
