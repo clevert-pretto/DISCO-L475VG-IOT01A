@@ -8,7 +8,9 @@ permalink: /
 # STM32L475 Platform Architecture
 **Principal Engineer Candidate Knowledge Base**
 
-This repository documents the transition from vendor-dependent HAL layers to a custom, deterministic **Bare-Metal SDK**.
+This repository documents follwing phases.
+* **Phase 1: Bare-Metal SDK** - The transition from vendor-dependent HAL layers to a custom, deterministic Bare-MEtal SDK.
+* **Phase 2: Advanced RTOS & scheduling** - Context Switching Internals, Priority Inversion & Inheritance, Stack Overflow Analysis, Multicore (SMP) concepts.
 
 ---
 
@@ -24,16 +26,17 @@ These components form the foundation of every project in this repository.
 ---
 
 ## 🚀 Engineering Modules
-| Module | Title | Technical Focus |
-| :--- | :--- | :--- |
-| **01** | [Silicon Handshake](./module-1-baremetal) | Bootstrapping, GPIO, and Modular Makefiles. |
-| **02** | [Precision Timing](./module-2-systick) | SysTick Hardware, ISRs, and `volatile` memory safety. |
-| **03** | [Serial Communication](./module-3-uart) | *Upcoming: UART Peripheral and Clock Trees.* |
-| **04** | [Environmental Sensing](./module-4-i2c) | I2C, Hardware FPU, and Sensor Interpolation. |
-| **05** | [DMA Acceleration](./module-5-dma) | DMA Controller , DMA1_CH4, IRQ Handlers, Background Telemetry, and CPU Offloading. |
-| **06** | [Independant Watchdog](./module-6-watchdog) | System Reliability IWDG, LSI Clocking, Fail-safe mechanisms. |
-| **07** | [SPI Bluetooth Hello](./module-07-spi-BLE) | High-Speed Serial - Full-duplex SPI, FIFO management, Reset sequencing. |
-| **08** | [External Interupt via User Button](./module-8-ext_intrrupt_usr_btn) | Verified EXTI/NVIC pipeline & VTOR. |
+### Phase 1. Bare_Metal architecture (Cortex M4)
+- [**01. Silicon Handshake**](./01_BareMetal/module-1-baremetal.md) - Bootstrapping, GPIO, and Modular Makefiles.
+- [**02. Precision Timing**](./01_BareMetal/module-2-systick) - SysTick Hardware, ISRs, and `volatile` memory safety.
+- [**03. Serial Communication**](./01_BareMetal/module-3-uart) - UART Peripheral and Clock Trees.
+- [ **04. Environmental Sensing**](./01_BareMetal/module-4-i2c) - I2C, Hardware FPU, and Sensor Interpolation.
+- [**05. DMA Acceleration**](./01_BareMetal/module-5-dma) - DMA Controller , DMA1_CH4, IRQ Handlers, Background Telemetry, and CPU Offloading.
+- [**06. Independant Watchdog**](./01_BareMetal/module-6-watchdog) - System Reliability IWDG, LSI Clocking, Fail-safe mechanisms.
+- [**07. SPI Bluetooth Hello**](./01_BareMetal/module-07-spi-BLE) - High-Speed Serial, Full-duplex SPI, FIFO management, Reset sequencing.
+- [**08. External Interupt via User Button**](./01_BareMetal/module-8-ext_intrrupt_usr_btn) - Verified EXTI/NVIC pipeline & VTOR.
+
+### Phase 2: Advanced RTOS & scheduling
 ---
 
 ## 🛠 Tech Stack
