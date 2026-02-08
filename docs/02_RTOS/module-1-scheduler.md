@@ -8,9 +8,33 @@ nav_order: 2
 # Module 01: Building a Round-Robin Scheduler
 
 ## 🎯 Strategic Objective
-Develop a basic preemptive kernel that leverages the **SysTick** timer to multiplex CPU time across multiple independent threads of execution.
+Develop a basic **static, preemptive, Round-Robin Real-Time kernel** that leverages the **SysTick** timer to multiplex CPU time across multiple independent threads of execution.
 
+Following are the aspects of system we developed:
 
+**1.Preemptive** - Unlike a "Cooperative" system (where a task must voluntarily give up control), our system is Preemptive. The SysTick interrupt acts as a "hard" authority that pauses a task mid-execution to let another one run. This is the foundation of modern real-time systems
+
+**2. Round-Robin** - Because TCBs (Task Control Blocks) are linked in a circle (tcbA -> tcbB -> tcbA), the scheduling algorithm is Round-Robin. Every task gets an equal "slice" of time (1ms in our case) before the baton is passed to the next player.
+
+**3. Static** - The memory for the tasks (the stacks and TCB structures) is allocated at compile-time.
+
+Traits of RTOS :
+
+*Static RTOS:* High reliability, no memory fragmentation, used in safety-critical systems (like SSD controllers or medical devices).
+
+*Dynamic RTOS:* Allows Task_Create() at runtime (like FreeRTOS), which is more flexible but carries a risk of "Out of Memory" errors during execution.
+
+**4. Bare-Metal** - Since we are communicating directly with the ARM Cortex-M4 registers without an intermediate abstraction layer (like a HAL or a standard library), this is a Bare-Metal Implementation. This gives you the lowest possible latency and the smallest binary size.
+
+### 🛡️ Why we call it a "Kernel" and not yet a full "OS"###
+
+To transition from a Kernel to a full Operating System, we would typically add "Middleware" services:
+
+**1. Inter-Process Communication (IPC):** Semaphores, Mutexes, and Mailboxes.
+
+**2. Memory Management:** Dynamic heaps or memory pools.
+
+**3. Device Drivers:** Standardized ways for tasks to talk to UART, SPI, or I2C.
 
 ## ⚙️ Technical Focus
 
