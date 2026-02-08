@@ -1,4 +1,4 @@
-# shared/base.mk
+# makefile for Custom scheduler
 
 CC = arm-none-eabi-gcc
 AS = arm-none-eabi-as

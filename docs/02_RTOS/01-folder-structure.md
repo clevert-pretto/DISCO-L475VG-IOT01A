@@ -42,9 +42,9 @@ This repository contains a from-scratch implementation of a preemptive Round-Rob
 ### 🛠️ 2. CMSIS & Startup Integration
 To ensure professional-grade register access while staying "No-HAL," the project utilizes:
 
-**CMSIS Headers:** stm32l475xx.h was sourced from the official STMicroelectronics CMSIS device repository. This provides the standardized structures used for direct register manipulation (e.g., GPIOA->BSRR).
+**CMSIS Headers:** *stm32l475xx.h* was sourced from the official STMicroelectronics CMSIS device repository. This provides the standardized structures used for direct register manipulation (e.g., `GPIOA->BSRR`).
 
-**Startup Code:** The startup_stm32l475xx.s file was adapted from the GCC toolchain templates. It was modified to ensure the PendSV_Handler is globally accessible and properly linked to our custom assembly implementation.
+**Startup Code:** The *startup_stm32l475xx.s* file was adapted from the GCC toolchain templates. It was modified to ensure the PendSV_Handler is globally accessible and properly linked to our custom assembly implementation.
 
 ### 🏗️ 3. Linker Script Construction
 The linker.ld was manually crafted to align with the Cortex-M4 memory map:
@@ -75,14 +75,14 @@ The switching logic is split between C and Assembly:
 
 **PendSV (Assembly):**
 
-Saves R4-R11 of the current task to its stack.
+1. **Saves** *R4-R11* of the current task to its stack.
 
-Updates the currentTask pointer to the next TCB in the circular linked list.
+2. **Updates** the currentTask pointer to the next TCB in the circular linked list.
 
-Restores R4-R11 from the new task's stack and updates the Process Stack Pointer (PSP).
+3. **Restores** *R4-R11* from the new task's stack and updates the Process Stack Pointer (PSP).
 
 **Task 4: Stack Watermarking**
-To detect potential memory corruption—a critical requirement in SSD firmware—we implemented stack painting. The stack is filled with 0xDEADBEEF, and a background function calculates the unused space by searching for the "pristine" magic numbers from the bottom up.
+To detect potential memory corruption—a critical requirement in SSD firmware—we implemented stack painting. The stack is filled with `0xDEADBEEF`, and a background function calculates the unused space by searching for the "pristine" magic numbers from the bottom up.
 
 ### 🚀 5. How to Build & Debug (WSL)
 **USB Bridge:** Use usbipd in Windows PowerShell to attach the ST-Link to WSL:
