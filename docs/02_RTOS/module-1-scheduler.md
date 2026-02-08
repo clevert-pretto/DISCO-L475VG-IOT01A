@@ -2,7 +2,7 @@
 layout: default
 title: "01. Custom RTOS Scheduler"
 parent: "Phase 2: Advanced RTOS & Scheduling"
-nav_order: 1
+nav_order: 2
 ---
 
 # Module 01: Building a Round-Robin Scheduler
