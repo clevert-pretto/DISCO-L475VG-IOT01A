@@ -1,3 +1,10 @@
+---
+layout: default
+title: "STM32 Development & Debugging on WSL"
+nav_order: 5
+has_children: false
+---
+
 # 🛠️ STM32 Development & Debugging on WSL
 
 This guide covers the end-to-end process of connecting an ST-LINK debugger to WSL, configuring VS Code, and setting up the Cortex-Debug environment for "No-HAL" development.
