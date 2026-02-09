@@ -38,6 +38,9 @@ These components form the foundation of every project in this repository.
 - [**08. External Interupt via User Button**](./01_BareMetal/module-8-ext_intrrupt_usr_btn) - Verified EXTI/NVIC pipeline & VTOR.
 
 ### Phase 2: Advanced RTOS & scheduling
+- [**01. Preemptive Round-Robin Scheduler**](./01_RTOS/module-1-RR-scheduler.md) - context switching, pendSV Handler, Assembly code, time sliced preemption, Round-Robin, Real-Time kernel, and Modular Makefiles, .vscode launch.json for debugging.
+
+- [**02. Preemptive Priority-Based Scheduler**](./01_RTOS/module-2-PB-scheduler.md) - 
 ---
 
 ## 🛠 Tech Stack

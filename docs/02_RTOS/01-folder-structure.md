@@ -8,7 +8,7 @@ nav_order: 1
 
 ## 🚀 STM32L475 Custom RTOS Scheduler (Bare-Metal)
 This repository contains a from-scratch implementation of a preemptive Round-Robin scheduler for the ARM Cortex-M4 (STM32L475VG). The project demonstrates low-level context switching, hardware timer configuration, and memory management without the use of a commercial RTOS or high-level HAL libraries.
-
+---
 ### 📂 1. Project Structure & File Purpose
 ```
 |.vscode/
@@ -38,6 +38,7 @@ This repository contains a from-scratch implementation of a preemptive Round-Rob
 ```
 
   *NOTE : further project structure will not be updated in here, refer latest directory structure for more details*
+---
 
 ### 🛠️ 2. CMSIS & Startup Integration
 To ensure professional-grade register access while staying "No-HAL," the project utilizes:
@@ -46,6 +47,7 @@ To ensure professional-grade register access while staying "No-HAL," the project
 
 **Startup Code:** The *startup_stm32l475xx.s* file was adapted from the GCC toolchain templates. It was modified to ensure the PendSV_Handler is globally accessible and properly linked to our custom assembly implementation.
 
+---
 ### 🏗️ 3. Linker Script Construction
 The linker.ld was manually crafted to align with the Cortex-M4 memory map:
 
@@ -61,6 +63,7 @@ The linker.ld was manually crafted to align with the Cortex-M4 memory map:
 
 **Stack Alignment:** Enforced 8-byte alignment for task stacks to comply with the ARM Procedure Call Standard (AAPCS).
 
+---
 ### ⚙️ 4. Technical Implementation Tasks
 **Task 1: Clock & Timer Configuration**
 The system was moved from the default 4MHz MSI clock to a stable 16MHz configuration. The SysTick timer was configured to generate an interrupt every 1ms to serve as the OS heartbeat.
@@ -84,6 +87,7 @@ The switching logic is split between C and Assembly:
 **Task 4: Stack Watermarking**
 To detect potential memory corruption—a critical requirement in SSD firmware—we implemented stack painting. The stack is filled with `0xDEADBEEF`, and a background function calculates the unused space by searching for the "pristine" magic numbers from the bottom up.
 
+---
 ### 🚀 5. How to Build & Debug (WSL)
 **USB Bridge:** Use usbipd in Windows PowerShell to attach the ST-Link to WSL:
 
@@ -95,6 +99,7 @@ To detect potential memory corruption—a critical requirement in SSD firmware�
 
 *Refer [STM32 Development & Debugging on WSL](../wsl-debug-setup.md) for more details*
 
+---
 ### 📈 6. Project Results
 **Multi-Tasking:** Two independent tasks toggling PA5 and PB14 LEDs at different frequencies (`500ms` vs `1000ms`).
 
@@ -102,10 +107,12 @@ To detect potential memory corruption—a critical requirement in SSD firmware�
 
 **Stability:** Verified `16-byte` stack alignment and FPU-safe standard stacking.
 
-
-### 6. Run time changes in folder structure (IMPORTANT TO BUILD CORRECT MODULE)
+---
+### 7. Run time changes in folder structure (IMPORTANT TO BUILD CORRECT MODULE)
 To build multiple module using same set of linker, startup, cmsis files, we have to make certain changes as below,
 1. In Makefile we have added `MODULE ?= <Folder name here>`.
 2. Type correct folder name for project you want to build from `0-Modules` folder so that it can generate it's relevant `final.bin` and `final.elf` files in `release` folder.
 3. With usual F5, now you can debug the correct active files, or you can load `final.bin` directly.
+
+---
 

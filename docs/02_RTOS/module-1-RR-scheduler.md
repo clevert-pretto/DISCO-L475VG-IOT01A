@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "01. Custom RTOS Scheduler"
+title: "01. Custom Preemptive Round-Robin Scheduler"
 parent: "Phase 2: Advanced RTOS & Scheduling"
 nav_order: 2
 ---
@@ -26,6 +26,8 @@ Traits of RTOS :
 
 **4. Bare-Metal** - Since we are communicating directly with the ARM Cortex-M4 registers without an intermediate abstraction layer (like a HAL or a standard library), this is a Bare-Metal Implementation. This gives you the lowest possible latency and the smallest binary size.
 
+---
+
 ### 🛡️ Why we call it a "Kernel" and not yet a full "OS"
 
 To transition from a Kernel to a full Operating System, we would typically add "Middleware" services:
@@ -36,8 +38,9 @@ To transition from a Kernel to a full Operating System, we would typically add "
 
 **3. Device Drivers:** Standardized ways for tasks to talk to UART, SPI, or I2C.
 
-## ⚙️ Technical Focus
+--- 
 
+## ⚙️ Technical Focus
 ### The "Big Three" of Cortex-M Schedulers
 * **PendSV (Pended Service Call):** The designated interrupt for context switching. It is set to the lowest priority to ensure it doesn't block time-critical ISRs.
 * **Stack Framing:** Manually "faking" a stack frame for new tasks so they can be "returned to" by the CPU.
@@ -56,6 +59,8 @@ To transition from a Kernel to a full Operating System, we would typically add "
 ---
 
 ## 🛠 Deliverables
-- [ ] **Context Switcher:** Assembly-level `PendSV_Handler` implementation.
-- [ ] **Task Manager:** C-level logic to initialize the TCB array.
-- [ ] **Wiki Documentation:** Detailed breakdown of the ARM Cortex-M4 register set.
+- [x] **Context Switcher:** Assembly-level `PendSV_Handler` implementation.
+- [x] **Task Manager:** C-level logic to initialize the TCB array.
+- [x] **Wiki Documentation:** Detailed breakdown of the ARM Cortex-M4 register set.
+
+---

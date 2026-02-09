@@ -1,10 +1,15 @@
 #include "scheduler.h"
+#include "stm32l475xx.h"
+
+#define STACK_MAGIC_NUMBER 0xDEADBEEF
 
 TCB_t *currentTask = 0;
-#define STACK_MAGIC_NUMBER 0xDEADBEEF
-extern volatile uint32_t msTicks;
+TCB_t *nextTask = 0;
+TCB_t *taskHead = 0; // Head of the task list
 
-void Task_Stack_Init(TCB_t *tcb, uint32_t *stack, uint32_t stackSize, void (*taskPtr)(void)) {
+void Task_Stack_Init(TCB_t *tcb, uint32_t *stack, uint32_t stackSize, 
+                    void (*taskPtr)(void), uint32_t priority)
+{
     
     /* 1. "Paint" the entire stack with a magic number */
     for (uint32_t i = 0; i < stackSize; i++) {
@@ -29,7 +34,51 @@ void Task_Stack_Init(TCB_t *tcb, uint32_t *stack, uint32_t stackSize, void (*tas
         *(--psp) = 0;
     }
 
-    tcb->stackPtr = psp; /* Save the resulting stack pointer into the TCB */
+    tcb->stackPtr = psp;        /* Save the resulting stack pointer into the TCB */
+    tcb->priority = priority;   /* Save the priority */
+    tcb->state = TASK_READY;    /* task state */
+    tcb->sleepTicks = 0;        
+
+    /* Add to global linked list */
+    tcb->nextPtr = taskHead;
+    taskHead = tcb;
+}
+
+void Scheduler_SelectNext(void) 
+{
+    TCB_t *temp = taskHead;
+    TCB_t *highestPriorityTask = NULL;
+
+    /* lop through all the tasks to find the highest priority task */
+    while (temp != NULL) {
+        if (temp->state == TASK_READY) {
+            if (highestPriorityTask == NULL || 
+                temp->priority < highestPriorityTask->priority) 
+            {
+                highestPriorityTask = temp;
+            }
+        }
+        temp = temp->nextPtr;
+    }
+
+    /* CRITICAL: If no task is ready, something is wrong (Idle Task should be ready) */
+    if (highestPriorityTask != NULL) {
+        nextTask = highestPriorityTask;
+        
+        /* Only pend PendSV if we are actually changing tasks */
+        if (nextTask != currentTask) {
+            SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
+        }
+    }
+}
+
+void Task_Sleep(uint32_t ticks) {
+    __disable_irq();
+    currentTask->sleepTicks = ticks;
+    currentTask->state = TASK_BLOCKED;
+    __enable_irq();
+    
+    Scheduler_SelectNext(); // Give up CPU immediately
 }
 
 /* Function to check how many bytes are still "pristine" */

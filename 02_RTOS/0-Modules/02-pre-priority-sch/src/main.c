@@ -4,9 +4,19 @@
 /* Define Stacks and TCBs */
 uint32_t stackA[128] __attribute__((aligned(8)));
 uint32_t stackB[128] __attribute__((aligned(8)));
-TCB_t tcbA, tcbB;
-volatile uint32_t msTicks = 0; // Global millisecond counter
+uint32_t stackIdle[64] __attribute__((aligned(8)));
+TCB_t tcbA, tcbB, tcbIdle;
 
+extern TCB_t *currentTask;
+extern TCB_t *nextTask;
+extern TCB_t *taskHead;
+
+void TaskIdle(void) {
+    while(1) {
+        /* In a real world scenario, we would put the CPU to sleep here to save power */
+        __WFI(); 
+    }
+}
 
 void Clock_Config_16MHz(void) {
     // 1. Enable HSI16
@@ -44,15 +54,21 @@ void SysTick_Init(uint32_t ticks) {
     NVIC_SetPriority(SysTick_IRQn, 14); 
 }
 
-void SysTick_Handler(void) {
-    msTicks++;
-    /* Trigger PendSV context switch */
-    SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk; 
-}
-
-void Delay_ms(uint32_t ms) {
-    uint32_t startTicks = msTicks;
-    while ((msTicks - startTicks) < ms);
+void SysTick_Handler(void) 
+{
+    TCB_t *temp = taskHead;
+    /* Update sleep timers */
+    while (temp != NULL) {
+        if (temp->state == TASK_BLOCKED) {
+            if (temp->sleepTicks > 0) {
+                temp->sleepTicks--;
+            } else {
+                temp->state = TASK_READY;
+            }
+        }
+        temp = temp->nextPtr;
+    }
+    Scheduler_SelectNext();
 }
 
 void SystemInit(void) {
@@ -76,10 +92,10 @@ void GPIO_Init(void) {
 volatile uint32_t freeBytes;
 void TaskA(void) {
     while(1) {
-        GPIOA->BSRR = GPIO_BSRR_BS5;  /* LED1 ON */
-        Delay_ms(500);
-        GPIOA->BSRR = GPIO_BSRR_BR5;  /* LED1 OFF */
-        Delay_ms(500);
+        GPIOA->BSRR = GPIO_BSRR_BS5; // LED ON
+        Task_Sleep(500);             // Yields CPU, non-blocking
+        GPIOA->BSRR = GPIO_BSRR_BR5; // LED OFF
+        Task_Sleep(500);
 
         /* Monitor stack usage */
         freeBytes = Get_Stack_Unused(stackA, 128);
@@ -92,10 +108,10 @@ void TaskA(void) {
 
 void TaskB(void) {
     while(1) {
-        GPIOB->BSRR = GPIO_BSRR_BS14; /* LED2 ON */
-        Delay_ms(1000);                /* Slow blink for Task B */
-        GPIOB->BSRR = GPIO_BSRR_BR14; /* LED2 OFF */
-        Delay_ms(1000);
+        GPIOB->BSRR = GPIO_BSRR_BS14; // LED2 ON
+        Task_Sleep(1000);
+        GPIOB->BSRR = GPIO_BSRR_BR14; // LED2 OFF
+        Task_Sleep(1000);
     }
 }
 
@@ -108,24 +124,25 @@ int main(void) {
     SCB->CPACR &= ~((3UL << 20) | (3UL << 22));
 
     /* 1. Hardware Init */
+    /* Configure LED Pins */
     GPIO_Init();
 
-    /* 2. Scheduler Init */
-    Task_Stack_Init(&tcbA, stackA, 128, TaskA);
-    Task_Stack_Init(&tcbB, stackB, 128, TaskB);
-    tcbA.nextPtr = &tcbB;
-    tcbB.nextPtr = &tcbA;
+    /* 2. Scheduler Init taskA priority = 0, taskB priority = 1 */
+    Task_Stack_Init(&tcbA, stackA, 128, TaskA, 0);
+    Task_Stack_Init(&tcbB, stackB, 128, TaskB, 1);
+    Task_Stack_Init(&tcbIdle, stackIdle, 64, TaskIdle, 255); // Lowest Priority
+
+    /* Ensure these are set before sysTickInit() to allow pendSV a valid source*/
     currentTask = &tcbA;
+    nextTask = &tcbA;
 
     /* 3. SysTick & Priority Configuration */
     /* HSI Clock is 16MHz by default; set 1ms tick */
     SysTick_Init(16000);
 
-    /* 3. Configure LED Pins */
-
     /* 4. Launch First Task */
     /* Set PendSV to the lowest possible priority (15 for STM32L4) */
-    NVIC_SetPriority(PendSV_IRQn, 15);;
+    NVIC_SetPriority(PendSV_IRQn, 15);
     __set_PSP((uint32_t)tcbA.stackPtr); /* Set PSP to Task A stack */
     __set_CONTROL(0x02);               /* Switch to PSP, Thread Mode */
     __ISB();                           /* Instruction Synchronization Barrier */
@@ -133,5 +150,6 @@ int main(void) {
     
     
     TaskA(); /* Start Task A */
+    //while(1); /* No effect of while here, as CPU never going to come here again */
 }
 

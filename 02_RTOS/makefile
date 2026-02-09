@@ -65,7 +65,6 @@ $(RELEASE_DIR)/$(TARGET).bin: $(RELEASE_DIR)/$(TARGET).elf
 	$(OBJCOPY) -O binary $< $@
 	@echo "------------------------------------------------"
 	@echo "Build Success for Module: $(MODULE)"
-	@echo "Output File: $(RELEASE_DIR)/$(TARGET).elf"
 	$(SIZE) $<
 	@echo "------------------------------------------------"
 
