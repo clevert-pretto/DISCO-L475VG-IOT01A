@@ -1,0 +1,7 @@
+{
+    "cortex-debug.armToolchainPath": "/usr/bin", 
+    "cortex-debug.gdbPath": "/usr/bin/gdb-multiarch",
+    "cortex-debug.objdumpPath": "arm-none-eabi-objdump",
+    "cortex-debug.nmPath": "arm-none-eabi-nm",
+    "cortex-debug.variableUseNaturalFormat": false
+}

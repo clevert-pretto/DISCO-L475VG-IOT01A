@@ -6,6 +6,5 @@ cat <<EOF > .gitignore
 *.map
 
 # IDE files
-.vscode/
 .history/
 EOF

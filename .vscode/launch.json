@@ -1,0 +1,24 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Cortex Debug (Release Folder)",
+            "type": "cortex-debug",
+            "request": "launch",
+            "servertype": "openocd",
+            "cwd": "${workspaceFolder}/02_RTOS",
+            "executable": "${workspaceFolder}/02_RTOS/release/final.elf",
+            "device": "STM32L475",
+            "interface": "swd",
+            "runToEntryPoint": "main",
+            "configFiles": [
+                "interface/stlink.cfg",
+                "target/stm32l4x.cfg"
+            ],
+            /* This is the key: it triggers the dropdown menu from tasks.json */
+            "preLaunchTask": "Manual Build",
+            /* Important for WSL: points to the gdb you installed */
+            "gdbPath": "/usr/bin/gdb-multiarch",
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Manual Build",
+            "type": "shell",
+            /* Just run make clean and make. It will use the MODULE defined in the Makefile */
+            "command": "make clean && make",
+            "options": {
+                "cwd": "${workspaceFolder}/02_RTOS"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        }
+    ]
+}
