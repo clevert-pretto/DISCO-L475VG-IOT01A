@@ -26,7 +26,7 @@ Traits of RTOS :
 
 **4. Bare-Metal** - Since we are communicating directly with the ARM Cortex-M4 registers without an intermediate abstraction layer (like a HAL or a standard library), this is a Bare-Metal Implementation. This gives you the lowest possible latency and the smallest binary size.
 
-### 🛡️ Why we call it a "Kernel" and not yet a full "OS"###
+### 🛡️ Why we call it a "Kernel" and not yet a full "OS"
 
 To transition from a Kernel to a full Operating System, we would typically add "Middleware" services:
 
@@ -50,7 +50,7 @@ To transition from a Kernel to a full Operating System, we would typically add "
 | Challenge | Technical Nuance |
 | :--- | :--- |
 | **Reset vs. Switch** | Distinguishing between the initial boot-up (MSP) and task switching (PSP). |
-| **FPU Management** | Handling the **Lazy Stacking** of floating-point registers ($S0-S31$) to prevent data corruption during math-heavy tasks. |
+| **FPU Management** | Handling the **Lazy Stacking** of floating-point registers `S0-S31` to prevent data corruption during math-heavy tasks. |
 | **Atomic Operations** | Ensuring the scheduler's linked list isn't corrupted if an interrupt occurs during a task swap. |
 
 ---

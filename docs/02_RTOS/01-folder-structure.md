@@ -101,3 +101,11 @@ To detect potential memory corruptionâ€”a critical requirement in SSD firmwareâ€
 **Preemption:** Demonstrated that the system can swap tasks even during a blocking Delay_ms loop.
 
 **Stability:** Verified `16-byte` stack alignment and FPU-safe standard stacking.
+
+
+### 6. Run time changes in folder structure (IMPORTANT TO BUILD CORRECT MODULE)
+To build multiple module using same set of linker, startup, cmsis files, we have to make certain changes as below,
+1. In Makefile we have added `MODULE ?= <Folder name here>`.
+2. Type correct folder name for project you want to build from `0-Modules` folder so that it can generate it's relevant `final.bin` and `final.elf` files in `release` folder.
+3. With usual F5, now you can debug the correct active files, or you can load `final.bin` directly.
+
