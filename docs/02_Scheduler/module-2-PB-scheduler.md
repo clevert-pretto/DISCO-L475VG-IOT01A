@@ -1,11 +1,11 @@
 ---
 layout: default
 title: "02. Custom Priority-Based Preemptive Scheduler"
-parent: "Phase 2: Advanced RTOS & Scheduling"
+parent: "Phase 2: Building custom Schedulers"
 nav_order: 3
 ---
 
-# Module 01: Building a Priority-Based Preemptive Scheduler
+# Module 02: Building a Priority-Based Preemptive Scheduler
 
 ## 🎯 Strategic Objective
 Transition from a fixed-slice Round-Robin model to a **Priority-Based Preemptive Kernel**. 

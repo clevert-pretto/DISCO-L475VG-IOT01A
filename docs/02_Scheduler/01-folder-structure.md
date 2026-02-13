@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Folder Structure"
-parent: "Phase 2: Advanced RTOS & Scheduling"
+parent: "Phase 2: Building custom Schedulers"
 nav_order: 1
 ---
 
@@ -13,7 +13,7 @@ This repository contains a from-scratch implementation of a preemptive Round-Rob
 ```
 |.vscode/
 │   └── launch.json                 # Debugging configuration for WSL + GDB
-02_RTOS/
+02_Scheduler/
 ├── cmsis/
 │   │──inc/
 │   │   │──m-profile/

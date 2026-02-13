@@ -10,7 +10,7 @@ permalink: /
 ## 📂 Knowledge Base Roadmap
 1. **Phase 1: Bare-Metal SDK**
    - From Silicon Handshake to Interrupt-Driven Bluetooth.
-2. **Phase 2: Advanced RTOS & Scheduling**
+2. **Phase 2: Building custom Schedulers**
    - Context Switching, Priority Inversion, and SMP concepts.
 3. **Shared SDK Architecture**
    - The reusable `shared/` layer: Startup, Linker, and Build System.
@@ -37,17 +37,20 @@ These components form the foundation of every project in this repository.
 - [**07. SPI Bluetooth Hello**](./01_BareMetal/module-07-spi-BLE) - High-Speed Serial, Full-duplex SPI, FIFO management, Reset sequencing.
 - [**08. External Interupt via User Button**](./01_BareMetal/module-8-ext_intrrupt_usr_btn) - Verified EXTI/NVIC pipeline & VTOR.
 
-### Phase 2: Advanced RTOS & scheduling
-- [**01. Preemptive Round-Robin Scheduler**](./02_RTOS/module-1-RR-scheduler.md) - context switching, pendSV Handler, Assembly code, time sliced preemption, Round-Robin, Real-Time kernel, and Modular Makefiles, .vscode launch.json for debugging.
-
-- [**02. Preemptive Priority-Based Scheduler**](./02_RTOS/module-2-PB-scheduler.md) - Priority preemption, state based scheduling, non-blocking delays, Idle task, High priority ready algorithm
 ---
+### Phase 2: Building custom Schedulers
+- [**01. Preemptive Round-Robin Scheduler**](./02_Scheduler/module-1-RR-scheduler.md) - context switching, pendSV Handler, Assembly code, time sliced preemption, Round-Robin, Real-Time kernel, and Modular Makefiles, .vscode launch.json for debugging.
 
+- [**02. Preemptive Priority-Based Scheduler**](./02_Scheduler/module-2-PB-scheduler.md) - Priority preemption, state based scheduling, non-blocking delays, Idle task, High priority ready algorithm
+
+---
 ## 🛠 Tech Stack
 - **Hardware:** Discovery kit IoT node (B-L475E-IOT01A)
 - **Compiler:** `arm-none-eabi-gcc` (Optimization: `-O0` for debug clarity)
 - **Debugger:** OpenOCD via ST-Link V2-1
 
-
+---
 ## Lesson learned
 In [Lesson Learned](./lesson-learned.md) section - Everything that I learned - The references, the logic, the hurdles and outcomes.
+
+---

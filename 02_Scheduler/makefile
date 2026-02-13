@@ -1,6 +1,6 @@
 # --- Module Selection ---
 # Default module if none is provided
-MODULE ?= 02-pre-priority-sch
+MODULE ?= 03-bitmask-sch
 MODULE_PATH := 0-Modules/$(MODULE)
 
 # --- Project Configuration ---

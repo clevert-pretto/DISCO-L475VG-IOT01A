@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "01. Custom Preemptive Round-Robin Scheduler"
-parent: "Phase 2: Advanced RTOS & Scheduling"
+parent: "Phase 2: Building custom Schedulers"
 nav_order: 2
 ---
 

@@ -1,11 +1,11 @@
 ---
 layout: default
-title: "Phase 2: Advanced RTOS & Scheduling"
+title: "Phase 2: Building custom Schedulers"
 nav_order: 4
 has_children: true
 ---
 
-# Phase 2: Advanced RTOS & Scheduling
+# Phase 2: Building custom Schedulers
 
 ## 🧠 The Mission
 Transitioning from simple **Super-Loop** architectures to a deterministic, **Multi-threaded Preemptive Kernel**. This phase focuses on the "under the hood" mechanics of how an OS manages the CPU.
