@@ -2,10 +2,10 @@
 layout: default
 title: Home
 nav_order: 1
-description: "STM32L475 Platform Architecture"
+description: "STM32L475, bare metal, FreeRTOS portfolio"
 permalink: /
 ---
-# STM32L475 Platform Architecture
+# STM32L475, bare metal, FreeRTOS portfolio
 
 ## 📂 Knowledge Base Roadmap
 1. [**Phase 1: Bare-Metal SDK**](./phase-1.md)

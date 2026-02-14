@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Lesson Learned
-nav_order: 95
+nav_order: 99
+parent: "Phase 1. Bare-Metal architecture"
 has_children: false
 ---
 
