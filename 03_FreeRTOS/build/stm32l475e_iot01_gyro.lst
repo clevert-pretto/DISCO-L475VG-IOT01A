@@ -1,0 +1,582 @@
+ARM GAS  /tmp/ccfK0n0F.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 6
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"stm32l475e_iot01_gyro.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c"
+  20              		.section	.rodata.CHANNEL_OFFSET_TAB,"a"
+  21              		.align	2
+  24              	CHANNEL_OFFSET_TAB:
+  25 0000 081C3044 		.ascii	"\010\0340DXl\200"
+  25      586C80
+  26              		.section	.bss.GyroscopeDrv,"aw",%nobits
+  27              		.align	2
+  30              	GyroscopeDrv:
+  31 0000 00000000 		.space	4
+  32              		.section	.text.BSP_GYRO_Init,"ax",%progbits
+  33              		.align	1
+  34              		.global	BSP_GYRO_Init
+  35              		.syntax unified
+  36              		.thumb
+  37              		.thumb_func
+  39              	BSP_GYRO_Init:
+  40              	.LFB445:
+   1:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** /**
+   2:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   ******************************************************************************
+   3:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * @file    stm32l475e_iot01_gyro.c
+   4:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * @author  MCD Application Team
+   5:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * @brief   This file provides a set of functions needed to manage the gyroscope sensor
+   6:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   ******************************************************************************
+   7:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * @attention
+   8:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   *
+   9:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * Copyright (c) 2017 STMicroelectronics.
+  10:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * All rights reserved.
+  11:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   *
+  12:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  13:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * in the root directory of this software component.
+  14:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  15:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   *
+  16:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   ******************************************************************************
+  17:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   */
+  18:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** 
+  19:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** /* Includes ------------------------------------------------------------------*/
+  20:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** #include "stm32l475e_iot01_gyro.h"
+  21:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** 
+ARM GAS  /tmp/ccfK0n0F.s 			page 2
+
+
+  22:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** /** @addtogroup BSP
+  23:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * @{
+  24:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   */
+  25:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** 
+  26:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** /** @addtogroup STM32L475E_IOT01
+  27:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * @{
+  28:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   */
+  29:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****       
+  30:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** /** @defgroup STM32L475E_IOT01_GYROSCOPE GYROSCOPE
+  31:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * @{
+  32:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   */ 
+  33:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** 
+  34:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** /** @defgroup STM32L475E_IOT01_GYROSCOPE_Private_Variables GYROSCOPE Private Variables
+  35:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * @{
+  36:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   */
+  37:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** static GYRO_DrvTypeDef *GyroscopeDrv;
+  38:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** 
+  39:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** /**
+  40:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * @}
+  41:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   */
+  42:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** 
+  43:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** 
+  44:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** /** @defgroup STM32L475E_IOT01_GYROSCOPE_Private_Functions GYROSCOPE Private Functions
+  45:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * @{
+  46:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   */ 
+  47:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** /**
+  48:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * @brief  Initialize Gyroscope.
+  49:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * @retval GYRO_OK or GYRO_ERROR
+  50:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   */
+  51:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** uint8_t BSP_GYRO_Init(void)
+  52:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** {  
+  41              		.loc 1 52 1
+  42              		.cfi_startproc
+  43              		@ args = 0, pretend = 0, frame = 16
+  44              		@ frame_needed = 1, uses_anonymous_args = 0
+  45 0000 80B5     		push	{r7, lr}
+  46              		.cfi_def_cfa_offset 8
+  47              		.cfi_offset 7, -8
+  48              		.cfi_offset 14, -4
+  49 0002 84B0     		sub	sp, sp, #16
+  50              		.cfi_def_cfa_offset 24
+  51 0004 00AF     		add	r7, sp, #0
+  52              		.cfi_def_cfa_register 7
+  53:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   uint8_t ret = GYRO_ERROR;
+  53              		.loc 1 53 11
+  54 0006 0123     		movs	r3, #1
+  55 0008 FB73     		strb	r3, [r7, #15]
+  54:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   uint16_t ctrl = 0x0000;
+  56              		.loc 1 54 12
+  57 000a 0023     		movs	r3, #0
+  58 000c BB81     		strh	r3, [r7, #12]	@ movhi
+  55:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   GYRO_InitTypeDef LSM6DSL_InitStructure;
+  56:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** 
+  57:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   if(Lsm6dslGyroDrv.ReadID() != LSM6DSL_ACC_GYRO_WHO_AM_I)
+  59              		.loc 1 57 20
+  60 000e 1C4B     		ldr	r3, .L5
+  61 0010 9B68     		ldr	r3, [r3, #8]
+ARM GAS  /tmp/ccfK0n0F.s 			page 3
+
+
+  62              		.loc 1 57 6
+  63 0012 9847     		blx	r3
+  64              	.LVL0:
+  65 0014 0346     		mov	r3, r0
+  66              		.loc 1 57 5 discriminator 1
+  67 0016 6A2B     		cmp	r3, #106
+  68 0018 02D0     		beq	.L2
+  58:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   {
+  59:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     ret = GYRO_ERROR;
+  69              		.loc 1 59 9
+  70 001a 0123     		movs	r3, #1
+  71 001c FB73     		strb	r3, [r7, #15]
+  72 001e 29E0     		b	.L3
+  73              	.L2:
+  60:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   }
+  61:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   else
+  62:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   {
+  63:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     /* Initialize the gyroscope driver structure */
+  64:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     GyroscopeDrv = &Lsm6dslGyroDrv;
+  74              		.loc 1 64 18
+  75 0020 184B     		ldr	r3, .L5+4
+  76 0022 174A     		ldr	r2, .L5
+  77 0024 1A60     		str	r2, [r3]
+  65:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** 
+  66:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     /* Configure Mems : data rate, power mode, full scale and axes */
+  67:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     LSM6DSL_InitStructure.Power_Mode = 0;
+  78              		.loc 1 67 38
+  79 0026 0023     		movs	r3, #0
+  80 0028 3B71     		strb	r3, [r7, #4]
+  68:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     LSM6DSL_InitStructure.Output_DataRate = LSM6DSL_ODR_52Hz;
+  81              		.loc 1 68 43
+  82 002a 3023     		movs	r3, #48
+  83 002c 7B71     		strb	r3, [r7, #5]
+  69:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     LSM6DSL_InitStructure.Axes_Enable = 0;
+  84              		.loc 1 69 39
+  85 002e 0023     		movs	r3, #0
+  86 0030 BB71     		strb	r3, [r7, #6]
+  70:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     LSM6DSL_InitStructure.Band_Width = 0;
+  87              		.loc 1 70 38
+  88 0032 0023     		movs	r3, #0
+  89 0034 FB71     		strb	r3, [r7, #7]
+  71:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     LSM6DSL_InitStructure.BlockData_Update = LSM6DSL_BDU_BLOCK_UPDATE;
+  90              		.loc 1 71 44
+  91 0036 4023     		movs	r3, #64
+  92 0038 3B72     		strb	r3, [r7, #8]
+  72:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     LSM6DSL_InitStructure.Endianness = 0;
+  93              		.loc 1 72 38
+  94 003a 0023     		movs	r3, #0
+  95 003c 7B72     		strb	r3, [r7, #9]
+  73:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     LSM6DSL_InitStructure.Full_Scale = LSM6DSL_GYRO_FS_2000; 
+  96              		.loc 1 73 38
+  97 003e 0C23     		movs	r3, #12
+  98 0040 BB72     		strb	r3, [r7, #10]
+  74:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** 
+  75:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     /* Configure MEMS: data rate, full scale  */
+  76:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     ctrl = (LSM6DSL_InitStructure.Full_Scale | LSM6DSL_InitStructure.Output_DataRate);
+  99              		.loc 1 76 34
+ARM GAS  /tmp/ccfK0n0F.s 			page 4
+
+
+ 100 0042 BA7A     		ldrb	r2, [r7, #10]	@ zero_extendqisi2
+ 101              		.loc 1 76 69
+ 102 0044 7B79     		ldrb	r3, [r7, #5]	@ zero_extendqisi2
+ 103              		.loc 1 76 10
+ 104 0046 1343     		orrs	r3, r3, r2
+ 105 0048 DBB2     		uxtb	r3, r3
+ 106 004a BB81     		strh	r3, [r7, #12]	@ movhi
+  77:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** 
+  78:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     /* Configure MEMS: BDU and Auto-increment for multi read/write */
+  79:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     ctrl |= ((LSM6DSL_InitStructure.BlockData_Update | LSM6DSL_ACC_GYRO_IF_INC_ENABLED) << 8);
+ 107              		.loc 1 79 36
+ 108 004c 3B7A     		ldrb	r3, [r7, #8]	@ zero_extendqisi2
+ 109              		.loc 1 79 10
+ 110 004e 43F00403 		orr	r3, r3, #4
+ 111 0052 DBB2     		uxtb	r3, r3
+ 112 0054 1BB2     		sxth	r3, r3
+ 113 0056 1B02     		lsls	r3, r3, #8
+ 114 0058 1AB2     		sxth	r2, r3
+ 115 005a B7F90C30 		ldrsh	r3, [r7, #12]
+ 116 005e 1343     		orrs	r3, r3, r2
+ 117 0060 1BB2     		sxth	r3, r3
+ 118 0062 BB81     		strh	r3, [r7, #12]	@ movhi
+  80:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** 
+  81:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     /* Initialize component */
+  82:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     GyroscopeDrv->Init(ctrl);
+ 119              		.loc 1 82 17
+ 120 0064 074B     		ldr	r3, .L5+4
+ 121 0066 1B68     		ldr	r3, [r3]
+ 122 0068 1B68     		ldr	r3, [r3]
+ 123              		.loc 1 82 5
+ 124 006a BA89     		ldrh	r2, [r7, #12]
+ 125 006c 1046     		mov	r0, r2
+ 126 006e 9847     		blx	r3
+ 127              	.LVL1:
+  83:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     
+  84:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     ret = GYRO_OK;
+ 128              		.loc 1 84 9
+ 129 0070 0023     		movs	r3, #0
+ 130 0072 FB73     		strb	r3, [r7, #15]
+ 131              	.L3:
+  85:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   }
+  86:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   
+  87:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   return ret;
+ 132              		.loc 1 87 10
+ 133 0074 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+  88:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** }
+ 134              		.loc 1 88 1
+ 135 0076 1846     		mov	r0, r3
+ 136 0078 1037     		adds	r7, r7, #16
+ 137              		.cfi_def_cfa_offset 8
+ 138 007a BD46     		mov	sp, r7
+ 139              		.cfi_def_cfa_register 13
+ 140              		@ sp needed
+ 141 007c 80BD     		pop	{r7, pc}
+ 142              	.L6:
+ 143 007e 00BF     		.align	2
+ 144              	.L5:
+ARM GAS  /tmp/ccfK0n0F.s 			page 5
+
+
+ 145 0080 00000000 		.word	Lsm6dslGyroDrv
+ 146 0084 00000000 		.word	GyroscopeDrv
+ 147              		.cfi_endproc
+ 148              	.LFE445:
+ 150              		.section	.text.BSP_GYRO_DeInit,"ax",%progbits
+ 151              		.align	1
+ 152              		.global	BSP_GYRO_DeInit
+ 153              		.syntax unified
+ 154              		.thumb
+ 155              		.thumb_func
+ 157              	BSP_GYRO_DeInit:
+ 158              	.LFB446:
+  89:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** 
+  90:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** 
+  91:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** /**
+  92:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * @brief  DeInitialize Gyroscope.
+  93:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   */
+  94:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** void BSP_GYRO_DeInit(void)
+  95:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** {
+ 159              		.loc 1 95 1
+ 160              		.cfi_startproc
+ 161              		@ args = 0, pretend = 0, frame = 0
+ 162              		@ frame_needed = 1, uses_anonymous_args = 0
+ 163 0000 80B5     		push	{r7, lr}
+ 164              		.cfi_def_cfa_offset 8
+ 165              		.cfi_offset 7, -8
+ 166              		.cfi_offset 14, -4
+ 167 0002 00AF     		add	r7, sp, #0
+ 168              		.cfi_def_cfa_register 7
+  96:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   /* DeInitialize the Gyroscope IO interfaces */
+  97:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   if(GyroscopeDrv != NULL)
+ 169              		.loc 1 97 19
+ 170 0004 074B     		ldr	r3, .L10
+ 171 0006 1B68     		ldr	r3, [r3]
+ 172              		.loc 1 97 5
+ 173 0008 002B     		cmp	r3, #0
+ 174 000a 08D0     		beq	.L9
+  98:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   {
+  99:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     if(GyroscopeDrv->DeInit!= NULL)
+ 175              		.loc 1 99 20
+ 176 000c 054B     		ldr	r3, .L10
+ 177 000e 1B68     		ldr	r3, [r3]
+ 178 0010 5B68     		ldr	r3, [r3, #4]
+ 179              		.loc 1 99 7
+ 180 0012 002B     		cmp	r3, #0
+ 181 0014 03D0     		beq	.L9
+ 100:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     {
+ 101:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****       GyroscopeDrv->DeInit();
+ 182              		.loc 1 101 19
+ 183 0016 034B     		ldr	r3, .L10
+ 184 0018 1B68     		ldr	r3, [r3]
+ 185 001a 5B68     		ldr	r3, [r3, #4]
+ 186              		.loc 1 101 7
+ 187 001c 9847     		blx	r3
+ 188              	.LVL2:
+ 189              	.L9:
+ 102:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     }
+ARM GAS  /tmp/ccfK0n0F.s 			page 6
+
+
+ 103:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   }
+ 104:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** }
+ 190              		.loc 1 104 1
+ 191 001e 00BF     		nop
+ 192 0020 80BD     		pop	{r7, pc}
+ 193              	.L11:
+ 194 0022 00BF     		.align	2
+ 195              	.L10:
+ 196 0024 00000000 		.word	GyroscopeDrv
+ 197              		.cfi_endproc
+ 198              	.LFE446:
+ 200              		.section	.text.BSP_GYRO_LowPower,"ax",%progbits
+ 201              		.align	1
+ 202              		.global	BSP_GYRO_LowPower
+ 203              		.syntax unified
+ 204              		.thumb
+ 205              		.thumb_func
+ 207              	BSP_GYRO_LowPower:
+ 208              	.LFB447:
+ 105:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** 
+ 106:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** 
+ 107:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** /**
+ 108:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * @brief  Set/Unset Gyroscope in low power mode.
+ 109:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * @param  status 0 means disable Low Power Mode, otherwise Low Power Mode is enabled
+ 110:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   */
+ 111:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** void BSP_GYRO_LowPower(uint16_t status)
+ 112:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** {
+ 209              		.loc 1 112 1
+ 210              		.cfi_startproc
+ 211              		@ args = 0, pretend = 0, frame = 8
+ 212              		@ frame_needed = 1, uses_anonymous_args = 0
+ 213 0000 80B5     		push	{r7, lr}
+ 214              		.cfi_def_cfa_offset 8
+ 215              		.cfi_offset 7, -8
+ 216              		.cfi_offset 14, -4
+ 217 0002 82B0     		sub	sp, sp, #8
+ 218              		.cfi_def_cfa_offset 16
+ 219 0004 00AF     		add	r7, sp, #0
+ 220              		.cfi_def_cfa_register 7
+ 221 0006 0346     		mov	r3, r0
+ 222 0008 FB80     		strh	r3, [r7, #6]	@ movhi
+ 113:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   /* Set/Unset component in low-power mode */
+ 114:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   if(GyroscopeDrv != NULL)
+ 223              		.loc 1 114 19
+ 224 000a 094B     		ldr	r3, .L15
+ 225 000c 1B68     		ldr	r3, [r3]
+ 226              		.loc 1 114 5
+ 227 000e 002B     		cmp	r3, #0
+ 228 0010 0AD0     		beq	.L14
+ 115:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   {
+ 116:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     if(GyroscopeDrv->LowPower!= NULL)
+ 229              		.loc 1 116 20
+ 230 0012 074B     		ldr	r3, .L15
+ 231 0014 1B68     		ldr	r3, [r3]
+ 232 0016 1B69     		ldr	r3, [r3, #16]
+ 233              		.loc 1 116 7
+ 234 0018 002B     		cmp	r3, #0
+ARM GAS  /tmp/ccfK0n0F.s 			page 7
+
+
+ 235 001a 05D0     		beq	.L14
+ 117:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     {
+ 118:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****       GyroscopeDrv->LowPower(status);
+ 236              		.loc 1 118 19
+ 237 001c 044B     		ldr	r3, .L15
+ 238 001e 1B68     		ldr	r3, [r3]
+ 239 0020 1B69     		ldr	r3, [r3, #16]
+ 240              		.loc 1 118 7
+ 241 0022 FA88     		ldrh	r2, [r7, #6]
+ 242 0024 1046     		mov	r0, r2
+ 243 0026 9847     		blx	r3
+ 244              	.LVL3:
+ 245              	.L14:
+ 119:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     }
+ 120:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   }
+ 121:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** }
+ 246              		.loc 1 121 1
+ 247 0028 00BF     		nop
+ 248 002a 0837     		adds	r7, r7, #8
+ 249              		.cfi_def_cfa_offset 8
+ 250 002c BD46     		mov	sp, r7
+ 251              		.cfi_def_cfa_register 13
+ 252              		@ sp needed
+ 253 002e 80BD     		pop	{r7, pc}
+ 254              	.L16:
+ 255              		.align	2
+ 256              	.L15:
+ 257 0030 00000000 		.word	GyroscopeDrv
+ 258              		.cfi_endproc
+ 259              	.LFE447:
+ 261              		.section	.text.BSP_GYRO_GetXYZ,"ax",%progbits
+ 262              		.align	1
+ 263              		.global	BSP_GYRO_GetXYZ
+ 264              		.syntax unified
+ 265              		.thumb
+ 266              		.thumb_func
+ 268              	BSP_GYRO_GetXYZ:
+ 269              	.LFB448:
+ 122:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** 
+ 123:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** /**
+ 124:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * @brief  Get XYZ angular acceleration from the Gyroscope.
+ 125:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   * @param  pfData: pointer on floating array         
+ 126:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   */
+ 127:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** void BSP_GYRO_GetXYZ(float* pfData)
+ 128:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** {
+ 270              		.loc 1 128 1
+ 271              		.cfi_startproc
+ 272              		@ args = 0, pretend = 0, frame = 8
+ 273              		@ frame_needed = 1, uses_anonymous_args = 0
+ 274 0000 80B5     		push	{r7, lr}
+ 275              		.cfi_def_cfa_offset 8
+ 276              		.cfi_offset 7, -8
+ 277              		.cfi_offset 14, -4
+ 278 0002 82B0     		sub	sp, sp, #8
+ 279              		.cfi_def_cfa_offset 16
+ 280 0004 00AF     		add	r7, sp, #0
+ 281              		.cfi_def_cfa_register 7
+ARM GAS  /tmp/ccfK0n0F.s 			page 8
+
+
+ 282 0006 7860     		str	r0, [r7, #4]
+ 129:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   if(GyroscopeDrv != NULL)
+ 283              		.loc 1 129 19
+ 284 0008 084B     		ldr	r3, .L20
+ 285 000a 1B68     		ldr	r3, [r3]
+ 286              		.loc 1 129 5
+ 287 000c 002B     		cmp	r3, #0
+ 288 000e 09D0     		beq	.L19
+ 130:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   {
+ 131:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     if(GyroscopeDrv->GetXYZ!= NULL)
+ 289              		.loc 1 131 20
+ 290 0010 064B     		ldr	r3, .L20
+ 291 0012 1B68     		ldr	r3, [r3]
+ 292 0014 1B6B     		ldr	r3, [r3, #48]
+ 293              		.loc 1 131 7
+ 294 0016 002B     		cmp	r3, #0
+ 295 0018 04D0     		beq	.L19
+ 132:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     {
+ 133:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****       GyroscopeDrv->GetXYZ(pfData);
+ 296              		.loc 1 133 19
+ 297 001a 044B     		ldr	r3, .L20
+ 298 001c 1B68     		ldr	r3, [r3]
+ 299 001e 1B6B     		ldr	r3, [r3, #48]
+ 300              		.loc 1 133 7
+ 301 0020 7868     		ldr	r0, [r7, #4]
+ 302 0022 9847     		blx	r3
+ 303              	.LVL4:
+ 304              	.L19:
+ 134:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****     }
+ 135:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c ****   }
+ 136:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.c **** }
+ 305              		.loc 1 136 1
+ 306 0024 00BF     		nop
+ 307 0026 0837     		adds	r7, r7, #8
+ 308              		.cfi_def_cfa_offset 8
+ 309 0028 BD46     		mov	sp, r7
+ 310              		.cfi_def_cfa_register 13
+ 311              		@ sp needed
+ 312 002a 80BD     		pop	{r7, pc}
+ 313              	.L21:
+ 314              		.align	2
+ 315              	.L20:
+ 316 002c 00000000 		.word	GyroscopeDrv
+ 317              		.cfi_endproc
+ 318              	.LFE448:
+ 320              		.text
+ 321              	.Letext0:
+ 322              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 323              		.file 3 "Drivers/BSP/B-L475E-IOT01/../Components/lsm6dsl/../Common/gyro.h"
+ 324              		.file 4 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_ll_dma.h"
+ 325              		.file 5 "Drivers/BSP/B-L475E-IOT01/../Components/lsm6dsl/lsm6dsl.h"
+ 326              		.file 6 "Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_gyro.h"
+ARM GAS  /tmp/ccfK0n0F.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32l475e_iot01_gyro.c
+     /tmp/ccfK0n0F.s:21     .rodata.CHANNEL_OFFSET_TAB:00000000 $d
+     /tmp/ccfK0n0F.s:24     .rodata.CHANNEL_OFFSET_TAB:00000000 CHANNEL_OFFSET_TAB
+     /tmp/ccfK0n0F.s:27     .bss.GyroscopeDrv:00000000 $d
+     /tmp/ccfK0n0F.s:30     .bss.GyroscopeDrv:00000000 GyroscopeDrv
+     /tmp/ccfK0n0F.s:33     .text.BSP_GYRO_Init:00000000 $t
+     /tmp/ccfK0n0F.s:39     .text.BSP_GYRO_Init:00000000 BSP_GYRO_Init
+     /tmp/ccfK0n0F.s:145    .text.BSP_GYRO_Init:00000080 $d
+     /tmp/ccfK0n0F.s:151    .text.BSP_GYRO_DeInit:00000000 $t
+     /tmp/ccfK0n0F.s:157    .text.BSP_GYRO_DeInit:00000000 BSP_GYRO_DeInit
+     /tmp/ccfK0n0F.s:196    .text.BSP_GYRO_DeInit:00000024 $d
+     /tmp/ccfK0n0F.s:201    .text.BSP_GYRO_LowPower:00000000 $t
+     /tmp/ccfK0n0F.s:207    .text.BSP_GYRO_LowPower:00000000 BSP_GYRO_LowPower
+     /tmp/ccfK0n0F.s:257    .text.BSP_GYRO_LowPower:00000030 $d
+     /tmp/ccfK0n0F.s:262    .text.BSP_GYRO_GetXYZ:00000000 $t
+     /tmp/ccfK0n0F.s:268    .text.BSP_GYRO_GetXYZ:00000000 BSP_GYRO_GetXYZ
+     /tmp/ccfK0n0F.s:316    .text.BSP_GYRO_GetXYZ:0000002c $d
+                           .group:00000000 wm4.0.e7b64c2c371cf922f2c8028878d5c18e
+                           .group:00000000 wm4.stm32l4xx_hal_conf.h.23.286c2f63aaa73ed97ffb4d26f7caa6e9
+                           .group:00000000 wm4.stm32l4xx.h.38.9f5830373ca31b8a3cd182fdc6c7b69a
+                           .group:00000000 wm4.stm32l475xx.h.34.2f1a75aed66751e299f09004aef64973
+                           .group:00000000 wm4.stdint.h.29.6d480f4ba0f60596e88234283d42444f
+                           .group:00000000 wm4.cmsis_version.h.32.46e8eccfa2cfeaae11d008bb2823a3ed
+                           .group:00000000 wm4.core_cm4.h.66.e4ff136c4a17abc46741866f64f8e729
+                           .group:00000000 wm4.cmsis_gcc.h.26.78077cef1206e937f7b56043ffca496a
+                           .group:00000000 wm4.core_cm4.h.174.fcddd62df80231752fa39eb9b61dadfe
+                           .group:00000000 wm4.mpu_armv7.h.32.4049752bb5792d4e15357775e9506cfc
+                           .group:00000000 wm4.stm32l475xx.h.423.4d783859c9ac66890c9807dd7bd3a4db
+                           .group:00000000 wm4.stm32l4xx.h.196.f5ae8047c57b6175c94f246ef967a286
+                           .group:00000000 wm4.stm32_hal_legacy.h.22.08b8350ccf512ba8d98002fb33e7cbe5
+                           .group:00000000 wm4.stddef.h.39.0dc9006b34572d4d9cae4c8b422c4971
+                           .group:00000000 wm4.stm32l4xx_hal_def.h.58.1058a33f7217e935f2a6b51956d66a69
+                           .group:00000000 wm4.stm32l4xx_hal_rcc.h.156.ab8eecc4e10f4827a2aa75d3549a356d
+                           .group:00000000 wm4.stm32l4xx_hal_rcc_ex.h.20.4a82a27d561b6d42fa16a54f82e29067
+                           .group:00000000 wm4.stm32l4xx_hal_gpio.h.21.2d2b1fd6aa6afa7b6dcc89cf752a9a25
+                           .group:00000000 wm4.stm32l4xx_hal_gpio_ex.h.21.7ea705f5185dd3c6b8ea336f2858cd46
+                           .group:00000000 wm4.stm32l4xx_ll_dma.h.21.b30e7f48d60d1fc53041ec1e3fd6e54a
+                           .group:00000000 wm4.stm32l4xx_hal_dma.h.166.54a7f8d65cee6f051d541dc010387b5a
+                           .group:00000000 wm4.stm32l4xx_hal_dfsdm.h.21.6785e38d00075079c7f2e5657def82ae
+                           .group:00000000 wm4.stm32l4xx_hal_cortex.h.21.cb491126bd2d6f44e90b66f27acb8434
+                           .group:00000000 wm4.stm32l4xx_ll_adc.h.21.0c578f71501c74365c67044efed214d6
+                           .group:00000000 wm4.stm32l4xx_hal_adc.h.411.68f60682cdb20556089756a482f23764
+                           .group:00000000 wm4.stm32l4xx_hal_adc_ex.h.21.7b82cb80166a21dfa8cb3e2fa8f8e654
+                           .group:00000000 wm4.stm32l4xx_hal_can.h.21.5019586d8e7137c0cec16eb1f9d6677b
+                           .group:00000000 wm4.stm32l4xx_ll_exti.h.21.d866eff070d6f999af2ce4ea60aa40ac
+                           .group:00000000 wm4.stm32l4xx_hal_comp.h.87.7f14cb673a463359c83faa552328844d
+                           .group:00000000 wm4.stm32l4xx_hal_crc.h.21.4c36a140cca35e6a8e478e76c6ad98e3
+                           .group:00000000 wm4.stm32l4xx_hal_crc_ex.h.21.9cc3dead436542d416ee5572c231a242
+                           .group:00000000 wm4.stm32l4xx_hal_dac.h.21.69feba704135531cf3d9b92de27b71d5
+                           .group:00000000 wm4.stm32l4xx_hal_dac_ex.h.21.c86699169bead5415cc3e94027b67df4
+                           .group:00000000 wm4.stm32l4xx_hal_exti.h.21.242e0410874d91d6d7523948fff74125
+                           .group:00000000 wm4.stm32l4xx_hal_firewall.h.21.7ed44f4228fcc2ef96d2177dd8632645
+                           .group:00000000 wm4.stm32l4xx_hal_flash.h.20.5e337018ccfa211b4afe888a79aae9f5
+                           .group:00000000 wm4.stm32l4xx_hal_flash.h.846.0445f6ea07a3f9aac82891c8687d96fb
+                           .group:00000000 wm4.stm32l4xx_ll_usb.h.21.5b5e42fb72a33dd326d7b20064953946
+                           .group:00000000 wm4.stm32l4xx_hal_hcd.h.107.73f2fd24f57e8822da5cc86bd5ad3dfd
+ARM GAS  /tmp/ccfK0n0F.s 			page 10
+
+
+                           .group:00000000 wm4.stm32l4xx_hal_i2c.h.21.e7fc2065051c77019a818818e4a637d8
+                           .group:00000000 wm4.stm32l4xx_hal_i2c_ex.h.21.ad4ad4e558d4fec06df87d163a6927d7
+                           .group:00000000 wm4.stm32l4xx_hal_i2c.h.737.fa3908c81294cf0f9894ae336466002c
+                           .group:00000000 wm4.stm32l4xx_hal_irda.h.21.136c042f9eef333167a549cc099df0c9
+                           .group:00000000 wm4.stm32l4xx_hal_irda_ex.h.21.e0ada4e6d2b2cadfb512dd3c8ac0a637
+                           .group:00000000 wm4.stm32l4xx_hal_iwdg.h.21.f94ca75f2fe1ebc7a2a8d0f5b58d8430
+                           .group:00000000 wm4.stm32l4xx_hal_lptim.h.21.78222ea6639fc8c02789d293a048991e
+                           .group:00000000 wm4.stm32l4xx_ll_sdmmc.h.21.65a5a8696b6ca7b87cc93d218084d702
+                           .group:00000000 wm4.stm32l4xx_hal_mmc.h.69.8f4159f0a88ef1ebc33c58a8f10362b9
+                           .group:00000000 wm4.stm32l4xx_ll_fmc.h.21.156a244c55010643ee92c6119049cb68
+                           .group:00000000 wm4.stm32l4xx_hal_nand.h.176.9bfeac6e4e757991088bbd0df44e2be9
+                           .group:00000000 wm4.stm32l4xx_hal_nor.h.21.d47e91e825f466bbac02fac0a7845a7a
+                           .group:00000000 wm4.stm32l4xx_hal_opamp.h.21.9d841e1eaccee939f247b3f973f8af5f
+                           .group:00000000 wm4.stm32l4xx_hal_pcd.h.169.addb1fac652268a18a0707cfcb5e2e47
+                           .group:00000000 wm4.stm32l4xx_hal_pwr.h.21.7ddab2caa97243c36e496eca17b27618
+                           .group:00000000 wm4.stm32l4xx_hal_pwr_ex.h.21.65ad8bbdbcb1950d945c0de10f22dc80
+                           .group:00000000 wm4.stm32l4xx_hal_qspi.h.21.0291dad4eaa82101f2f77d76315c9b12
+                           .group:00000000 wm4.stm32l4xx_hal_rng.h.21.96593715bdeab0c74ac9dfc538fb2feb
+                           .group:00000000 wm4.stm32l4xx_hal_rtc.h.21.9da6b1aeebde99930891f803cb7f9678
+                           .group:00000000 wm4.stm32l4xx_hal_rtc_ex.h.21.c692539378320719c7f2a2da1ca64502
+                           .group:00000000 wm4.stm32l4xx_hal_rtc.h.999.c8bd9450c783628bd606ecb31bea5cc9
+                           .group:00000000 wm4.stm32l4xx_hal_sai.h.21.c1165aaf2bbde65fae28ed4817be5cc5
+                           .group:00000000 wm4.stm32l4xx_hal_sd.h.21.b395c90a87e82f7e8d77d4a518036063
+                           .group:00000000 wm4.stm32l4xx_hal_smartcard.h.21.423c3ad63e0df35b864303e89e6d253c
+                           .group:00000000 wm4.stm32l4xx_hal_smartcard_ex.h.21.801a2ce9252a785aec000b3fc7667a74
+                           .group:00000000 wm4.stm32l4xx_hal_smbus.h.21.7480adb16468bfdce819ee591f21299e
+                           .group:00000000 wm4.stm32l4xx_hal_smbus_ex.h.21.bdc715f5f6fb6612a871d3c03c3b871f
+                           .group:00000000 wm4.stm32l4xx_hal_spi.h.21.3b51f9f7b241962f6b3483c47a43334f
+                           .group:00000000 wm4.stm32l4xx_hal_sram.h.21.285210181e158bddc1cdde63dde572fd
+                           .group:00000000 wm4.stm32l4xx_hal_swpmi.h.21.787f994f40b117a62aad9a6dd408b8fc
+                           .group:00000000 wm4.stm32l4xx_hal_tim.h.21.d190832030e7505384ad081daa7ba8d6
+                           .group:00000000 wm4.stm32l4xx_hal_tim_ex.h.21.1d0860218366ee9f64a97fd8af0ddee1
+                           .group:00000000 wm4.stm32l4xx_hal_tsc.h.21.e9010049847ea38297d4b95a5ede0d8c
+                           .group:00000000 wm4.stm32l4xx_hal_uart.h.21.480c0a64ca01596a921cda9dceb01df4
+                           .group:00000000 wm4.stm32l4xx_hal_uart_ex.h.21.d793e64693c93af07c90464aef42bd83
+                           .group:00000000 wm4.stm32l4xx_hal_usart.h.21.561c0058e33cb8df6671dcd29d5d25f9
+                           .group:00000000 wm4.stm32l4xx_hal_usart_ex.h.21.111da650523691ebc80d64103d7b26e5
+                           .group:00000000 wm4.stm32l4xx_hal_wwdg.h.21.073aa79d58120ae4fb8590c46b210051
+                           .group:00000000 wm4.stm32l4xx_hal.h.75.d364b3778b3801d2f66bb409c48d396d
+                           .group:00000000 wm4.stm32l475e_iot01.h.80.22fc749436d27c2cc4f18c5952914e12
+                           .group:00000000 wm4.lsm6dsl.h.49.ace64be6fe04a5d4be136d73d5dffbb6
+
+UNDEFINED SYMBOLS
+Lsm6dslGyroDrv

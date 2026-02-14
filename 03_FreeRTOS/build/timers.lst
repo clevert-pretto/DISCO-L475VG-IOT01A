@@ -1,0 +1,64 @@
+ARM GAS  /tmp/cc96LHBL.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 6
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"timers.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Middlewares/FreeRTOS/timers.c"
+  20              	.Letext0:
+ARM GAS  /tmp/cc96LHBL.s 			page 2
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 timers.c
+                           .group:00000000 wm4.0.e7b64c2c371cf922f2c8028878d5c18e
+                           .group:00000000 wm4.ieeefp.h.77.5ad60f72ea25fc152400b550ac118212
+                           .group:00000000 wm4._newlib_version.h.4.411db44ea2338a62eca2f0777f81481b
+                           .group:00000000 wm4.newlib.h.27.07bf1b8b16da454ae07478107717878b
+                           .group:00000000 wm4.features.h.22.4e5514d51694f64cae235f84d9e565a5
+                           .group:00000000 wm4.config.h.224.10ee1ad185d877c6e334e6581faab44d
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdlib.h.13.4ed386f5c1a80d71e72172885d946ef2
+                           .group:00000000 wm4.stddef.h.185.882514a1a6169ceba9142f401cbe27c6
+                           .group:00000000 wm4.stddef.h.39.794fa375de48dda278c4aebb5c74aa5b
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.cdefs.h.49.70fc7af612f78ddcace70fdd90b5623b
+                           .group:00000000 wm4._types.h.20.dd0d04dca3800a0d2a6129b87f3adbb2
+                           .group:00000000 wm4.stddef.h.158.6f8e08a347b1cff664332fa350bfceb3
+                           .group:00000000 wm4._types.h.127.3bdfe3ff8ea2d0985b03d9cbe93480e3
+                           .group:00000000 wm4.reent.h.18.25503cdc8b7e55dd0d6ea7b3e5af7a03
+                           .group:00000000 wm4.lock.h.2.c0958401bd0ce484d507ee19aacab817
+                           .group:00000000 wm4.reent.h.78.7f0775353a33c852a1479c008f68cd03
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.56.f4862cfbf4363a1db01842d5bdf72c18
+                           .group:00000000 wm4.stdint.h.29.6d480f4ba0f60596e88234283d42444f
+                           .group:00000000 wm4.FreeRTOS.h.59.647b1b0da38e4e98108aae13c8abe9ee
+                           .group:00000000 wm4.FreeRTOSConfig.h.3.1bc113985a1c518a5550f81e20536102
+                           .group:00000000 wm4.FreeRTOS.h.80.9a03152afd9cd416d9ab2abfdad37c9b
+                           .group:00000000 wm4.projdefs.h.30.aa35d7b594916c060d2a891e32dea137
+                           .group:00000000 wm4.portmacro.h.31.e33b7e559875bcc469c70605da17b58f
+                           .group:00000000 wm4.portable.h.61.05b23d6f46f623c8ade29ce5eacb329c
+                           .group:00000000 wm4.mpu_wrappers.h.30.5ad41bb447b8a1fc377f3ff5365e3b43
+                           .group:00000000 wm4.portable.h.193.36e79dfed0030429d07d873c91c7277e
+                           .group:00000000 wm4.FreeRTOS.h.111.6daad733ba046b297d537354d32aec60
+                           .group:00000000 wm4.list.h.59.51b351582e53f1c2c45529a43c6ffaaf
+                           .group:00000000 wm4.task.h.56.6d40654270ebd8aede87d7ae52c162f1
+                           .group:00000000 wm4.queue.h.68.790bcd6ddfd18d11f6bee0515f399741
+                           .group:00000000 wm4.timers.h.31.9b3adcedbd6ebcb01368f57a174a7488
+
+NO UNDEFINED SYMBOLS

@@ -1,0 +1,718 @@
+ARM GAS  /tmp/ccqx4J2Z.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 6
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"stm32l4xx_hal_smbus_ex.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c"
+  20              		.section	.rodata.CHANNEL_OFFSET_TAB,"a"
+  21              		.align	2
+  24              	CHANNEL_OFFSET_TAB:
+  25 0000 081C3044 		.ascii	"\010\0340DXl\200"
+  25      586C80
+  26              		.section	.text.HAL_SMBUSEx_EnableWakeUp,"ax",%progbits
+  27              		.align	1
+  28              		.global	HAL_SMBUSEx_EnableWakeUp
+  29              		.syntax unified
+  30              		.thumb
+  31              		.thumb_func
+  33              	HAL_SMBUSEx_EnableWakeUp:
+  34              	.LFB445:
+   1:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /**
+   2:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   ******************************************************************************
+   3:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @file    stm32l4xx_hal_smbus_ex.c
+   4:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @author  MCD Application Team
+   5:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @brief   SMBUS Extended HAL module driver.
+   6:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *          This file provides firmware functions to manage the following
+   7:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *          functionalities of SMBUS Extended peripheral:
+   8:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *           + Extended features functions
+   9:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *           + WakeUp Mode Functions
+  10:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *           + FastModePlus Functions
+  11:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *
+  12:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   ******************************************************************************
+  13:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @attention
+  14:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *
+  15:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * Copyright (c) 2017 STMicroelectronics.
+  16:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * All rights reserved.
+  17:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *
+  18:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  19:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * in the root directory of this software component.
+  20:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  21:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *
+  22:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   ******************************************************************************
+  23:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   @verbatim
+  24:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   ==============================================================================
+  25:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****                ##### SMBUS peripheral Extended features  #####
+ARM GAS  /tmp/ccqx4J2Z.s 			page 2
+
+
+  26:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   ==============================================================================
+  27:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+  28:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   [..] Comparing to other previous devices, the SMBUS interface for STM32L4xx
+  29:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****        devices contains the following additional features
+  30:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+  31:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****        (+) Disable or enable wakeup from Stop mode(s)
+  32:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****        (+) Disable or enable Fast Mode Plus
+  33:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+  34:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****                      ##### How to use this driver #####
+  35:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   ==============================================================================
+  36:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     (#) Configure the enable or disable of SMBUS Wake Up Mode using the functions :
+  37:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****           (++) HAL_SMBUSEx_EnableWakeUp()
+  38:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****           (++) HAL_SMBUSEx_DisableWakeUp()
+  39:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     (#) Configure the enable or disable of fast mode plus driving capability using the functions :
+  40:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****           (++) HAL_SMBUSEx_EnableFastModePlus()
+  41:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****           (++) HAL_SMBUSEx_DisableFastModePlus()
+  42:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   @endverbatim
+  43:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   */
+  44:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+  45:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /* Includes ------------------------------------------------------------------*/
+  46:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** #include "stm32l4xx_hal.h"
+  47:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+  48:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /** @addtogroup STM32L4xx_HAL_Driver
+  49:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @{
+  50:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   */
+  51:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+  52:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /** @defgroup SMBUSEx SMBUSEx
+  53:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @brief SMBUS Extended HAL module driver
+  54:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @{
+  55:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   */
+  56:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+  57:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** #ifdef HAL_SMBUS_MODULE_ENABLED
+  58:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+  59:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /* Private typedef -----------------------------------------------------------*/
+  60:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /* Private define ------------------------------------------------------------*/
+  61:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /* Private macro -------------------------------------------------------------*/
+  62:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /* Private variables ---------------------------------------------------------*/
+  63:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /* Private function prototypes -----------------------------------------------*/
+  64:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /* Private functions ---------------------------------------------------------*/
+  65:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+  66:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /** @defgroup SMBUSEx_Exported_Functions SMBUS Extended Exported Functions
+  67:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @{
+  68:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   */
+  69:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+  70:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /** @defgroup SMBUSEx_Exported_Functions_Group2 WakeUp Mode Functions
+  71:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @brief    WakeUp Mode Functions
+  72:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *
+  73:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** @verbatim
+  74:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****  ===============================================================================
+  75:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****                       ##### WakeUp Mode Functions #####
+  76:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****  ===============================================================================
+  77:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     [..] This section provides functions allowing to:
+  78:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****       (+) Configure Wake Up Feature
+  79:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+  80:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** @endverbatim
+  81:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @{
+  82:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   */
+ARM GAS  /tmp/ccqx4J2Z.s 			page 3
+
+
+  83:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+  84:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /**
+  85:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @brief  Enable SMBUS wakeup from Stop mode(s).
+  86:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @param  hsmbus Pointer to a SMBUS_HandleTypeDef structure that contains
+  87:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *                the configuration information for the specified SMBUSx peripheral.
+  88:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @retval HAL status
+  89:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   */
+  90:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** HAL_StatusTypeDef HAL_SMBUSEx_EnableWakeUp(SMBUS_HandleTypeDef *hsmbus)
+  91:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** {
+  35              		.loc 1 91 1
+  36              		.cfi_startproc
+  37              		@ args = 0, pretend = 0, frame = 8
+  38              		@ frame_needed = 1, uses_anonymous_args = 0
+  39              		@ link register save eliminated.
+  40 0000 80B4     		push	{r7}
+  41              		.cfi_def_cfa_offset 4
+  42              		.cfi_offset 7, -4
+  43 0002 83B0     		sub	sp, sp, #12
+  44              		.cfi_def_cfa_offset 16
+  45 0004 00AF     		add	r7, sp, #0
+  46              		.cfi_def_cfa_register 7
+  47 0006 7860     		str	r0, [r7, #4]
+  92:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   /* Check the parameters */
+  93:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   assert_param(IS_I2C_WAKEUP_FROMSTOP_INSTANCE(hsmbus->Instance));
+  94:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+  95:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   if (hsmbus->State == HAL_SMBUS_STATE_READY)
+  48              		.loc 1 95 13
+  49 0008 7B68     		ldr	r3, [r7, #4]
+  50 000a 9B6C     		ldr	r3, [r3, #72]
+  51              		.loc 1 95 6
+  52 000c 012B     		cmp	r3, #1
+  53 000e 2ED1     		bne	.L2
+  96:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   {
+  97:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     /* Process Locked */
+  98:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     __HAL_LOCK(hsmbus);
+  54              		.loc 1 98 5
+  55 0010 7B68     		ldr	r3, [r7, #4]
+  56 0012 93F84430 		ldrb	r3, [r3, #68]	@ zero_extendqisi2
+  57 0016 012B     		cmp	r3, #1
+  58 0018 01D1     		bne	.L3
+  59              		.loc 1 98 5 is_stmt 0 discriminator 1
+  60 001a 0223     		movs	r3, #2
+  61              		.loc 1 98 5
+  62 001c 28E0     		b	.L4
+  63              	.L3:
+  64              		.loc 1 98 5 discriminator 2
+  65 001e 7B68     		ldr	r3, [r7, #4]
+  66 0020 0122     		movs	r2, #1
+  67 0022 83F84420 		strb	r2, [r3, #68]
+  99:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 100:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     hsmbus->State = HAL_SMBUS_STATE_BUSY;
+  68              		.loc 1 100 19 is_stmt 1
+  69 0026 7B68     		ldr	r3, [r7, #4]
+  70 0028 0222     		movs	r2, #2
+  71 002a 9A64     		str	r2, [r3, #72]
+ 101:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 102:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     /* Disable the selected SMBUS peripheral */
+ARM GAS  /tmp/ccqx4J2Z.s 			page 4
+
+
+ 103:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     __HAL_SMBUS_DISABLE(hsmbus);
+  72              		.loc 1 103 5
+  73 002c 7B68     		ldr	r3, [r7, #4]
+  74 002e 1B68     		ldr	r3, [r3]
+  75 0030 1A68     		ldr	r2, [r3]
+  76 0032 7B68     		ldr	r3, [r7, #4]
+  77 0034 1B68     		ldr	r3, [r3]
+  78 0036 22F00102 		bic	r2, r2, #1
+  79 003a 1A60     		str	r2, [r3]
+ 104:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 105:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     /* Enable wakeup from stop mode */
+ 106:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     hsmbus->Instance->CR1 |= I2C_CR1_WUPEN;
+  80              		.loc 1 106 11
+  81 003c 7B68     		ldr	r3, [r7, #4]
+  82 003e 1B68     		ldr	r3, [r3]
+  83              		.loc 1 106 21
+  84 0040 1A68     		ldr	r2, [r3]
+  85              		.loc 1 106 11
+  86 0042 7B68     		ldr	r3, [r7, #4]
+  87 0044 1B68     		ldr	r3, [r3]
+  88              		.loc 1 106 27
+  89 0046 42F48022 		orr	r2, r2, #262144
+  90 004a 1A60     		str	r2, [r3]
+ 107:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 108:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     __HAL_SMBUS_ENABLE(hsmbus);
+  91              		.loc 1 108 5
+  92 004c 7B68     		ldr	r3, [r7, #4]
+  93 004e 1B68     		ldr	r3, [r3]
+  94 0050 1A68     		ldr	r2, [r3]
+  95 0052 7B68     		ldr	r3, [r7, #4]
+  96 0054 1B68     		ldr	r3, [r3]
+  97 0056 42F00102 		orr	r2, r2, #1
+  98 005a 1A60     		str	r2, [r3]
+ 109:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 110:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     hsmbus->State = HAL_SMBUS_STATE_READY;
+  99              		.loc 1 110 19
+ 100 005c 7B68     		ldr	r3, [r7, #4]
+ 101 005e 0122     		movs	r2, #1
+ 102 0060 9A64     		str	r2, [r3, #72]
+ 111:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 112:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     /* Process Unlocked */
+ 113:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     __HAL_UNLOCK(hsmbus);
+ 103              		.loc 1 113 5
+ 104 0062 7B68     		ldr	r3, [r7, #4]
+ 105 0064 0022     		movs	r2, #0
+ 106 0066 83F84420 		strb	r2, [r3, #68]
+ 114:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 115:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     return HAL_OK;
+ 107              		.loc 1 115 12
+ 108 006a 0023     		movs	r3, #0
+ 109 006c 00E0     		b	.L4
+ 110              	.L2:
+ 116:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   }
+ 117:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   else
+ 118:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   {
+ 119:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     return HAL_BUSY;
+ 111              		.loc 1 119 12
+ARM GAS  /tmp/ccqx4J2Z.s 			page 5
+
+
+ 112 006e 0223     		movs	r3, #2
+ 113              	.L4:
+ 120:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   }
+ 121:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** }
+ 114              		.loc 1 121 1
+ 115 0070 1846     		mov	r0, r3
+ 116 0072 0C37     		adds	r7, r7, #12
+ 117              		.cfi_def_cfa_offset 4
+ 118 0074 BD46     		mov	sp, r7
+ 119              		.cfi_def_cfa_register 13
+ 120              		@ sp needed
+ 121 0076 5DF8047B 		ldr	r7, [sp], #4
+ 122              		.cfi_restore 7
+ 123              		.cfi_def_cfa_offset 0
+ 124 007a 7047     		bx	lr
+ 125              		.cfi_endproc
+ 126              	.LFE445:
+ 128              		.section	.text.HAL_SMBUSEx_DisableWakeUp,"ax",%progbits
+ 129              		.align	1
+ 130              		.global	HAL_SMBUSEx_DisableWakeUp
+ 131              		.syntax unified
+ 132              		.thumb
+ 133              		.thumb_func
+ 135              	HAL_SMBUSEx_DisableWakeUp:
+ 136              	.LFB446:
+ 122:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 123:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /**
+ 124:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @brief  Disable SMBUS wakeup from Stop mode(s).
+ 125:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @param  hsmbus Pointer to a SMBUS_HandleTypeDef structure that contains
+ 126:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *                the configuration information for the specified SMBUSx peripheral.
+ 127:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @retval HAL status
+ 128:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   */
+ 129:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** HAL_StatusTypeDef HAL_SMBUSEx_DisableWakeUp(SMBUS_HandleTypeDef *hsmbus)
+ 130:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** {
+ 137              		.loc 1 130 1
+ 138              		.cfi_startproc
+ 139              		@ args = 0, pretend = 0, frame = 8
+ 140              		@ frame_needed = 1, uses_anonymous_args = 0
+ 141              		@ link register save eliminated.
+ 142 0000 80B4     		push	{r7}
+ 143              		.cfi_def_cfa_offset 4
+ 144              		.cfi_offset 7, -4
+ 145 0002 83B0     		sub	sp, sp, #12
+ 146              		.cfi_def_cfa_offset 16
+ 147 0004 00AF     		add	r7, sp, #0
+ 148              		.cfi_def_cfa_register 7
+ 149 0006 7860     		str	r0, [r7, #4]
+ 131:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   /* Check the parameters */
+ 132:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   assert_param(IS_I2C_WAKEUP_FROMSTOP_INSTANCE(hsmbus->Instance));
+ 133:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 134:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   if (hsmbus->State == HAL_SMBUS_STATE_READY)
+ 150              		.loc 1 134 13
+ 151 0008 7B68     		ldr	r3, [r7, #4]
+ 152 000a 9B6C     		ldr	r3, [r3, #72]
+ 153              		.loc 1 134 6
+ 154 000c 012B     		cmp	r3, #1
+ 155 000e 2ED1     		bne	.L6
+ARM GAS  /tmp/ccqx4J2Z.s 			page 6
+
+
+ 135:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   {
+ 136:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     /* Process Locked */
+ 137:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     __HAL_LOCK(hsmbus);
+ 156              		.loc 1 137 5
+ 157 0010 7B68     		ldr	r3, [r7, #4]
+ 158 0012 93F84430 		ldrb	r3, [r3, #68]	@ zero_extendqisi2
+ 159 0016 012B     		cmp	r3, #1
+ 160 0018 01D1     		bne	.L7
+ 161              		.loc 1 137 5 is_stmt 0 discriminator 1
+ 162 001a 0223     		movs	r3, #2
+ 163              		.loc 1 137 5
+ 164 001c 28E0     		b	.L8
+ 165              	.L7:
+ 166              		.loc 1 137 5 discriminator 2
+ 167 001e 7B68     		ldr	r3, [r7, #4]
+ 168 0020 0122     		movs	r2, #1
+ 169 0022 83F84420 		strb	r2, [r3, #68]
+ 138:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 139:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     hsmbus->State = HAL_SMBUS_STATE_BUSY;
+ 170              		.loc 1 139 19 is_stmt 1
+ 171 0026 7B68     		ldr	r3, [r7, #4]
+ 172 0028 0222     		movs	r2, #2
+ 173 002a 9A64     		str	r2, [r3, #72]
+ 140:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 141:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     /* Disable the selected SMBUS peripheral */
+ 142:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     __HAL_SMBUS_DISABLE(hsmbus);
+ 174              		.loc 1 142 5
+ 175 002c 7B68     		ldr	r3, [r7, #4]
+ 176 002e 1B68     		ldr	r3, [r3]
+ 177 0030 1A68     		ldr	r2, [r3]
+ 178 0032 7B68     		ldr	r3, [r7, #4]
+ 179 0034 1B68     		ldr	r3, [r3]
+ 180 0036 22F00102 		bic	r2, r2, #1
+ 181 003a 1A60     		str	r2, [r3]
+ 143:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 144:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     /* Disable wakeup from stop mode */
+ 145:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     hsmbus->Instance->CR1 &= ~(I2C_CR1_WUPEN);
+ 182              		.loc 1 145 11
+ 183 003c 7B68     		ldr	r3, [r7, #4]
+ 184 003e 1B68     		ldr	r3, [r3]
+ 185              		.loc 1 145 21
+ 186 0040 1A68     		ldr	r2, [r3]
+ 187              		.loc 1 145 11
+ 188 0042 7B68     		ldr	r3, [r7, #4]
+ 189 0044 1B68     		ldr	r3, [r3]
+ 190              		.loc 1 145 27
+ 191 0046 22F48022 		bic	r2, r2, #262144
+ 192 004a 1A60     		str	r2, [r3]
+ 146:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 147:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     __HAL_SMBUS_ENABLE(hsmbus);
+ 193              		.loc 1 147 5
+ 194 004c 7B68     		ldr	r3, [r7, #4]
+ 195 004e 1B68     		ldr	r3, [r3]
+ 196 0050 1A68     		ldr	r2, [r3]
+ 197 0052 7B68     		ldr	r3, [r7, #4]
+ 198 0054 1B68     		ldr	r3, [r3]
+ 199 0056 42F00102 		orr	r2, r2, #1
+ARM GAS  /tmp/ccqx4J2Z.s 			page 7
+
+
+ 200 005a 1A60     		str	r2, [r3]
+ 148:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 149:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     hsmbus->State = HAL_SMBUS_STATE_READY;
+ 201              		.loc 1 149 19
+ 202 005c 7B68     		ldr	r3, [r7, #4]
+ 203 005e 0122     		movs	r2, #1
+ 204 0060 9A64     		str	r2, [r3, #72]
+ 150:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 151:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     /* Process Unlocked */
+ 152:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     __HAL_UNLOCK(hsmbus);
+ 205              		.loc 1 152 5
+ 206 0062 7B68     		ldr	r3, [r7, #4]
+ 207 0064 0022     		movs	r2, #0
+ 208 0066 83F84420 		strb	r2, [r3, #68]
+ 153:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 154:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     return HAL_OK;
+ 209              		.loc 1 154 12
+ 210 006a 0023     		movs	r3, #0
+ 211 006c 00E0     		b	.L8
+ 212              	.L6:
+ 155:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   }
+ 156:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   else
+ 157:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   {
+ 158:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     return HAL_BUSY;
+ 213              		.loc 1 158 12
+ 214 006e 0223     		movs	r3, #2
+ 215              	.L8:
+ 159:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   }
+ 160:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** }
+ 216              		.loc 1 160 1
+ 217 0070 1846     		mov	r0, r3
+ 218 0072 0C37     		adds	r7, r7, #12
+ 219              		.cfi_def_cfa_offset 4
+ 220 0074 BD46     		mov	sp, r7
+ 221              		.cfi_def_cfa_register 13
+ 222              		@ sp needed
+ 223 0076 5DF8047B 		ldr	r7, [sp], #4
+ 224              		.cfi_restore 7
+ 225              		.cfi_def_cfa_offset 0
+ 226 007a 7047     		bx	lr
+ 227              		.cfi_endproc
+ 228              	.LFE446:
+ 230              		.section	.text.HAL_SMBUSEx_EnableFastModePlus,"ax",%progbits
+ 231              		.align	1
+ 232              		.global	HAL_SMBUSEx_EnableFastModePlus
+ 233              		.syntax unified
+ 234              		.thumb
+ 235              		.thumb_func
+ 237              	HAL_SMBUSEx_EnableFastModePlus:
+ 238              	.LFB447:
+ 161:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /**
+ 162:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @}
+ 163:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   */
+ 164:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 165:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /** @defgroup SMBUSEx_Exported_Functions_Group3 Fast Mode Plus Functions
+ 166:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @brief    Fast Mode Plus Functions
+ 167:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *
+ARM GAS  /tmp/ccqx4J2Z.s 			page 8
+
+
+ 168:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** @verbatim
+ 169:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****  ===============================================================================
+ 170:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****                       ##### Fast Mode Plus Functions #####
+ 171:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****  ===============================================================================
+ 172:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****     [..] This section provides functions allowing to:
+ 173:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****       (+) Configure Fast Mode Plus
+ 174:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 175:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** @endverbatim
+ 176:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @{
+ 177:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   */
+ 178:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 179:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /**
+ 180:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @brief Enable the SMBUS fast mode plus driving capability.
+ 181:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @param ConfigFastModePlus Selects the pin.
+ 182:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *   This parameter can be one of the @ref SMBUSEx_FastModePlus values
+ 183:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @note  For I2C1, fast mode plus driving capability can be enabled on all selected
+ 184:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *        I2C1 pins using SMBUS_FASTMODEPLUS_I2C1 parameter or independently
+ 185:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *        on each one of the following pins PB6, PB7, PB8 and PB9.
+ 186:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @note  For remaining I2C1 pins (PA14, PA15...) fast mode plus driving capability
+ 187:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *        can be enabled only by using SMBUS_FASTMODEPLUS_I2C1 parameter.
+ 188:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @note  For all I2C2 pins fast mode plus driving capability can be enabled
+ 189:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *        only by using SMBUS_FASTMODEPLUS_I2C2 parameter.
+ 190:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @note  For all I2C3 pins fast mode plus driving capability can be enabled
+ 191:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *        only by using SMBUS_FASTMODEPLUS_I2C3 parameter.
+ 192:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @note  For all I2C4 pins fast mode plus driving capability can be enabled
+ 193:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *        only by using SMBUS_FASTMODEPLUS_I2C4 parameter.
+ 194:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @retval None
+ 195:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   */
+ 196:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** void HAL_SMBUSEx_EnableFastModePlus(uint32_t ConfigFastModePlus)
+ 197:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** {
+ 239              		.loc 1 197 1
+ 240              		.cfi_startproc
+ 241              		@ args = 0, pretend = 0, frame = 16
+ 242              		@ frame_needed = 1, uses_anonymous_args = 0
+ 243              		@ link register save eliminated.
+ 244 0000 80B4     		push	{r7}
+ 245              		.cfi_def_cfa_offset 4
+ 246              		.cfi_offset 7, -4
+ 247 0002 85B0     		sub	sp, sp, #20
+ 248              		.cfi_def_cfa_offset 24
+ 249 0004 00AF     		add	r7, sp, #0
+ 250              		.cfi_def_cfa_register 7
+ 251 0006 7860     		str	r0, [r7, #4]
+ 252              	.LBB2:
+ 198:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   /* Check the parameter */
+ 199:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   assert_param(IS_SMBUS_FASTMODEPLUS(ConfigFastModePlus));
+ 200:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 201:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   /* Enable SYSCFG clock */
+ 202:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   __HAL_RCC_SYSCFG_CLK_ENABLE();
+ 253              		.loc 1 202 3
+ 254 0008 0B4B     		ldr	r3, .L10
+ 255 000a 1B6E     		ldr	r3, [r3, #96]
+ 256 000c 0A4A     		ldr	r2, .L10
+ 257 000e 43F00103 		orr	r3, r3, #1
+ 258 0012 1366     		str	r3, [r2, #96]
+ 259 0014 084B     		ldr	r3, .L10
+ 260 0016 1B6E     		ldr	r3, [r3, #96]
+ARM GAS  /tmp/ccqx4J2Z.s 			page 9
+
+
+ 261 0018 03F00103 		and	r3, r3, #1
+ 262 001c FB60     		str	r3, [r7, #12]
+ 263 001e FB68     		ldr	r3, [r7, #12]
+ 264              	.LBE2:
+ 203:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 204:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   /* Enable fast mode plus driving capability for selected pin */
+ 205:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   SET_BIT(SYSCFG->CFGR1, (uint32_t)ConfigFastModePlus);
+ 265              		.loc 1 205 3
+ 266 0020 064B     		ldr	r3, .L10+4
+ 267 0022 5A68     		ldr	r2, [r3, #4]
+ 268 0024 0549     		ldr	r1, .L10+4
+ 269 0026 7B68     		ldr	r3, [r7, #4]
+ 270 0028 1343     		orrs	r3, r3, r2
+ 271 002a 4B60     		str	r3, [r1, #4]
+ 206:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** }
+ 272              		.loc 1 206 1
+ 273 002c 00BF     		nop
+ 274 002e 1437     		adds	r7, r7, #20
+ 275              		.cfi_def_cfa_offset 4
+ 276 0030 BD46     		mov	sp, r7
+ 277              		.cfi_def_cfa_register 13
+ 278              		@ sp needed
+ 279 0032 5DF8047B 		ldr	r7, [sp], #4
+ 280              		.cfi_restore 7
+ 281              		.cfi_def_cfa_offset 0
+ 282 0036 7047     		bx	lr
+ 283              	.L11:
+ 284              		.align	2
+ 285              	.L10:
+ 286 0038 00100240 		.word	1073876992
+ 287 003c 00000140 		.word	1073807360
+ 288              		.cfi_endproc
+ 289              	.LFE447:
+ 291              		.section	.text.HAL_SMBUSEx_DisableFastModePlus,"ax",%progbits
+ 292              		.align	1
+ 293              		.global	HAL_SMBUSEx_DisableFastModePlus
+ 294              		.syntax unified
+ 295              		.thumb
+ 296              		.thumb_func
+ 298              	HAL_SMBUSEx_DisableFastModePlus:
+ 299              	.LFB448:
+ 207:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 208:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** /**
+ 209:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @brief Disable the SMBUS fast mode plus driving capability.
+ 210:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @param ConfigFastModePlus Selects the pin.
+ 211:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *   This parameter can be one of the @ref SMBUSEx_FastModePlus values
+ 212:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @note  For I2C1, fast mode plus driving capability can be disabled on all selected
+ 213:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *        I2C1 pins using SMBUS_FASTMODEPLUS_I2C1 parameter or independently
+ 214:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *        on each one of the following pins PB6, PB7, PB8 and PB9.
+ 215:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @note  For remaining I2C1 pins (PA14, PA15...) fast mode plus driving capability
+ 216:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *        can be disabled only by using SMBUS_FASTMODEPLUS_I2C1 parameter.
+ 217:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @note  For all I2C2 pins fast mode plus driving capability can be disabled
+ 218:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *        only by using SMBUS_FASTMODEPLUS_I2C2 parameter.
+ 219:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @note  For all I2C3 pins fast mode plus driving capability can be disabled
+ 220:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *        only by using SMBUS_FASTMODEPLUS_I2C3 parameter.
+ 221:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @note  For all I2C4 pins fast mode plus driving capability can be disabled
+ 222:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   *        only by using SMBUS_FASTMODEPLUS_I2C4 parameter.
+ARM GAS  /tmp/ccqx4J2Z.s 			page 10
+
+
+ 223:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   * @retval None
+ 224:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   */
+ 225:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** void HAL_SMBUSEx_DisableFastModePlus(uint32_t ConfigFastModePlus)
+ 226:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** {
+ 300              		.loc 1 226 1
+ 301              		.cfi_startproc
+ 302              		@ args = 0, pretend = 0, frame = 16
+ 303              		@ frame_needed = 1, uses_anonymous_args = 0
+ 304              		@ link register save eliminated.
+ 305 0000 80B4     		push	{r7}
+ 306              		.cfi_def_cfa_offset 4
+ 307              		.cfi_offset 7, -4
+ 308 0002 85B0     		sub	sp, sp, #20
+ 309              		.cfi_def_cfa_offset 24
+ 310 0004 00AF     		add	r7, sp, #0
+ 311              		.cfi_def_cfa_register 7
+ 312 0006 7860     		str	r0, [r7, #4]
+ 313              	.LBB3:
+ 227:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   /* Check the parameter */
+ 228:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   assert_param(IS_SMBUS_FASTMODEPLUS(ConfigFastModePlus));
+ 229:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 230:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   /* Enable SYSCFG clock */
+ 231:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   __HAL_RCC_SYSCFG_CLK_ENABLE();
+ 314              		.loc 1 231 3
+ 315 0008 0C4B     		ldr	r3, .L13
+ 316 000a 1B6E     		ldr	r3, [r3, #96]
+ 317 000c 0B4A     		ldr	r2, .L13
+ 318 000e 43F00103 		orr	r3, r3, #1
+ 319 0012 1366     		str	r3, [r2, #96]
+ 320 0014 094B     		ldr	r3, .L13
+ 321 0016 1B6E     		ldr	r3, [r3, #96]
+ 322 0018 03F00103 		and	r3, r3, #1
+ 323 001c FB60     		str	r3, [r7, #12]
+ 324 001e FB68     		ldr	r3, [r7, #12]
+ 325              	.LBE3:
+ 232:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** 
+ 233:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   /* Disable fast mode plus driving capability for selected pin */
+ 234:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c ****   CLEAR_BIT(SYSCFG->CFGR1, (uint32_t)ConfigFastModePlus);
+ 326              		.loc 1 234 3
+ 327 0020 074B     		ldr	r3, .L13+4
+ 328 0022 5A68     		ldr	r2, [r3, #4]
+ 329 0024 7B68     		ldr	r3, [r7, #4]
+ 330 0026 DB43     		mvns	r3, r3
+ 331 0028 0549     		ldr	r1, .L13+4
+ 332 002a 1340     		ands	r3, r3, r2
+ 333 002c 4B60     		str	r3, [r1, #4]
+ 235:Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_smbus_ex.c **** }
+ 334              		.loc 1 235 1
+ 335 002e 00BF     		nop
+ 336 0030 1437     		adds	r7, r7, #20
+ 337              		.cfi_def_cfa_offset 4
+ 338 0032 BD46     		mov	sp, r7
+ 339              		.cfi_def_cfa_register 13
+ 340              		@ sp needed
+ 341 0034 5DF8047B 		ldr	r7, [sp], #4
+ 342              		.cfi_restore 7
+ 343              		.cfi_def_cfa_offset 0
+ARM GAS  /tmp/ccqx4J2Z.s 			page 11
+
+
+ 344 0038 7047     		bx	lr
+ 345              	.L14:
+ 346 003a 00BF     		.align	2
+ 347              	.L13:
+ 348 003c 00100240 		.word	1073876992
+ 349 0040 00000140 		.word	1073807360
+ 350              		.cfi_endproc
+ 351              	.LFE448:
+ 353              		.text
+ 354              	.Letext0:
+ 355              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 356              		.file 3 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l475xx.h"
+ 357              		.file 4 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h"
+ 358              		.file 5 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_smbus.h"
+ 359              		.file 6 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_ll_dma.h"
+ARM GAS  /tmp/ccqx4J2Z.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32l4xx_hal_smbus_ex.c
+     /tmp/ccqx4J2Z.s:21     .rodata.CHANNEL_OFFSET_TAB:00000000 $d
+     /tmp/ccqx4J2Z.s:24     .rodata.CHANNEL_OFFSET_TAB:00000000 CHANNEL_OFFSET_TAB
+     /tmp/ccqx4J2Z.s:27     .text.HAL_SMBUSEx_EnableWakeUp:00000000 $t
+     /tmp/ccqx4J2Z.s:33     .text.HAL_SMBUSEx_EnableWakeUp:00000000 HAL_SMBUSEx_EnableWakeUp
+     /tmp/ccqx4J2Z.s:129    .text.HAL_SMBUSEx_DisableWakeUp:00000000 $t
+     /tmp/ccqx4J2Z.s:135    .text.HAL_SMBUSEx_DisableWakeUp:00000000 HAL_SMBUSEx_DisableWakeUp
+     /tmp/ccqx4J2Z.s:231    .text.HAL_SMBUSEx_EnableFastModePlus:00000000 $t
+     /tmp/ccqx4J2Z.s:237    .text.HAL_SMBUSEx_EnableFastModePlus:00000000 HAL_SMBUSEx_EnableFastModePlus
+     /tmp/ccqx4J2Z.s:286    .text.HAL_SMBUSEx_EnableFastModePlus:00000038 $d
+     /tmp/ccqx4J2Z.s:292    .text.HAL_SMBUSEx_DisableFastModePlus:00000000 $t
+     /tmp/ccqx4J2Z.s:298    .text.HAL_SMBUSEx_DisableFastModePlus:00000000 HAL_SMBUSEx_DisableFastModePlus
+     /tmp/ccqx4J2Z.s:348    .text.HAL_SMBUSEx_DisableFastModePlus:0000003c $d
+                           .group:00000000 wm4.0.e7b64c2c371cf922f2c8028878d5c18e
+                           .group:00000000 wm4.stm32l4xx_hal_conf.h.23.286c2f63aaa73ed97ffb4d26f7caa6e9
+                           .group:00000000 wm4.stm32l4xx.h.38.9f5830373ca31b8a3cd182fdc6c7b69a
+                           .group:00000000 wm4.stm32l475xx.h.34.2f1a75aed66751e299f09004aef64973
+                           .group:00000000 wm4.stdint.h.29.6d480f4ba0f60596e88234283d42444f
+                           .group:00000000 wm4.cmsis_version.h.32.46e8eccfa2cfeaae11d008bb2823a3ed
+                           .group:00000000 wm4.core_cm4.h.66.e4ff136c4a17abc46741866f64f8e729
+                           .group:00000000 wm4.cmsis_gcc.h.26.78077cef1206e937f7b56043ffca496a
+                           .group:00000000 wm4.core_cm4.h.174.fcddd62df80231752fa39eb9b61dadfe
+                           .group:00000000 wm4.mpu_armv7.h.32.4049752bb5792d4e15357775e9506cfc
+                           .group:00000000 wm4.stm32l475xx.h.423.4d783859c9ac66890c9807dd7bd3a4db
+                           .group:00000000 wm4.stm32l4xx.h.196.f5ae8047c57b6175c94f246ef967a286
+                           .group:00000000 wm4.stm32_hal_legacy.h.22.08b8350ccf512ba8d98002fb33e7cbe5
+                           .group:00000000 wm4.stddef.h.39.0dc9006b34572d4d9cae4c8b422c4971
+                           .group:00000000 wm4.stm32l4xx_hal_def.h.58.1058a33f7217e935f2a6b51956d66a69
+                           .group:00000000 wm4.stm32l4xx_hal_rcc.h.156.ab8eecc4e10f4827a2aa75d3549a356d
+                           .group:00000000 wm4.stm32l4xx_hal_rcc_ex.h.20.4a82a27d561b6d42fa16a54f82e29067
+                           .group:00000000 wm4.stm32l4xx_hal_gpio.h.21.2d2b1fd6aa6afa7b6dcc89cf752a9a25
+                           .group:00000000 wm4.stm32l4xx_hal_gpio_ex.h.21.7ea705f5185dd3c6b8ea336f2858cd46
+                           .group:00000000 wm4.stm32l4xx_ll_dma.h.21.b30e7f48d60d1fc53041ec1e3fd6e54a
+                           .group:00000000 wm4.stm32l4xx_hal_dma.h.166.54a7f8d65cee6f051d541dc010387b5a
+                           .group:00000000 wm4.stm32l4xx_hal_dfsdm.h.21.6785e38d00075079c7f2e5657def82ae
+                           .group:00000000 wm4.stm32l4xx_hal_cortex.h.21.cb491126bd2d6f44e90b66f27acb8434
+                           .group:00000000 wm4.stm32l4xx_ll_adc.h.21.0c578f71501c74365c67044efed214d6
+                           .group:00000000 wm4.stm32l4xx_hal_adc.h.411.68f60682cdb20556089756a482f23764
+                           .group:00000000 wm4.stm32l4xx_hal_adc_ex.h.21.7b82cb80166a21dfa8cb3e2fa8f8e654
+                           .group:00000000 wm4.stm32l4xx_hal_can.h.21.5019586d8e7137c0cec16eb1f9d6677b
+                           .group:00000000 wm4.stm32l4xx_ll_exti.h.21.d866eff070d6f999af2ce4ea60aa40ac
+                           .group:00000000 wm4.stm32l4xx_hal_comp.h.87.7f14cb673a463359c83faa552328844d
+                           .group:00000000 wm4.stm32l4xx_hal_crc.h.21.4c36a140cca35e6a8e478e76c6ad98e3
+                           .group:00000000 wm4.stm32l4xx_hal_crc_ex.h.21.9cc3dead436542d416ee5572c231a242
+                           .group:00000000 wm4.stm32l4xx_hal_dac.h.21.69feba704135531cf3d9b92de27b71d5
+                           .group:00000000 wm4.stm32l4xx_hal_dac_ex.h.21.c86699169bead5415cc3e94027b67df4
+                           .group:00000000 wm4.stm32l4xx_hal_exti.h.21.242e0410874d91d6d7523948fff74125
+                           .group:00000000 wm4.stm32l4xx_hal_firewall.h.21.7ed44f4228fcc2ef96d2177dd8632645
+                           .group:00000000 wm4.stm32l4xx_hal_flash.h.20.5e337018ccfa211b4afe888a79aae9f5
+                           .group:00000000 wm4.stm32l4xx_hal_flash.h.846.0445f6ea07a3f9aac82891c8687d96fb
+                           .group:00000000 wm4.stm32l4xx_ll_usb.h.21.5b5e42fb72a33dd326d7b20064953946
+                           .group:00000000 wm4.stm32l4xx_hal_hcd.h.107.73f2fd24f57e8822da5cc86bd5ad3dfd
+                           .group:00000000 wm4.stm32l4xx_hal_i2c.h.21.e7fc2065051c77019a818818e4a637d8
+                           .group:00000000 wm4.stm32l4xx_hal_i2c_ex.h.21.ad4ad4e558d4fec06df87d163a6927d7
+                           .group:00000000 wm4.stm32l4xx_hal_i2c.h.737.fa3908c81294cf0f9894ae336466002c
+                           .group:00000000 wm4.stm32l4xx_hal_irda.h.21.136c042f9eef333167a549cc099df0c9
+ARM GAS  /tmp/ccqx4J2Z.s 			page 13
+
+
+                           .group:00000000 wm4.stm32l4xx_hal_irda_ex.h.21.e0ada4e6d2b2cadfb512dd3c8ac0a637
+                           .group:00000000 wm4.stm32l4xx_hal_iwdg.h.21.f94ca75f2fe1ebc7a2a8d0f5b58d8430
+                           .group:00000000 wm4.stm32l4xx_hal_lptim.h.21.78222ea6639fc8c02789d293a048991e
+                           .group:00000000 wm4.stm32l4xx_ll_sdmmc.h.21.65a5a8696b6ca7b87cc93d218084d702
+                           .group:00000000 wm4.stm32l4xx_hal_mmc.h.69.8f4159f0a88ef1ebc33c58a8f10362b9
+                           .group:00000000 wm4.stm32l4xx_ll_fmc.h.21.156a244c55010643ee92c6119049cb68
+                           .group:00000000 wm4.stm32l4xx_hal_nand.h.176.9bfeac6e4e757991088bbd0df44e2be9
+                           .group:00000000 wm4.stm32l4xx_hal_nor.h.21.d47e91e825f466bbac02fac0a7845a7a
+                           .group:00000000 wm4.stm32l4xx_hal_opamp.h.21.9d841e1eaccee939f247b3f973f8af5f
+                           .group:00000000 wm4.stm32l4xx_hal_pcd.h.169.addb1fac652268a18a0707cfcb5e2e47
+                           .group:00000000 wm4.stm32l4xx_hal_pwr.h.21.7ddab2caa97243c36e496eca17b27618
+                           .group:00000000 wm4.stm32l4xx_hal_pwr_ex.h.21.65ad8bbdbcb1950d945c0de10f22dc80
+                           .group:00000000 wm4.stm32l4xx_hal_qspi.h.21.0291dad4eaa82101f2f77d76315c9b12
+                           .group:00000000 wm4.stm32l4xx_hal_rng.h.21.96593715bdeab0c74ac9dfc538fb2feb
+                           .group:00000000 wm4.stm32l4xx_hal_rtc.h.21.9da6b1aeebde99930891f803cb7f9678
+                           .group:00000000 wm4.stm32l4xx_hal_rtc_ex.h.21.c692539378320719c7f2a2da1ca64502
+                           .group:00000000 wm4.stm32l4xx_hal_rtc.h.999.c8bd9450c783628bd606ecb31bea5cc9
+                           .group:00000000 wm4.stm32l4xx_hal_sai.h.21.c1165aaf2bbde65fae28ed4817be5cc5
+                           .group:00000000 wm4.stm32l4xx_hal_sd.h.21.b395c90a87e82f7e8d77d4a518036063
+                           .group:00000000 wm4.stm32l4xx_hal_smartcard.h.21.423c3ad63e0df35b864303e89e6d253c
+                           .group:00000000 wm4.stm32l4xx_hal_smartcard_ex.h.21.801a2ce9252a785aec000b3fc7667a74
+                           .group:00000000 wm4.stm32l4xx_hal_smbus.h.21.7480adb16468bfdce819ee591f21299e
+                           .group:00000000 wm4.stm32l4xx_hal_smbus_ex.h.21.bdc715f5f6fb6612a871d3c03c3b871f
+                           .group:00000000 wm4.stm32l4xx_hal_spi.h.21.3b51f9f7b241962f6b3483c47a43334f
+                           .group:00000000 wm4.stm32l4xx_hal_sram.h.21.285210181e158bddc1cdde63dde572fd
+                           .group:00000000 wm4.stm32l4xx_hal_swpmi.h.21.787f994f40b117a62aad9a6dd408b8fc
+                           .group:00000000 wm4.stm32l4xx_hal_tim.h.21.d190832030e7505384ad081daa7ba8d6
+                           .group:00000000 wm4.stm32l4xx_hal_tim_ex.h.21.1d0860218366ee9f64a97fd8af0ddee1
+                           .group:00000000 wm4.stm32l4xx_hal_tsc.h.21.e9010049847ea38297d4b95a5ede0d8c
+                           .group:00000000 wm4.stm32l4xx_hal_uart.h.21.480c0a64ca01596a921cda9dceb01df4
+                           .group:00000000 wm4.stm32l4xx_hal_uart_ex.h.21.d793e64693c93af07c90464aef42bd83
+                           .group:00000000 wm4.stm32l4xx_hal_usart.h.21.561c0058e33cb8df6671dcd29d5d25f9
+                           .group:00000000 wm4.stm32l4xx_hal_usart_ex.h.21.111da650523691ebc80d64103d7b26e5
+                           .group:00000000 wm4.stm32l4xx_hal_wwdg.h.21.073aa79d58120ae4fb8590c46b210051
+                           .group:00000000 wm4.stm32l4xx_hal.h.75.d364b3778b3801d2f66bb409c48d396d
+
+NO UNDEFINED SYMBOLS

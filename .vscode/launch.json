@@ -2,12 +2,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Cortex Debug (Release Folder)",
+            "name": "Cortex Debug",
             "type": "cortex-debug",
             "request": "launch",
             "servertype": "openocd",
-            "cwd": "${workspaceFolder}/02_Scheduler",
-            "executable": "${workspaceFolder}/02_Scheduler/release/final.elf",
+            "cwd": "${workspaceFolder}/03_FreeRTOS",
+            "executable": "${workspaceFolder}/03_FreeRTOS/MyBlinky.elf",
             "device": "STM32L475",
             "interface": "swd",
             "runToEntryPoint": "main",

@@ -7,7 +7,7 @@
             /* Just run make clean and make. It will use the MODULE defined in the Makefile */
             "command": "make clean && make",
             "options": {
-                "cwd": "${workspaceFolder}/02_Scheduler"
+                "cwd": "${workspaceFolder}/03_FreeRTOS"
             },
             "group": {
                 "kind": "build",

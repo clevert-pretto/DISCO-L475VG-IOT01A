@@ -1,0 +1,3398 @@
+ARM GAS  /tmp/ccEi5qWM.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 6
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"stm32l475e_iot01.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c"
+  20              		.section	.rodata.CHANNEL_OFFSET_TAB,"a"
+  21              		.align	2
+  24              	CHANNEL_OFFSET_TAB:
+  25 0000 081C3044 		.ascii	"\010\0340DXl\200"
+  25      586C80
+  26              		.global	GPIO_PIN
+  27              		.section	.rodata.GPIO_PIN,"a"
+  28              		.align	2
+  31              	GPIO_PIN:
+  32 0000 00400000 		.word	16384
+  33              		.global	GPIO_PORT
+  34              		.section	.data.GPIO_PORT,"aw"
+  35              		.align	2
+  38              	GPIO_PORT:
+  39 0000 00040048 		.word	1207960576
+  40              		.global	BUTTON_PORT
+  41              		.section	.data.BUTTON_PORT,"aw"
+  42              		.align	2
+  45              	BUTTON_PORT:
+  46 0000 00080048 		.word	1207961600
+  47              		.global	BUTTON_PIN
+  48              		.section	.rodata.BUTTON_PIN,"a"
+  49              		.align	2
+  52              	BUTTON_PIN:
+  53 0000 0020     		.short	8192
+  54              		.global	BUTTON_IRQn
+  55              		.section	.rodata.BUTTON_IRQn,"a"
+  56              		.align	2
+  59              	BUTTON_IRQn:
+  60 0000 2800     		.short	40
+  61              		.global	COM_USART
+  62              		.section	.data.COM_USART,"aw"
+  63              		.align	2
+  66              	COM_USART:
+  67 0000 00380140 		.word	1073821696
+  68              		.global	COM_TX_PORT
+  69              		.section	.data.COM_TX_PORT,"aw"
+  70              		.align	2
+ARM GAS  /tmp/ccEi5qWM.s 			page 2
+
+
+  73              	COM_TX_PORT:
+  74 0000 00040048 		.word	1207960576
+  75              		.global	COM_RX_PORT
+  76              		.section	.data.COM_RX_PORT,"aw"
+  77              		.align	2
+  80              	COM_RX_PORT:
+  81 0000 00040048 		.word	1207960576
+  82              		.global	COM_TX_PIN
+  83              		.section	.rodata.COM_TX_PIN,"a"
+  84              		.align	2
+  87              	COM_TX_PIN:
+  88 0000 4000     		.short	64
+  89              		.global	COM_RX_PIN
+  90              		.section	.rodata.COM_RX_PIN,"a"
+  91              		.align	2
+  94              	COM_RX_PIN:
+  95 0000 8000     		.short	128
+  96              		.global	COM_TX_AF
+  97              		.section	.rodata.COM_TX_AF,"a"
+  98              		.align	2
+ 101              	COM_TX_AF:
+ 102 0000 0700     		.short	7
+ 103              		.global	COM_RX_AF
+ 104              		.section	.rodata.COM_RX_AF,"a"
+ 105              		.align	2
+ 108              	COM_RX_AF:
+ 109 0000 0700     		.short	7
+ 110              		.global	hI2cHandler
+ 111              		.section	.bss.hI2cHandler,"aw",%nobits
+ 112              		.align	2
+ 115              	hI2cHandler:
+ 116 0000 00000000 		.space	84
+ 116      00000000 
+ 116      00000000 
+ 116      00000000 
+ 116      00000000 
+ 117              		.global	hDiscoUart
+ 118              		.section	.bss.hDiscoUart,"aw",%nobits
+ 119              		.align	2
+ 122              	hDiscoUart:
+ 123 0000 00000000 		.space	136
+ 123      00000000 
+ 123      00000000 
+ 123      00000000 
+ 123      00000000 
+ 124              		.section	.text.BSP_GetVersion,"ax",%progbits
+ 125              		.align	1
+ 126              		.global	BSP_GetVersion
+ 127              		.syntax unified
+ 128              		.thumb
+ 129              		.thumb_func
+ 131              	BSP_GetVersion:
+ 132              	.LFB445:
+   1:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+   2:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   ******************************************************************************
+   3:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @file    stm32l475e_iot01.c
+   4:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @author  MCD Application Team
+ARM GAS  /tmp/ccEi5qWM.s 			page 3
+
+
+   5:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief   STM32L475E-IOT01 board support package
+   6:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   ******************************************************************************
+   7:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @attention
+   8:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *
+   9:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * Copyright (c) 2017 STMicroelectronics.
+  10:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * All rights reserved.
+  11:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *
+  12:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  13:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * in the root directory of this software component.
+  14:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  15:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *
+  16:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   ******************************************************************************
+  17:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+  18:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  19:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /* Includes ------------------------------------------------------------------*/
+  20:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** #include "stm32l475e_iot01.h"
+  21:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  22:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /** @defgroup BSP BSP
+  23:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @{
+  24:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */ 
+  25:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  26:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /** @defgroup STM32L475E_IOT01 STM32L475E_IOT01
+  27:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @{
+  28:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+  29:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  30:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /** @defgroup STM32L475E_IOT01_LOW_LEVEL LOW LEVEL
+  31:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @{
+  32:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+  33:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  34:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /** @defgroup STM32L475E_IOT01_LOW_LEVEL_Private_Defines LOW LEVEL Private Def
+  35:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @{
+  36:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+  37:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+  38:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****  * @brief STM32L475E IOT01 BSP Driver version number
+  39:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****    */
+  40:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** #define __STM32L475E_IOT01_BSP_VERSION_MAIN   (0x01) /*!< [31:24] main version */
+  41:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** #define __STM32L475E_IOT01_BSP_VERSION_SUB1   (0x01) /*!< [23:16] sub1 version */
+  42:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** #define __STM32L475E_IOT01_BSP_VERSION_SUB2   (0x08) /*!< [15:8]  sub2 version */
+  43:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** #define __STM32L475E_IOT01_BSP_VERSION_RC     (0x00) /*!< [7:0]  release candidate */
+  44:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** #define __STM32L475E_IOT01_BSP_VERSION        ((__STM32L475E_IOT01_BSP_VERSION_MAIN << 24)\
+  45:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****                                                  |(__STM32L475E_IOT01_BSP_VERSION_SUB1 << 16)\
+  46:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****                                                  |(__STM32L475E_IOT01_BSP_VERSION_SUB2 << 8 )\
+  47:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****                                                  |(__STM32L475E_IOT01_BSP_VERSION_RC))
+  48:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+  49:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @}
+  50:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+  51:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  52:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /** @defgroup STM32L475E_IOT01_LOW_LEVEL_Private_Variables LOW LEVEL Variables 
+  53:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @{
+  54:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+  55:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  56:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** const uint32_t GPIO_PIN[LEDn] = {LED2_PIN};
+  57:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  58:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  59:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** GPIO_TypeDef* GPIO_PORT[LEDn] = {LED2_GPIO_PORT};
+  60:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  61:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ARM GAS  /tmp/ccEi5qWM.s 			page 4
+
+
+  62:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** GPIO_TypeDef* BUTTON_PORT[BUTTONn] = {USER_BUTTON_GPIO_PORT};
+  63:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  64:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** const uint16_t BUTTON_PIN[BUTTONn] = {USER_BUTTON_PIN};
+  65:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  66:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** const uint16_t BUTTON_IRQn[BUTTONn] = {USER_BUTTON_EXTI_IRQn};
+  67:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  68:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** USART_TypeDef* COM_USART[COMn] = {DISCOVERY_COM1};
+  69:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  70:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** GPIO_TypeDef* COM_TX_PORT[COMn] = {DISCOVERY_COM1_TX_GPIO_PORT};
+  71:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  72:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** GPIO_TypeDef* COM_RX_PORT[COMn] = {DISCOVERY_COM1_RX_GPIO_PORT};
+  73:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  74:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** const uint16_t COM_TX_PIN[COMn] = {DISCOVERY_COM1_TX_PIN};
+  75:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  76:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** const uint16_t COM_RX_PIN[COMn] = {DISCOVERY_COM1_RX_PIN};
+  77:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  78:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** const uint16_t COM_TX_AF[COMn] = {DISCOVERY_COM1_TX_AF};
+  79:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  80:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** const uint16_t COM_RX_AF[COMn] = {DISCOVERY_COM1_RX_AF};
+  81:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  82:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** I2C_HandleTypeDef hI2cHandler;
+  83:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** UART_HandleTypeDef hDiscoUart;
+  84:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+  85:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+  86:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @}
+  87:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+  88:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /** @defgroup STM32L475E_IOT01_LOW_LEVEL_Private_FunctionPrototypes LOW LEVEL Private Function Prot
+  89:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @{
+  90:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+  91:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** static void     I2Cx_MspInit(I2C_HandleTypeDef *i2c_handler);
+  92:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** static void     I2Cx_MspDeInit(I2C_HandleTypeDef *i2c_handler);
+  93:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** static void     I2Cx_Init(I2C_HandleTypeDef *i2c_handler);
+  94:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** static void     I2Cx_DeInit(I2C_HandleTypeDef *i2c_handler);
+  95:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** static HAL_StatusTypeDef I2Cx_ReadMultiple(I2C_HandleTypeDef *i2c_handler, uint8_t Addr, uint16_t R
+  96:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** static HAL_StatusTypeDef I2Cx_WriteMultiple(I2C_HandleTypeDef *i2c_handler, uint8_t Addr, uint16_t 
+  97:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** static HAL_StatusTypeDef I2Cx_IsDeviceReady(I2C_HandleTypeDef *i2c_handler, uint16_t DevAddress, ui
+  98:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** static void              I2Cx_Error(I2C_HandleTypeDef *i2c_handler, uint8_t Addr);
+  99:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 100:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /* Sensors IO functions */
+ 101:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void     SENSOR_IO_Init(void);
+ 102:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void     SENSOR_IO_DeInit(void);
+ 103:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void     SENSOR_IO_Write(uint8_t Addr, uint8_t Reg, uint8_t Value);
+ 104:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** uint8_t  SENSOR_IO_Read(uint8_t Addr, uint8_t Reg);
+ 105:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** uint16_t SENSOR_IO_ReadMultiple(uint8_t Addr, uint8_t Reg, uint8_t *Buffer, uint16_t Length);
+ 106:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void     SENSOR_IO_WriteMultiple(uint8_t Addr, uint8_t Reg, uint8_t *Buffer, uint16_t Length);
+ 107:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** HAL_StatusTypeDef SENSOR_IO_IsDeviceReady(uint16_t DevAddress, uint32_t Trials);
+ 108:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void     SENSOR_IO_Delay(uint32_t Delay);
+ 109:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 110:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void     NFC_IO_Init(uint8_t GpoIrqEnable);
+ 111:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void     NFC_IO_DeInit(void);
+ 112:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** uint16_t NFC_IO_ReadMultiple (uint8_t Addr, uint8_t *pBuffer, uint16_t Length );
+ 113:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** uint16_t NFC_IO_WriteMultiple (uint8_t Addr, uint8_t *pBuffer, uint16_t Length);
+ 114:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** uint16_t NFC_IO_IsDeviceReady (uint8_t Addr, uint32_t Trials);
+ 115:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void     NFC_IO_ReadState(uint8_t * pPinState);
+ 116:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void     NFC_IO_RfDisable(uint8_t PinState);
+ 117:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void     NFC_IO_Delay(uint32_t Delay);
+ 118:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ARM GAS  /tmp/ccEi5qWM.s 			page 5
+
+
+ 119:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 120:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @}
+ 121:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 122:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 123:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /** @defgroup STM32L475E_IOT01_LOW_LEVEL_Private_Functions LOW LEVEL Private Functions
+ 124:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @{
+ 125:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */ 
+ 126:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 127:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 128:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  This method returns the STM32L475E IOT01 BSP Driver revision
+ 129:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval version  0xXYZR (8bits for each decimal, R for RC)
+ 130:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 131:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** uint32_t BSP_GetVersion(void)
+ 132:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 133              		.loc 1 132 1
+ 134              		.cfi_startproc
+ 135              		@ args = 0, pretend = 0, frame = 0
+ 136              		@ frame_needed = 1, uses_anonymous_args = 0
+ 137              		@ link register save eliminated.
+ 138 0000 80B4     		push	{r7}
+ 139              		.cfi_def_cfa_offset 4
+ 140              		.cfi_offset 7, -4
+ 141 0002 00AF     		add	r7, sp, #0
+ 142              		.cfi_def_cfa_register 7
+ 133:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   return __STM32L475E_IOT01_BSP_VERSION;
+ 143              		.loc 1 133 10
+ 144 0004 024B     		ldr	r3, .L3
+ 134:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 145              		.loc 1 134 1
+ 146 0006 1846     		mov	r0, r3
+ 147 0008 BD46     		mov	sp, r7
+ 148              		.cfi_def_cfa_register 13
+ 149              		@ sp needed
+ 150 000a 5DF8047B 		ldr	r7, [sp], #4
+ 151              		.cfi_restore 7
+ 152              		.cfi_def_cfa_offset 0
+ 153 000e 7047     		bx	lr
+ 154              	.L4:
+ 155              		.align	2
+ 156              	.L3:
+ 157 0010 00080101 		.word	16844800
+ 158              		.cfi_endproc
+ 159              	.LFE445:
+ 161              		.section	.text.BSP_LED_Init,"ax",%progbits
+ 162              		.align	1
+ 163              		.global	BSP_LED_Init
+ 164              		.syntax unified
+ 165              		.thumb
+ 166              		.thumb_func
+ 168              	BSP_LED_Init:
+ 169              	.LFB446:
+ 135:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 136:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 137:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Initializes LED GPIO.
+ 138:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Led  LED to be initialized. 
+ 139:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *              This parameter can be one of the following values:
+ 140:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                @arg  LED2
+ARM GAS  /tmp/ccEi5qWM.s 			page 6
+
+
+ 141:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 142:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void BSP_LED_Init(Led_TypeDef Led)
+ 143:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 170              		.loc 1 143 1
+ 171              		.cfi_startproc
+ 172              		@ args = 0, pretend = 0, frame = 32
+ 173              		@ frame_needed = 1, uses_anonymous_args = 0
+ 174 0000 80B5     		push	{r7, lr}
+ 175              		.cfi_def_cfa_offset 8
+ 176              		.cfi_offset 7, -8
+ 177              		.cfi_offset 14, -4
+ 178 0002 88B0     		sub	sp, sp, #32
+ 179              		.cfi_def_cfa_offset 40
+ 180 0004 00AF     		add	r7, sp, #0
+ 181              		.cfi_def_cfa_register 7
+ 182 0006 0346     		mov	r3, r0
+ 183 0008 FB71     		strb	r3, [r7, #7]
+ 144:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   GPIO_InitTypeDef  gpio_init_structure;
+ 145:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   
+ 146:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   LEDx_GPIO_CLK_ENABLE(Led);
+ 184              		.loc 1 146 3
+ 185 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 186 000c 002B     		cmp	r3, #0
+ 187 000e 0BD1     		bne	.L6
+ 188              	.LBB2:
+ 189              		.loc 1 146 3 is_stmt 0 discriminator 1
+ 190 0010 114B     		ldr	r3, .L7
+ 191 0012 DB6C     		ldr	r3, [r3, #76]
+ 192 0014 104A     		ldr	r2, .L7
+ 193 0016 43F00203 		orr	r3, r3, #2
+ 194 001a D364     		str	r3, [r2, #76]
+ 195 001c 0E4B     		ldr	r3, .L7
+ 196 001e DB6C     		ldr	r3, [r3, #76]
+ 197 0020 03F00203 		and	r3, r3, #2
+ 198 0024 BB60     		str	r3, [r7, #8]
+ 199 0026 BB68     		ldr	r3, [r7, #8]
+ 200              	.L6:
+ 201              	.LBE2:
+ 147:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Configure the GPIO_LED pin */
+ 148:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Pin   = GPIO_PIN[Led];
+ 202              		.loc 1 148 39 is_stmt 1
+ 203 0028 4FF48043 		mov	r3, #16384
+ 204              		.loc 1 148 29
+ 205 002c FB60     		str	r3, [r7, #12]
+ 149:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Mode  = GPIO_MODE_OUTPUT_PP;
+ 206              		.loc 1 149 29
+ 207 002e 0123     		movs	r3, #1
+ 208 0030 3B61     		str	r3, [r7, #16]
+ 150:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Pull  = GPIO_NOPULL;
+ 209              		.loc 1 150 29
+ 210 0032 0023     		movs	r3, #0
+ 211 0034 7B61     		str	r3, [r7, #20]
+ 151:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Speed = GPIO_SPEED_FREQ_HIGH;
+ 212              		.loc 1 151 29
+ 213 0036 0223     		movs	r3, #2
+ 214 0038 BB61     		str	r3, [r7, #24]
+ 152:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   
+ARM GAS  /tmp/ccEi5qWM.s 			page 7
+
+
+ 153:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_GPIO_Init(GPIO_PORT[Led], &gpio_init_structure);
+ 215              		.loc 1 153 3
+ 216 003a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 217 003c 074A     		ldr	r2, .L7+4
+ 218 003e 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 219 0042 07F10C02 		add	r2, r7, #12
+ 220 0046 1146     		mov	r1, r2
+ 221 0048 1846     		mov	r0, r3
+ 222 004a FFF7FEFF 		bl	HAL_GPIO_Init
+ 154:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 223              		.loc 1 154 1
+ 224 004e 00BF     		nop
+ 225 0050 2037     		adds	r7, r7, #32
+ 226              		.cfi_def_cfa_offset 8
+ 227 0052 BD46     		mov	sp, r7
+ 228              		.cfi_def_cfa_register 13
+ 229              		@ sp needed
+ 230 0054 80BD     		pop	{r7, pc}
+ 231              	.L8:
+ 232 0056 00BF     		.align	2
+ 233              	.L7:
+ 234 0058 00100240 		.word	1073876992
+ 235 005c 00000000 		.word	GPIO_PORT
+ 236              		.cfi_endproc
+ 237              	.LFE446:
+ 239              		.section	.text.BSP_LED_DeInit,"ax",%progbits
+ 240              		.align	1
+ 241              		.global	BSP_LED_DeInit
+ 242              		.syntax unified
+ 243              		.thumb
+ 244              		.thumb_func
+ 246              	BSP_LED_DeInit:
+ 247              	.LFB447:
+ 155:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 156:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 157:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  DeInitializes LED GPIO.
+ 158:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Led  LED to be deinitialized. 
+ 159:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *              This parameter can be one of the following values:
+ 160:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                @arg  LED2
+ 161:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 162:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void BSP_LED_DeInit(Led_TypeDef Led)
+ 163:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 248              		.loc 1 163 1
+ 249              		.cfi_startproc
+ 250              		@ args = 0, pretend = 0, frame = 32
+ 251              		@ frame_needed = 1, uses_anonymous_args = 0
+ 252 0000 80B5     		push	{r7, lr}
+ 253              		.cfi_def_cfa_offset 8
+ 254              		.cfi_offset 7, -8
+ 255              		.cfi_offset 14, -4
+ 256 0002 88B0     		sub	sp, sp, #32
+ 257              		.cfi_def_cfa_offset 40
+ 258 0004 00AF     		add	r7, sp, #0
+ 259              		.cfi_def_cfa_register 7
+ 260 0006 0346     		mov	r3, r0
+ 261 0008 FB71     		strb	r3, [r7, #7]
+ 164:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   GPIO_InitTypeDef  gpio_init_structure;
+ARM GAS  /tmp/ccEi5qWM.s 			page 8
+
+
+ 165:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   
+ 166:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* DeInit the GPIO_LED pin */
+ 167:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Pin = GPIO_PIN[Led];
+ 262              		.loc 1 167 37
+ 263 000a 4FF48043 		mov	r3, #16384
+ 264              		.loc 1 167 27
+ 265 000e FB60     		str	r3, [r7, #12]
+ 168:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   
+ 169:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Turn off LED */
+ 170:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_GPIO_WritePin(GPIO_PORT[Led], GPIO_PIN[Led], GPIO_PIN_RESET);
+ 266              		.loc 1 170 3
+ 267 0010 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 268 0012 0B4A     		ldr	r2, .L10
+ 269 0014 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 270              		.loc 1 170 45
+ 271 0018 4FF48042 		mov	r2, #16384
+ 272              		.loc 1 170 3
+ 273 001c 91B2     		uxth	r1, r2
+ 274 001e 0022     		movs	r2, #0
+ 275 0020 1846     		mov	r0, r3
+ 276 0022 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 171:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_GPIO_DeInit(GPIO_PORT[Led], gpio_init_structure.Pin);
+ 277              		.loc 1 171 3
+ 278 0026 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 279 0028 054A     		ldr	r2, .L10
+ 280 002a 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 281 002e FA68     		ldr	r2, [r7, #12]
+ 282 0030 1146     		mov	r1, r2
+ 283 0032 1846     		mov	r0, r3
+ 284 0034 FFF7FEFF 		bl	HAL_GPIO_DeInit
+ 172:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 285              		.loc 1 172 1
+ 286 0038 00BF     		nop
+ 287 003a 2037     		adds	r7, r7, #32
+ 288              		.cfi_def_cfa_offset 8
+ 289 003c BD46     		mov	sp, r7
+ 290              		.cfi_def_cfa_register 13
+ 291              		@ sp needed
+ 292 003e 80BD     		pop	{r7, pc}
+ 293              	.L11:
+ 294              		.align	2
+ 295              	.L10:
+ 296 0040 00000000 		.word	GPIO_PORT
+ 297              		.cfi_endproc
+ 298              	.LFE447:
+ 300              		.section	.text.BSP_LED_On,"ax",%progbits
+ 301              		.align	1
+ 302              		.global	BSP_LED_On
+ 303              		.syntax unified
+ 304              		.thumb
+ 305              		.thumb_func
+ 307              	BSP_LED_On:
+ 308              	.LFB448:
+ 173:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 174:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 175:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Turns the selected LED On.
+ 176:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Led  LED to be set on 
+ARM GAS  /tmp/ccEi5qWM.s 			page 9
+
+
+ 177:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *              This parameter can be one of the following values:
+ 178:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                @arg  LED2
+ 179:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 180:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void BSP_LED_On(Led_TypeDef Led)
+ 181:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 309              		.loc 1 181 1
+ 310              		.cfi_startproc
+ 311              		@ args = 0, pretend = 0, frame = 8
+ 312              		@ frame_needed = 1, uses_anonymous_args = 0
+ 313 0000 80B5     		push	{r7, lr}
+ 314              		.cfi_def_cfa_offset 8
+ 315              		.cfi_offset 7, -8
+ 316              		.cfi_offset 14, -4
+ 317 0002 82B0     		sub	sp, sp, #8
+ 318              		.cfi_def_cfa_offset 16
+ 319 0004 00AF     		add	r7, sp, #0
+ 320              		.cfi_def_cfa_register 7
+ 321 0006 0346     		mov	r3, r0
+ 322 0008 FB71     		strb	r3, [r7, #7]
+ 182:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_GPIO_WritePin(GPIO_PORT[Led], GPIO_PIN[Led], GPIO_PIN_SET);
+ 323              		.loc 1 182 3
+ 324 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 325 000c 064A     		ldr	r2, .L13
+ 326 000e 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 327              		.loc 1 182 45
+ 328 0012 4FF48042 		mov	r2, #16384
+ 329              		.loc 1 182 3
+ 330 0016 91B2     		uxth	r1, r2
+ 331 0018 0122     		movs	r2, #1
+ 332 001a 1846     		mov	r0, r3
+ 333 001c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 183:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 334              		.loc 1 183 1
+ 335 0020 00BF     		nop
+ 336 0022 0837     		adds	r7, r7, #8
+ 337              		.cfi_def_cfa_offset 8
+ 338 0024 BD46     		mov	sp, r7
+ 339              		.cfi_def_cfa_register 13
+ 340              		@ sp needed
+ 341 0026 80BD     		pop	{r7, pc}
+ 342              	.L14:
+ 343              		.align	2
+ 344              	.L13:
+ 345 0028 00000000 		.word	GPIO_PORT
+ 346              		.cfi_endproc
+ 347              	.LFE448:
+ 349              		.section	.text.BSP_LED_Off,"ax",%progbits
+ 350              		.align	1
+ 351              		.global	BSP_LED_Off
+ 352              		.syntax unified
+ 353              		.thumb
+ 354              		.thumb_func
+ 356              	BSP_LED_Off:
+ 357              	.LFB449:
+ 184:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 185:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 186:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Turns the selected LED Off. 
+ARM GAS  /tmp/ccEi5qWM.s 			page 10
+
+
+ 187:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Led  LED to be set off
+ 188:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *              This parameter can be one of the following values:
+ 189:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                @arg  LED2
+ 190:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 191:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void BSP_LED_Off(Led_TypeDef Led)
+ 192:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 358              		.loc 1 192 1
+ 359              		.cfi_startproc
+ 360              		@ args = 0, pretend = 0, frame = 8
+ 361              		@ frame_needed = 1, uses_anonymous_args = 0
+ 362 0000 80B5     		push	{r7, lr}
+ 363              		.cfi_def_cfa_offset 8
+ 364              		.cfi_offset 7, -8
+ 365              		.cfi_offset 14, -4
+ 366 0002 82B0     		sub	sp, sp, #8
+ 367              		.cfi_def_cfa_offset 16
+ 368 0004 00AF     		add	r7, sp, #0
+ 369              		.cfi_def_cfa_register 7
+ 370 0006 0346     		mov	r3, r0
+ 371 0008 FB71     		strb	r3, [r7, #7]
+ 193:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_GPIO_WritePin(GPIO_PORT[Led], GPIO_PIN[Led], GPIO_PIN_RESET);
+ 372              		.loc 1 193 3
+ 373 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 374 000c 064A     		ldr	r2, .L16
+ 375 000e 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 376              		.loc 1 193 45
+ 377 0012 4FF48042 		mov	r2, #16384
+ 378              		.loc 1 193 3
+ 379 0016 91B2     		uxth	r1, r2
+ 380 0018 0022     		movs	r2, #0
+ 381 001a 1846     		mov	r0, r3
+ 382 001c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 194:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 383              		.loc 1 194 1
+ 384 0020 00BF     		nop
+ 385 0022 0837     		adds	r7, r7, #8
+ 386              		.cfi_def_cfa_offset 8
+ 387 0024 BD46     		mov	sp, r7
+ 388              		.cfi_def_cfa_register 13
+ 389              		@ sp needed
+ 390 0026 80BD     		pop	{r7, pc}
+ 391              	.L17:
+ 392              		.align	2
+ 393              	.L16:
+ 394 0028 00000000 		.word	GPIO_PORT
+ 395              		.cfi_endproc
+ 396              	.LFE449:
+ 398              		.section	.text.BSP_LED_Toggle,"ax",%progbits
+ 399              		.align	1
+ 400              		.global	BSP_LED_Toggle
+ 401              		.syntax unified
+ 402              		.thumb
+ 403              		.thumb_func
+ 405              	BSP_LED_Toggle:
+ 406              	.LFB450:
+ 195:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 196:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ARM GAS  /tmp/ccEi5qWM.s 			page 11
+
+
+ 197:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Toggles the selected LED.
+ 198:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Led  LED to be toggled
+ 199:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *              This parameter can be one of the following values:
+ 200:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                @arg  LED2
+ 201:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 202:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void BSP_LED_Toggle(Led_TypeDef Led)
+ 203:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 407              		.loc 1 203 1
+ 408              		.cfi_startproc
+ 409              		@ args = 0, pretend = 0, frame = 8
+ 410              		@ frame_needed = 1, uses_anonymous_args = 0
+ 411 0000 80B5     		push	{r7, lr}
+ 412              		.cfi_def_cfa_offset 8
+ 413              		.cfi_offset 7, -8
+ 414              		.cfi_offset 14, -4
+ 415 0002 82B0     		sub	sp, sp, #8
+ 416              		.cfi_def_cfa_offset 16
+ 417 0004 00AF     		add	r7, sp, #0
+ 418              		.cfi_def_cfa_register 7
+ 419 0006 0346     		mov	r3, r0
+ 420 0008 FB71     		strb	r3, [r7, #7]
+ 204:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_GPIO_TogglePin(GPIO_PORT[Led], GPIO_PIN[Led]);
+ 421              		.loc 1 204 3
+ 422 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 423 000c 064A     		ldr	r2, .L19
+ 424 000e 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 425              		.loc 1 204 46
+ 426 0012 4FF48042 		mov	r2, #16384
+ 427              		.loc 1 204 3
+ 428 0016 92B2     		uxth	r2, r2
+ 429 0018 1146     		mov	r1, r2
+ 430 001a 1846     		mov	r0, r3
+ 431 001c FFF7FEFF 		bl	HAL_GPIO_TogglePin
+ 205:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 432              		.loc 1 205 1
+ 433 0020 00BF     		nop
+ 434 0022 0837     		adds	r7, r7, #8
+ 435              		.cfi_def_cfa_offset 8
+ 436 0024 BD46     		mov	sp, r7
+ 437              		.cfi_def_cfa_register 13
+ 438              		@ sp needed
+ 439 0026 80BD     		pop	{r7, pc}
+ 440              	.L20:
+ 441              		.align	2
+ 442              	.L19:
+ 443 0028 00000000 		.word	GPIO_PORT
+ 444              		.cfi_endproc
+ 445              	.LFE450:
+ 447              		.section	.text.BSP_PB_Init,"ax",%progbits
+ 448              		.align	1
+ 449              		.global	BSP_PB_Init
+ 450              		.syntax unified
+ 451              		.thumb
+ 452              		.thumb_func
+ 454              	BSP_PB_Init:
+ 455              	.LFB451:
+ 206:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ARM GAS  /tmp/ccEi5qWM.s 			page 12
+
+
+ 207:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 208:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Initializes push button GPIO and EXTI Line.
+ 209:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Button  Button to be configured
+ 210:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                 This parameter can be one of the following values:
+ 211:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                   @arg  BUTTON_USER  User Push Button
+ 212:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  ButtonMode Button mode
+ 213:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                    This parameter can be one of the following values:
+ 214:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                      @arg  BUTTON_MODE_GPIO  Button will be used as simple IO
+ 215:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                      @arg  BUTTON_MODE_EXTI  Button will be connected to EXTI line 
+ 216:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                                              with interrupt generation capability  
+ 217:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 218:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode)
+ 219:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 456              		.loc 1 219 1
+ 457              		.cfi_startproc
+ 458              		@ args = 0, pretend = 0, frame = 32
+ 459              		@ frame_needed = 1, uses_anonymous_args = 0
+ 460 0000 80B5     		push	{r7, lr}
+ 461              		.cfi_def_cfa_offset 8
+ 462              		.cfi_offset 7, -8
+ 463              		.cfi_offset 14, -4
+ 464 0002 88B0     		sub	sp, sp, #32
+ 465              		.cfi_def_cfa_offset 40
+ 466 0004 00AF     		add	r7, sp, #0
+ 467              		.cfi_def_cfa_register 7
+ 468 0006 0346     		mov	r3, r0
+ 469 0008 0A46     		mov	r2, r1
+ 470 000a FB71     		strb	r3, [r7, #7]
+ 471 000c 1346     		mov	r3, r2
+ 472 000e BB71     		strb	r3, [r7, #6]
+ 473              	.LBB3:
+ 220:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   GPIO_InitTypeDef gpio_init_structure;
+ 221:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   
+ 222:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Enable the BUTTON clock */
+ 223:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   USER_BUTTON_GPIO_CLK_ENABLE();
+ 474              		.loc 1 223 3
+ 475 0010 244B     		ldr	r3, .L25
+ 476 0012 DB6C     		ldr	r3, [r3, #76]
+ 477 0014 234A     		ldr	r2, .L25
+ 478 0016 43F00403 		orr	r3, r3, #4
+ 479 001a D364     		str	r3, [r2, #76]
+ 480 001c 214B     		ldr	r3, .L25
+ 481 001e DB6C     		ldr	r3, [r3, #76]
+ 482 0020 03F00403 		and	r3, r3, #4
+ 483 0024 BB60     		str	r3, [r7, #8]
+ 484 0026 BB68     		ldr	r3, [r7, #8]
+ 485              	.LBE3:
+ 224:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   
+ 225:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   if(ButtonMode == BUTTON_MODE_GPIO)
+ 486              		.loc 1 225 5
+ 487 0028 BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+ 488 002a 002B     		cmp	r3, #0
+ 489 002c 12D1     		bne	.L22
+ 226:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   {
+ 227:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     /* Configure Button pin as input */
+ 228:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     gpio_init_structure.Pin = BUTTON_PIN[Button];
+ 490              		.loc 1 228 41
+ARM GAS  /tmp/ccEi5qWM.s 			page 13
+
+
+ 491 002e 4FF40053 		mov	r3, #8192
+ 492              		.loc 1 228 29
+ 493 0032 FB60     		str	r3, [r7, #12]
+ 229:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     gpio_init_structure.Mode = GPIO_MODE_INPUT;
+ 494              		.loc 1 229 30
+ 495 0034 0023     		movs	r3, #0
+ 496 0036 3B61     		str	r3, [r7, #16]
+ 230:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     gpio_init_structure.Pull = GPIO_PULLUP;
+ 497              		.loc 1 230 30
+ 498 0038 0123     		movs	r3, #1
+ 499 003a 7B61     		str	r3, [r7, #20]
+ 231:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     gpio_init_structure.Speed = GPIO_SPEED_FREQ_HIGH;
+ 500              		.loc 1 231 31
+ 501 003c 0223     		movs	r3, #2
+ 502 003e BB61     		str	r3, [r7, #24]
+ 232:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     HAL_GPIO_Init(BUTTON_PORT[Button], &gpio_init_structure);
+ 503              		.loc 1 232 5
+ 504 0040 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 505 0042 194A     		ldr	r2, .L25+4
+ 506 0044 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 507 0048 07F10C02 		add	r2, r7, #12
+ 508 004c 1146     		mov	r1, r2
+ 509 004e 1846     		mov	r0, r3
+ 510 0050 FFF7FEFF 		bl	HAL_GPIO_Init
+ 511              	.L22:
+ 233:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   }
+ 234:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   
+ 235:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   if(ButtonMode == BUTTON_MODE_EXTI)
+ 512              		.loc 1 235 5
+ 513 0054 BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+ 514 0056 012B     		cmp	r3, #1
+ 515 0058 1FD1     		bne	.L24
+ 236:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   {
+ 237:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     /* Configure Button pin as input with External interrupt */
+ 238:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     gpio_init_structure.Pin = BUTTON_PIN[Button];
+ 516              		.loc 1 238 41
+ 517 005a 4FF40053 		mov	r3, #8192
+ 518              		.loc 1 238 29
+ 519 005e FB60     		str	r3, [r7, #12]
+ 239:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     gpio_init_structure.Pull = GPIO_PULLUP;
+ 520              		.loc 1 239 30
+ 521 0060 0123     		movs	r3, #1
+ 522 0062 7B61     		str	r3, [r7, #20]
+ 240:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     gpio_init_structure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 523              		.loc 1 240 31
+ 524 0064 0323     		movs	r3, #3
+ 525 0066 BB61     		str	r3, [r7, #24]
+ 241:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     
+ 242:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     gpio_init_structure.Mode = GPIO_MODE_IT_RISING;
+ 526              		.loc 1 242 30
+ 527 0068 4FF48813 		mov	r3, #1114112
+ 528 006c 3B61     		str	r3, [r7, #16]
+ 243:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     
+ 244:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     HAL_GPIO_Init(BUTTON_PORT[Button], &gpio_init_structure);
+ 529              		.loc 1 244 5
+ 530 006e FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 531 0070 0D4A     		ldr	r2, .L25+4
+ARM GAS  /tmp/ccEi5qWM.s 			page 14
+
+
+ 532 0072 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 533 0076 07F10C02 		add	r2, r7, #12
+ 534 007a 1146     		mov	r1, r2
+ 535 007c 1846     		mov	r0, r3
+ 536 007e FFF7FEFF 		bl	HAL_GPIO_Init
+ 245:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     
+ 246:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     /* Enable and set Button EXTI Interrupt to the lowest priority */
+ 247:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     HAL_NVIC_SetPriority((IRQn_Type)(BUTTON_IRQn[Button]), 0x0F, 0x00);
+ 537              		.loc 1 247 49
+ 538 0082 2823     		movs	r3, #40
+ 539              		.loc 1 247 5
+ 540 0084 5BB2     		sxtb	r3, r3
+ 541 0086 0022     		movs	r2, #0
+ 542 0088 0F21     		movs	r1, #15
+ 543 008a 1846     		mov	r0, r3
+ 544 008c FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 248:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     HAL_NVIC_EnableIRQ((IRQn_Type)(BUTTON_IRQn[Button]));
+ 545              		.loc 1 248 47
+ 546 0090 2823     		movs	r3, #40
+ 547              		.loc 1 248 5
+ 548 0092 5BB2     		sxtb	r3, r3
+ 549 0094 1846     		mov	r0, r3
+ 550 0096 FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+ 551              	.L24:
+ 249:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   }
+ 250:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 552              		.loc 1 250 1
+ 553 009a 00BF     		nop
+ 554 009c 2037     		adds	r7, r7, #32
+ 555              		.cfi_def_cfa_offset 8
+ 556 009e BD46     		mov	sp, r7
+ 557              		.cfi_def_cfa_register 13
+ 558              		@ sp needed
+ 559 00a0 80BD     		pop	{r7, pc}
+ 560              	.L26:
+ 561 00a2 00BF     		.align	2
+ 562              	.L25:
+ 563 00a4 00100240 		.word	1073876992
+ 564 00a8 00000000 		.word	BUTTON_PORT
+ 565              		.cfi_endproc
+ 566              	.LFE451:
+ 568              		.section	.text.BSP_PB_DeInit,"ax",%progbits
+ 569              		.align	1
+ 570              		.global	BSP_PB_DeInit
+ 571              		.syntax unified
+ 572              		.thumb
+ 573              		.thumb_func
+ 575              	BSP_PB_DeInit:
+ 576              	.LFB452:
+ 251:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 252:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 253:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  DeInitializes push button.
+ 254:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Button  Button to be configured
+ 255:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                 This parameter can be one of the following values:
+ 256:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                   @arg  BUTTON_USER  User Push Button 
+ 257:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @note PB DeInit does not disable the GPIO clock
+ 258:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ARM GAS  /tmp/ccEi5qWM.s 			page 15
+
+
+ 259:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void BSP_PB_DeInit(Button_TypeDef Button)
+ 260:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 577              		.loc 1 260 1
+ 578              		.cfi_startproc
+ 579              		@ args = 0, pretend = 0, frame = 32
+ 580              		@ frame_needed = 1, uses_anonymous_args = 0
+ 581 0000 80B5     		push	{r7, lr}
+ 582              		.cfi_def_cfa_offset 8
+ 583              		.cfi_offset 7, -8
+ 584              		.cfi_offset 14, -4
+ 585 0002 88B0     		sub	sp, sp, #32
+ 586              		.cfi_def_cfa_offset 40
+ 587 0004 00AF     		add	r7, sp, #0
+ 588              		.cfi_def_cfa_register 7
+ 589 0006 0346     		mov	r3, r0
+ 590 0008 FB71     		strb	r3, [r7, #7]
+ 261:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   GPIO_InitTypeDef gpio_init_structure;
+ 262:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 263:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Pin = BUTTON_PIN[Button];
+ 591              		.loc 1 263 39
+ 592 000a 4FF40053 		mov	r3, #8192
+ 593              		.loc 1 263 27
+ 594 000e FB60     		str	r3, [r7, #12]
+ 264:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_NVIC_DisableIRQ((IRQn_Type)(BUTTON_IRQn[Button]));
+ 595              		.loc 1 264 46
+ 596 0010 2823     		movs	r3, #40
+ 597              		.loc 1 264 3
+ 598 0012 5BB2     		sxtb	r3, r3
+ 599 0014 1846     		mov	r0, r3
+ 600 0016 FFF7FEFF 		bl	HAL_NVIC_DisableIRQ
+ 265:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_GPIO_DeInit(BUTTON_PORT[Button], gpio_init_structure.Pin);
+ 601              		.loc 1 265 3
+ 602 001a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 603 001c 054A     		ldr	r2, .L28
+ 604 001e 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 605 0022 FA68     		ldr	r2, [r7, #12]
+ 606 0024 1146     		mov	r1, r2
+ 607 0026 1846     		mov	r0, r3
+ 608 0028 FFF7FEFF 		bl	HAL_GPIO_DeInit
+ 266:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 609              		.loc 1 266 1
+ 610 002c 00BF     		nop
+ 611 002e 2037     		adds	r7, r7, #32
+ 612              		.cfi_def_cfa_offset 8
+ 613 0030 BD46     		mov	sp, r7
+ 614              		.cfi_def_cfa_register 13
+ 615              		@ sp needed
+ 616 0032 80BD     		pop	{r7, pc}
+ 617              	.L29:
+ 618              		.align	2
+ 619              	.L28:
+ 620 0034 00000000 		.word	BUTTON_PORT
+ 621              		.cfi_endproc
+ 622              	.LFE452:
+ 624              		.section	.text.BSP_PB_GetState,"ax",%progbits
+ 625              		.align	1
+ 626              		.global	BSP_PB_GetState
+ARM GAS  /tmp/ccEi5qWM.s 			page 16
+
+
+ 627              		.syntax unified
+ 628              		.thumb
+ 629              		.thumb_func
+ 631              	BSP_PB_GetState:
+ 632              	.LFB453:
+ 267:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 268:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 269:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 270:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Returns the selected button state.
+ 271:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Button  Button to be checked
+ 272:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                 This parameter can be one of the following values:
+ 273:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                   @arg  BUTTON_USER  User Push Button 
+ 274:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval The Button GPIO pin value (GPIO_PIN_RESET = button pressed)
+ 275:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 276:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** uint32_t BSP_PB_GetState(Button_TypeDef Button)
+ 277:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 633              		.loc 1 277 1
+ 634              		.cfi_startproc
+ 635              		@ args = 0, pretend = 0, frame = 8
+ 636              		@ frame_needed = 1, uses_anonymous_args = 0
+ 637 0000 80B5     		push	{r7, lr}
+ 638              		.cfi_def_cfa_offset 8
+ 639              		.cfi_offset 7, -8
+ 640              		.cfi_offset 14, -4
+ 641 0002 82B0     		sub	sp, sp, #8
+ 642              		.cfi_def_cfa_offset 16
+ 643 0004 00AF     		add	r7, sp, #0
+ 644              		.cfi_def_cfa_register 7
+ 645 0006 0346     		mov	r3, r0
+ 646 0008 FB71     		strb	r3, [r7, #7]
+ 278:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   return HAL_GPIO_ReadPin(BUTTON_PORT[Button], BUTTON_PIN[Button]);
+ 647              		.loc 1 278 10
+ 648 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 649 000c 064A     		ldr	r2, .L32
+ 650 000e 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 651              		.loc 1 278 58
+ 652 0012 4FF40052 		mov	r2, #8192
+ 653              		.loc 1 278 10
+ 654 0016 1146     		mov	r1, r2
+ 655 0018 1846     		mov	r0, r3
+ 656 001a FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 657 001e 0346     		mov	r3, r0
+ 279:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 658              		.loc 1 279 1
+ 659 0020 1846     		mov	r0, r3
+ 660 0022 0837     		adds	r7, r7, #8
+ 661              		.cfi_def_cfa_offset 8
+ 662 0024 BD46     		mov	sp, r7
+ 663              		.cfi_def_cfa_register 13
+ 664              		@ sp needed
+ 665 0026 80BD     		pop	{r7, pc}
+ 666              	.L33:
+ 667              		.align	2
+ 668              	.L32:
+ 669 0028 00000000 		.word	BUTTON_PORT
+ 670              		.cfi_endproc
+ 671              	.LFE453:
+ARM GAS  /tmp/ccEi5qWM.s 			page 17
+
+
+ 673              		.section	.text.BSP_COM_Init,"ax",%progbits
+ 674              		.align	1
+ 675              		.global	BSP_COM_Init
+ 676              		.syntax unified
+ 677              		.thumb
+ 678              		.thumb_func
+ 680              	BSP_COM_Init:
+ 681              	.LFB454:
+ 280:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 281:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 282:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Configures COM port.
+ 283:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  COM  COM port to be initialized.
+ 284:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *              This parameter can be one of the following values:
+ 285:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                @arg  COM1 
+ 286:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  huart  Pointer to a UART_HandleTypeDef structure that contains the
+ 287:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                configuration information for the specified USART peripheral.
+ 288:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 289:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void BSP_COM_Init(COM_TypeDef COM, UART_HandleTypeDef *huart)
+ 290:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 682              		.loc 1 290 1
+ 683              		.cfi_startproc
+ 684              		@ args = 0, pretend = 0, frame = 40
+ 685              		@ frame_needed = 1, uses_anonymous_args = 0
+ 686 0000 80B5     		push	{r7, lr}
+ 687              		.cfi_def_cfa_offset 8
+ 688              		.cfi_offset 7, -8
+ 689              		.cfi_offset 14, -4
+ 690 0002 8AB0     		sub	sp, sp, #40
+ 691              		.cfi_def_cfa_offset 48
+ 692 0004 00AF     		add	r7, sp, #0
+ 693              		.cfi_def_cfa_register 7
+ 694 0006 0346     		mov	r3, r0
+ 695 0008 3960     		str	r1, [r7]
+ 696 000a FB71     		strb	r3, [r7, #7]
+ 291:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   GPIO_InitTypeDef gpio_init_structure;
+ 292:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 293:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Enable GPIO clock */
+ 294:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   DISCOVERY_COMx_TX_GPIO_CLK_ENABLE(COM);
+ 697              		.loc 1 294 3
+ 698 000c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 699 000e 002B     		cmp	r3, #0
+ 700 0010 0BD1     		bne	.L35
+ 701              	.LBB4:
+ 702              		.loc 1 294 3 is_stmt 0 discriminator 1
+ 703 0012 2D4B     		ldr	r3, .L38
+ 704 0014 DB6C     		ldr	r3, [r3, #76]
+ 705 0016 2C4A     		ldr	r2, .L38
+ 706 0018 43F00203 		orr	r3, r3, #2
+ 707 001c D364     		str	r3, [r2, #76]
+ 708 001e 2A4B     		ldr	r3, .L38
+ 709 0020 DB6C     		ldr	r3, [r3, #76]
+ 710 0022 03F00203 		and	r3, r3, #2
+ 711 0026 3B61     		str	r3, [r7, #16]
+ 712 0028 3B69     		ldr	r3, [r7, #16]
+ 713              	.L35:
+ 714              	.LBE4:
+ 295:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   DISCOVERY_COMx_RX_GPIO_CLK_ENABLE(COM);
+ARM GAS  /tmp/ccEi5qWM.s 			page 18
+
+
+ 715              		.loc 1 295 3 is_stmt 1
+ 716 002a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 717 002c 002B     		cmp	r3, #0
+ 718 002e 0BD1     		bne	.L36
+ 719              	.LBB5:
+ 720              		.loc 1 295 3 is_stmt 0 discriminator 1
+ 721 0030 254B     		ldr	r3, .L38
+ 722 0032 DB6C     		ldr	r3, [r3, #76]
+ 723 0034 244A     		ldr	r2, .L38
+ 724 0036 43F00203 		orr	r3, r3, #2
+ 725 003a D364     		str	r3, [r2, #76]
+ 726 003c 224B     		ldr	r3, .L38
+ 727 003e DB6C     		ldr	r3, [r3, #76]
+ 728 0040 03F00203 		and	r3, r3, #2
+ 729 0044 FB60     		str	r3, [r7, #12]
+ 730 0046 FB68     		ldr	r3, [r7, #12]
+ 731              	.L36:
+ 732              	.LBE5:
+ 296:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 297:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Enable USART clock */
+ 298:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   DISCOVERY_COMx_CLK_ENABLE(COM);
+ 733              		.loc 1 298 3 is_stmt 1
+ 734 0048 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 735 004a 002B     		cmp	r3, #0
+ 736 004c 0BD1     		bne	.L37
+ 737              	.LBB6:
+ 738              		.loc 1 298 3 is_stmt 0 discriminator 1
+ 739 004e 1E4B     		ldr	r3, .L38
+ 740 0050 1B6E     		ldr	r3, [r3, #96]
+ 741 0052 1D4A     		ldr	r2, .L38
+ 742 0054 43F48043 		orr	r3, r3, #16384
+ 743 0058 1366     		str	r3, [r2, #96]
+ 744 005a 1B4B     		ldr	r3, .L38
+ 745 005c 1B6E     		ldr	r3, [r3, #96]
+ 746 005e 03F48043 		and	r3, r3, #16384
+ 747 0062 BB60     		str	r3, [r7, #8]
+ 748 0064 BB68     		ldr	r3, [r7, #8]
+ 749              	.L37:
+ 750              	.LBE6:
+ 299:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 300:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Configure USART Tx as alternate function */
+ 301:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Pin = COM_TX_PIN[COM];
+ 751              		.loc 1 301 39 is_stmt 1
+ 752 0066 4023     		movs	r3, #64
+ 753              		.loc 1 301 27
+ 754 0068 7B61     		str	r3, [r7, #20]
+ 302:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Mode = GPIO_MODE_AF_PP;
+ 755              		.loc 1 302 28
+ 756 006a 0223     		movs	r3, #2
+ 757 006c BB61     		str	r3, [r7, #24]
+ 303:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Speed = GPIO_SPEED_FREQ_HIGH;
+ 758              		.loc 1 303 29
+ 759 006e 0223     		movs	r3, #2
+ 760 0070 3B62     		str	r3, [r7, #32]
+ 304:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Pull = GPIO_NOPULL;
+ 761              		.loc 1 304 28
+ 762 0072 0023     		movs	r3, #0
+ARM GAS  /tmp/ccEi5qWM.s 			page 19
+
+
+ 763 0074 FB61     		str	r3, [r7, #28]
+ 305:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Alternate = COM_TX_AF[COM];
+ 764              		.loc 1 305 44
+ 765 0076 0723     		movs	r3, #7
+ 766              		.loc 1 305 33
+ 767 0078 7B62     		str	r3, [r7, #36]
+ 306:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_GPIO_Init(COM_TX_PORT[COM], &gpio_init_structure);
+ 768              		.loc 1 306 3
+ 769 007a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 770 007c 134A     		ldr	r2, .L38+4
+ 771 007e 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 772 0082 07F11402 		add	r2, r7, #20
+ 773 0086 1146     		mov	r1, r2
+ 774 0088 1846     		mov	r0, r3
+ 775 008a FFF7FEFF 		bl	HAL_GPIO_Init
+ 307:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 308:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Configure USART Rx as alternate function */
+ 309:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Pin = COM_RX_PIN[COM];
+ 776              		.loc 1 309 39
+ 777 008e 8023     		movs	r3, #128
+ 778              		.loc 1 309 27
+ 779 0090 7B61     		str	r3, [r7, #20]
+ 310:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Mode = GPIO_MODE_AF_PP;
+ 780              		.loc 1 310 28
+ 781 0092 0223     		movs	r3, #2
+ 782 0094 BB61     		str	r3, [r7, #24]
+ 311:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Alternate = COM_RX_AF[COM];
+ 783              		.loc 1 311 44
+ 784 0096 0723     		movs	r3, #7
+ 785              		.loc 1 311 33
+ 786 0098 7B62     		str	r3, [r7, #36]
+ 312:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_GPIO_Init(COM_RX_PORT[COM], &gpio_init_structure);
+ 787              		.loc 1 312 3
+ 788 009a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 789 009c 0C4A     		ldr	r2, .L38+8
+ 790 009e 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 791 00a2 07F11402 		add	r2, r7, #20
+ 792 00a6 1146     		mov	r1, r2
+ 793 00a8 1846     		mov	r0, r3
+ 794 00aa FFF7FEFF 		bl	HAL_GPIO_Init
+ 313:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 314:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* USART configuration */
+ 315:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   huart->Instance = COM_USART[COM];
+ 795              		.loc 1 315 30
+ 796 00ae FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 797 00b0 084A     		ldr	r2, .L38+12
+ 798 00b2 52F82320 		ldr	r2, [r2, r3, lsl #2]
+ 799              		.loc 1 315 19
+ 800 00b6 3B68     		ldr	r3, [r7]
+ 801 00b8 1A60     		str	r2, [r3]
+ 316:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_UART_Init(huart);
+ 802              		.loc 1 316 3
+ 803 00ba 3868     		ldr	r0, [r7]
+ 804 00bc FFF7FEFF 		bl	HAL_UART_Init
+ 317:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 805              		.loc 1 317 1
+ 806 00c0 00BF     		nop
+ARM GAS  /tmp/ccEi5qWM.s 			page 20
+
+
+ 807 00c2 2837     		adds	r7, r7, #40
+ 808              		.cfi_def_cfa_offset 8
+ 809 00c4 BD46     		mov	sp, r7
+ 810              		.cfi_def_cfa_register 13
+ 811              		@ sp needed
+ 812 00c6 80BD     		pop	{r7, pc}
+ 813              	.L39:
+ 814              		.align	2
+ 815              	.L38:
+ 816 00c8 00100240 		.word	1073876992
+ 817 00cc 00000000 		.word	COM_TX_PORT
+ 818 00d0 00000000 		.word	COM_RX_PORT
+ 819 00d4 00000000 		.word	COM_USART
+ 820              		.cfi_endproc
+ 821              	.LFE454:
+ 823              		.section	.text.BSP_COM_DeInit,"ax",%progbits
+ 824              		.align	1
+ 825              		.global	BSP_COM_DeInit
+ 826              		.syntax unified
+ 827              		.thumb
+ 828              		.thumb_func
+ 830              	BSP_COM_DeInit:
+ 831              	.LFB455:
+ 318:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 319:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 320:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  DeInitializes COM port.
+ 321:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  COM  COM port to be deinitialized.
+ 322:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *              This parameter can be one of the following values:
+ 323:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                @arg  COM1 
+ 324:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  huart  Pointer to a UART_HandleTypeDef structure that contains the
+ 325:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *                configuration information for the specified USART peripheral.
+ 326:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 327:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void BSP_COM_DeInit(COM_TypeDef COM, UART_HandleTypeDef *huart)
+ 328:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 832              		.loc 1 328 1
+ 833              		.cfi_startproc
+ 834              		@ args = 0, pretend = 0, frame = 8
+ 835              		@ frame_needed = 1, uses_anonymous_args = 0
+ 836 0000 80B5     		push	{r7, lr}
+ 837              		.cfi_def_cfa_offset 8
+ 838              		.cfi_offset 7, -8
+ 839              		.cfi_offset 14, -4
+ 840 0002 82B0     		sub	sp, sp, #8
+ 841              		.cfi_def_cfa_offset 16
+ 842 0004 00AF     		add	r7, sp, #0
+ 843              		.cfi_def_cfa_register 7
+ 844 0006 0346     		mov	r3, r0
+ 845 0008 3960     		str	r1, [r7]
+ 846 000a FB71     		strb	r3, [r7, #7]
+ 329:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* USART configuration */
+ 330:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   huart->Instance = COM_USART[COM];
+ 847              		.loc 1 330 30
+ 848 000c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 849 000e 0A4A     		ldr	r2, .L43
+ 850 0010 52F82320 		ldr	r2, [r2, r3, lsl #2]
+ 851              		.loc 1 330 19
+ 852 0014 3B68     		ldr	r3, [r7]
+ARM GAS  /tmp/ccEi5qWM.s 			page 21
+
+
+ 853 0016 1A60     		str	r2, [r3]
+ 331:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_UART_DeInit(huart);
+ 854              		.loc 1 331 3
+ 855 0018 3868     		ldr	r0, [r7]
+ 856 001a FFF7FEFF 		bl	HAL_UART_DeInit
+ 332:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 333:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Enable USART clock */
+ 334:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   DISCOVERY_COMx_CLK_DISABLE(COM);
+ 857              		.loc 1 334 3
+ 858 001e FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 859 0020 002B     		cmp	r3, #0
+ 860 0022 05D1     		bne	.L42
+ 861              		.loc 1 334 3 is_stmt 0 discriminator 1
+ 862 0024 054B     		ldr	r3, .L43+4
+ 863 0026 1B6E     		ldr	r3, [r3, #96]
+ 864 0028 044A     		ldr	r2, .L43+4
+ 865 002a 23F48043 		bic	r3, r3, #16384
+ 866 002e 1366     		str	r3, [r2, #96]
+ 867              	.L42:
+ 335:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 336:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* DeInit GPIO pins can be done in the application 
+ 337:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****      (by surcharging this __weak function) */
+ 338:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 339:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* GPIO pins clock, FMC clock and DMA clock can be shut down in the application 
+ 340:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****      by surcharging this __weak function */ 
+ 341:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 868              		.loc 1 341 1 is_stmt 1
+ 869 0030 00BF     		nop
+ 870 0032 0837     		adds	r7, r7, #8
+ 871              		.cfi_def_cfa_offset 8
+ 872 0034 BD46     		mov	sp, r7
+ 873              		.cfi_def_cfa_register 13
+ 874              		@ sp needed
+ 875 0036 80BD     		pop	{r7, pc}
+ 876              	.L44:
+ 877              		.align	2
+ 878              	.L43:
+ 879 0038 00000000 		.word	COM_USART
+ 880 003c 00100240 		.word	1073876992
+ 881              		.cfi_endproc
+ 882              	.LFE455:
+ 884              		.section	.text.I2Cx_MspInit,"ax",%progbits
+ 885              		.align	1
+ 886              		.syntax unified
+ 887              		.thumb
+ 888              		.thumb_func
+ 890              	I2Cx_MspInit:
+ 891              	.LFB456:
+ 342:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 343:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 344:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /*******************************************************************************
+ 345:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****                             BUS OPERATIONS
+ 346:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** *******************************************************************************/
+ 347:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 348:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /******************************* I2C Routines *********************************/
+ 349:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 350:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Initializes I2C MSP.
+ARM GAS  /tmp/ccEi5qWM.s 			page 22
+
+
+ 351:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  i2c_handler  I2C handler
+ 352:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval None
+ 353:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 354:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** static void I2Cx_MspInit(I2C_HandleTypeDef *i2c_handler)
+ 355:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 892              		.loc 1 355 1
+ 893              		.cfi_startproc
+ 894              		@ args = 0, pretend = 0, frame = 40
+ 895              		@ frame_needed = 1, uses_anonymous_args = 0
+ 896 0000 80B5     		push	{r7, lr}
+ 897              		.cfi_def_cfa_offset 8
+ 898              		.cfi_offset 7, -8
+ 899              		.cfi_offset 14, -4
+ 900 0002 8AB0     		sub	sp, sp, #40
+ 901              		.cfi_def_cfa_offset 48
+ 902 0004 00AF     		add	r7, sp, #0
+ 903              		.cfi_def_cfa_register 7
+ 904 0006 7860     		str	r0, [r7, #4]
+ 905              	.LBB7:
+ 356:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   GPIO_InitTypeDef  gpio_init_structure;
+ 357:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 358:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /*** Configure the GPIOs ***/
+ 359:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Enable GPIO clock */
+ 360:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   DISCOVERY_I2Cx_SCL_SDA_GPIO_CLK_ENABLE();
+ 906              		.loc 1 360 3
+ 907 0008 274B     		ldr	r3, .L46
+ 908 000a DB6C     		ldr	r3, [r3, #76]
+ 909 000c 264A     		ldr	r2, .L46
+ 910 000e 43F00203 		orr	r3, r3, #2
+ 911 0012 D364     		str	r3, [r2, #76]
+ 912 0014 244B     		ldr	r3, .L46
+ 913 0016 DB6C     		ldr	r3, [r3, #76]
+ 914 0018 03F00203 		and	r3, r3, #2
+ 915 001c 3B61     		str	r3, [r7, #16]
+ 916 001e 3B69     		ldr	r3, [r7, #16]
+ 917              	.LBE7:
+ 361:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 362:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Configure I2C Tx, Rx as alternate function */
+ 363:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Pin = DISCOVERY_I2Cx_SCL_PIN | DISCOVERY_I2Cx_SDA_PIN;
+ 918              		.loc 1 363 27
+ 919 0020 4FF44063 		mov	r3, #3072
+ 920 0024 7B61     		str	r3, [r7, #20]
+ 364:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Mode = GPIO_MODE_AF_OD;
+ 921              		.loc 1 364 28
+ 922 0026 1223     		movs	r3, #18
+ 923 0028 BB61     		str	r3, [r7, #24]
+ 365:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Pull = GPIO_PULLUP;
+ 924              		.loc 1 365 28
+ 925 002a 0123     		movs	r3, #1
+ 926 002c FB61     		str	r3, [r7, #28]
+ 366:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 927              		.loc 1 366 29
+ 928 002e 0323     		movs	r3, #3
+ 929 0030 3B62     		str	r3, [r7, #32]
+ 367:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Alternate = DISCOVERY_I2Cx_SCL_SDA_AF;
+ 930              		.loc 1 367 33
+ 931 0032 0423     		movs	r3, #4
+ARM GAS  /tmp/ccEi5qWM.s 			page 23
+
+
+ 932 0034 7B62     		str	r3, [r7, #36]
+ 368:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_GPIO_Init(DISCOVERY_I2Cx_SCL_SDA_GPIO_PORT, &gpio_init_structure);
+ 933              		.loc 1 368 3
+ 934 0036 07F11403 		add	r3, r7, #20
+ 935 003a 1946     		mov	r1, r3
+ 936 003c 1B48     		ldr	r0, .L46+4
+ 937 003e FFF7FEFF 		bl	HAL_GPIO_Init
+ 369:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 370:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_GPIO_Init(DISCOVERY_I2Cx_SCL_SDA_GPIO_PORT, &gpio_init_structure);
+ 938              		.loc 1 370 3
+ 939 0042 07F11403 		add	r3, r7, #20
+ 940 0046 1946     		mov	r1, r3
+ 941 0048 1848     		ldr	r0, .L46+4
+ 942 004a FFF7FEFF 		bl	HAL_GPIO_Init
+ 943              	.LBB8:
+ 371:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 372:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /*** Configure the I2C peripheral ***/
+ 373:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Enable I2C clock */
+ 374:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   DISCOVERY_I2Cx_CLK_ENABLE();
+ 944              		.loc 1 374 3
+ 945 004e 164B     		ldr	r3, .L46
+ 946 0050 9B6D     		ldr	r3, [r3, #88]
+ 947 0052 154A     		ldr	r2, .L46
+ 948 0054 43F48003 		orr	r3, r3, #4194304
+ 949 0058 9365     		str	r3, [r2, #88]
+ 950 005a 134B     		ldr	r3, .L46
+ 951 005c 9B6D     		ldr	r3, [r3, #88]
+ 952 005e 03F48003 		and	r3, r3, #4194304
+ 953 0062 FB60     		str	r3, [r7, #12]
+ 954 0064 FB68     		ldr	r3, [r7, #12]
+ 955              	.LBE8:
+ 375:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 376:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Force the I2C peripheral clock reset */
+ 377:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   DISCOVERY_I2Cx_FORCE_RESET();
+ 956              		.loc 1 377 3
+ 957 0066 104B     		ldr	r3, .L46
+ 958 0068 9B6B     		ldr	r3, [r3, #56]
+ 959 006a 0F4A     		ldr	r2, .L46
+ 960 006c 43F48003 		orr	r3, r3, #4194304
+ 961 0070 9363     		str	r3, [r2, #56]
+ 378:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 379:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Release the I2C peripheral clock reset */
+ 380:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   DISCOVERY_I2Cx_RELEASE_RESET();
+ 962              		.loc 1 380 3
+ 963 0072 0D4B     		ldr	r3, .L46
+ 964 0074 9B6B     		ldr	r3, [r3, #56]
+ 965 0076 0C4A     		ldr	r2, .L46
+ 966 0078 23F48003 		bic	r3, r3, #4194304
+ 967 007c 9363     		str	r3, [r2, #56]
+ 381:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 382:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Enable and set I2Cx Interrupt to a lower priority */
+ 383:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_NVIC_SetPriority(DISCOVERY_I2Cx_EV_IRQn, 0x0F, 0);
+ 968              		.loc 1 383 3
+ 969 007e 0022     		movs	r2, #0
+ 970 0080 0F21     		movs	r1, #15
+ 971 0082 2120     		movs	r0, #33
+ 972 0084 FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ARM GAS  /tmp/ccEi5qWM.s 			page 24
+
+
+ 384:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_NVIC_EnableIRQ(DISCOVERY_I2Cx_EV_IRQn);
+ 973              		.loc 1 384 3
+ 974 0088 2120     		movs	r0, #33
+ 975 008a FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+ 385:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 386:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Enable and set I2Cx Interrupt to a lower priority */
+ 387:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_NVIC_SetPriority(DISCOVERY_I2Cx_ER_IRQn, 0x0F, 0);
+ 976              		.loc 1 387 3
+ 977 008e 0022     		movs	r2, #0
+ 978 0090 0F21     		movs	r1, #15
+ 979 0092 2220     		movs	r0, #34
+ 980 0094 FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 388:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_NVIC_EnableIRQ(DISCOVERY_I2Cx_ER_IRQn);
+ 981              		.loc 1 388 3
+ 982 0098 2220     		movs	r0, #34
+ 983 009a FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+ 389:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 984              		.loc 1 389 1
+ 985 009e 00BF     		nop
+ 986 00a0 2837     		adds	r7, r7, #40
+ 987              		.cfi_def_cfa_offset 8
+ 988 00a2 BD46     		mov	sp, r7
+ 989              		.cfi_def_cfa_register 13
+ 990              		@ sp needed
+ 991 00a4 80BD     		pop	{r7, pc}
+ 992              	.L47:
+ 993 00a6 00BF     		.align	2
+ 994              	.L46:
+ 995 00a8 00100240 		.word	1073876992
+ 996 00ac 00040048 		.word	1207960576
+ 997              		.cfi_endproc
+ 998              	.LFE456:
+ 1000              		.section	.text.I2Cx_MspDeInit,"ax",%progbits
+ 1001              		.align	1
+ 1002              		.syntax unified
+ 1003              		.thumb
+ 1004              		.thumb_func
+ 1006              	I2Cx_MspDeInit:
+ 1007              	.LFB457:
+ 390:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 391:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 392:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  DeInitializes I2C MSP.
+ 393:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  i2c_handler  I2C handler
+ 394:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval None
+ 395:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 396:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** static void I2Cx_MspDeInit(I2C_HandleTypeDef *i2c_handler)
+ 397:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 1008              		.loc 1 397 1
+ 1009              		.cfi_startproc
+ 1010              		@ args = 0, pretend = 0, frame = 32
+ 1011              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1012 0000 80B5     		push	{r7, lr}
+ 1013              		.cfi_def_cfa_offset 8
+ 1014              		.cfi_offset 7, -8
+ 1015              		.cfi_offset 14, -4
+ 1016 0002 88B0     		sub	sp, sp, #32
+ 1017              		.cfi_def_cfa_offset 40
+ARM GAS  /tmp/ccEi5qWM.s 			page 25
+
+
+ 1018 0004 00AF     		add	r7, sp, #0
+ 1019              		.cfi_def_cfa_register 7
+ 1020 0006 7860     		str	r0, [r7, #4]
+ 398:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   GPIO_InitTypeDef  gpio_init_structure;
+ 399:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   
+ 400:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Configure I2C Tx, Rx as alternate function */
+ 401:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   gpio_init_structure.Pin = DISCOVERY_I2Cx_SCL_PIN | DISCOVERY_I2Cx_SDA_PIN;
+ 1021              		.loc 1 401 27
+ 1022 0008 4FF44063 		mov	r3, #3072
+ 1023 000c FB60     		str	r3, [r7, #12]
+ 402:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_GPIO_DeInit(DISCOVERY_I2Cx_SCL_SDA_GPIO_PORT, gpio_init_structure.Pin);
+ 1024              		.loc 1 402 3
+ 1025 000e FB68     		ldr	r3, [r7, #12]
+ 1026 0010 1946     		mov	r1, r3
+ 1027 0012 0948     		ldr	r0, .L49
+ 1028 0014 FFF7FEFF 		bl	HAL_GPIO_DeInit
+ 403:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Disable GPIO clock */
+ 404:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   DISCOVERY_I2Cx_SCL_SDA_GPIO_CLK_DISABLE();
+ 1029              		.loc 1 404 3
+ 1030 0018 084B     		ldr	r3, .L49+4
+ 1031 001a DB6C     		ldr	r3, [r3, #76]
+ 1032 001c 074A     		ldr	r2, .L49+4
+ 1033 001e 23F00203 		bic	r3, r3, #2
+ 1034 0022 D364     		str	r3, [r2, #76]
+ 405:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   
+ 406:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Disable I2C clock */
+ 407:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   DISCOVERY_I2Cx_CLK_DISABLE();
+ 1035              		.loc 1 407 3
+ 1036 0024 054B     		ldr	r3, .L49+4
+ 1037 0026 9B6D     		ldr	r3, [r3, #88]
+ 1038 0028 044A     		ldr	r2, .L49+4
+ 1039 002a 23F48003 		bic	r3, r3, #4194304
+ 1040 002e 9365     		str	r3, [r2, #88]
+ 408:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1041              		.loc 1 408 1
+ 1042 0030 00BF     		nop
+ 1043 0032 2037     		adds	r7, r7, #32
+ 1044              		.cfi_def_cfa_offset 8
+ 1045 0034 BD46     		mov	sp, r7
+ 1046              		.cfi_def_cfa_register 13
+ 1047              		@ sp needed
+ 1048 0036 80BD     		pop	{r7, pc}
+ 1049              	.L50:
+ 1050              		.align	2
+ 1051              	.L49:
+ 1052 0038 00040048 		.word	1207960576
+ 1053 003c 00100240 		.word	1073876992
+ 1054              		.cfi_endproc
+ 1055              	.LFE457:
+ 1057              		.section	.text.I2Cx_Init,"ax",%progbits
+ 1058              		.align	1
+ 1059              		.syntax unified
+ 1060              		.thumb
+ 1061              		.thumb_func
+ 1063              	I2Cx_Init:
+ 1064              	.LFB458:
+ 409:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ARM GAS  /tmp/ccEi5qWM.s 			page 26
+
+
+ 410:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 411:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Initializes I2C HAL.
+ 412:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  i2c_handler  I2C handler
+ 413:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval None
+ 414:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 415:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** static void I2Cx_Init(I2C_HandleTypeDef *i2c_handler)
+ 416:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 1065              		.loc 1 416 1
+ 1066              		.cfi_startproc
+ 1067              		@ args = 0, pretend = 0, frame = 8
+ 1068              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1069 0000 80B5     		push	{r7, lr}
+ 1070              		.cfi_def_cfa_offset 8
+ 1071              		.cfi_offset 7, -8
+ 1072              		.cfi_offset 14, -4
+ 1073 0002 82B0     		sub	sp, sp, #8
+ 1074              		.cfi_def_cfa_offset 16
+ 1075 0004 00AF     		add	r7, sp, #0
+ 1076              		.cfi_def_cfa_register 7
+ 1077 0006 7860     		str	r0, [r7, #4]
+ 417:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* I2C configuration */
+ 418:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   i2c_handler->Instance              = DISCOVERY_I2Cx;
+ 1078              		.loc 1 418 38
+ 1079 0008 7B68     		ldr	r3, [r7, #4]
+ 1080 000a 124A     		ldr	r2, .L52
+ 1081 000c 1A60     		str	r2, [r3]
+ 419:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   i2c_handler->Init.Timing           = DISCOVERY_I2Cx_TIMING;
+ 1082              		.loc 1 419 38
+ 1083 000e 7B68     		ldr	r3, [r7, #4]
+ 1084 0010 114A     		ldr	r2, .L52+4
+ 1085 0012 5A60     		str	r2, [r3, #4]
+ 420:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   i2c_handler->Init.OwnAddress1      = 0;
+ 1086              		.loc 1 420 38
+ 1087 0014 7B68     		ldr	r3, [r7, #4]
+ 1088 0016 0022     		movs	r2, #0
+ 1089 0018 9A60     		str	r2, [r3, #8]
+ 421:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   i2c_handler->Init.AddressingMode   = I2C_ADDRESSINGMODE_7BIT;
+ 1090              		.loc 1 421 38
+ 1091 001a 7B68     		ldr	r3, [r7, #4]
+ 1092 001c 0122     		movs	r2, #1
+ 1093 001e DA60     		str	r2, [r3, #12]
+ 422:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   i2c_handler->Init.DualAddressMode  = I2C_DUALADDRESS_DISABLE;
+ 1094              		.loc 1 422 38
+ 1095 0020 7B68     		ldr	r3, [r7, #4]
+ 1096 0022 0022     		movs	r2, #0
+ 1097 0024 1A61     		str	r2, [r3, #16]
+ 423:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   i2c_handler->Init.OwnAddress2      = 0;
+ 1098              		.loc 1 423 38
+ 1099 0026 7B68     		ldr	r3, [r7, #4]
+ 1100 0028 0022     		movs	r2, #0
+ 1101 002a 5A61     		str	r2, [r3, #20]
+ 424:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   i2c_handler->Init.GeneralCallMode  = I2C_GENERALCALL_DISABLE;
+ 1102              		.loc 1 424 38
+ 1103 002c 7B68     		ldr	r3, [r7, #4]
+ 1104 002e 0022     		movs	r2, #0
+ 1105 0030 DA61     		str	r2, [r3, #28]
+ 425:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   i2c_handler->Init.NoStretchMode    = I2C_NOSTRETCH_DISABLE;
+ARM GAS  /tmp/ccEi5qWM.s 			page 27
+
+
+ 1106              		.loc 1 425 38
+ 1107 0032 7B68     		ldr	r3, [r7, #4]
+ 1108 0034 0022     		movs	r2, #0
+ 1109 0036 1A62     		str	r2, [r3, #32]
+ 426:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 427:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Init the I2C */
+ 428:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   I2Cx_MspInit(i2c_handler);
+ 1110              		.loc 1 428 3
+ 1111 0038 7868     		ldr	r0, [r7, #4]
+ 1112 003a FFF7FEFF 		bl	I2Cx_MspInit
+ 429:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_I2C_Init(i2c_handler);
+ 1113              		.loc 1 429 3
+ 1114 003e 7868     		ldr	r0, [r7, #4]
+ 1115 0040 FFF7FEFF 		bl	HAL_I2C_Init
+ 430:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   
+ 431:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /**Configure Analogue filter */
+ 432:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_I2CEx_ConfigAnalogFilter(i2c_handler, I2C_ANALOGFILTER_ENABLE);  
+ 1116              		.loc 1 432 3
+ 1117 0044 0021     		movs	r1, #0
+ 1118 0046 7868     		ldr	r0, [r7, #4]
+ 1119 0048 FFF7FEFF 		bl	HAL_I2CEx_ConfigAnalogFilter
+ 433:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1120              		.loc 1 433 1
+ 1121 004c 00BF     		nop
+ 1122 004e 0837     		adds	r7, r7, #8
+ 1123              		.cfi_def_cfa_offset 8
+ 1124 0050 BD46     		mov	sp, r7
+ 1125              		.cfi_def_cfa_register 13
+ 1126              		@ sp needed
+ 1127 0052 80BD     		pop	{r7, pc}
+ 1128              	.L53:
+ 1129              		.align	2
+ 1130              	.L52:
+ 1131 0054 00580040 		.word	1073764352
+ 1132 0058 81267000 		.word	7349889
+ 1133              		.cfi_endproc
+ 1134              	.LFE458:
+ 1136              		.section	.text.I2Cx_DeInit,"ax",%progbits
+ 1137              		.align	1
+ 1138              		.syntax unified
+ 1139              		.thumb
+ 1140              		.thumb_func
+ 1142              	I2Cx_DeInit:
+ 1143              	.LFB459:
+ 434:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 435:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 436:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  DeInitializes I2C HAL.
+ 437:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  i2c_handler  I2C handler
+ 438:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval None
+ 439:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 440:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** static void I2Cx_DeInit(I2C_HandleTypeDef *i2c_handler)
+ 441:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {  /* DeInit the I2C */
+ 1144              		.loc 1 441 1
+ 1145              		.cfi_startproc
+ 1146              		@ args = 0, pretend = 0, frame = 8
+ 1147              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1148 0000 80B5     		push	{r7, lr}
+ARM GAS  /tmp/ccEi5qWM.s 			page 28
+
+
+ 1149              		.cfi_def_cfa_offset 8
+ 1150              		.cfi_offset 7, -8
+ 1151              		.cfi_offset 14, -4
+ 1152 0002 82B0     		sub	sp, sp, #8
+ 1153              		.cfi_def_cfa_offset 16
+ 1154 0004 00AF     		add	r7, sp, #0
+ 1155              		.cfi_def_cfa_register 7
+ 1156 0006 7860     		str	r0, [r7, #4]
+ 442:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   I2Cx_MspDeInit(i2c_handler);
+ 1157              		.loc 1 442 3
+ 1158 0008 7868     		ldr	r0, [r7, #4]
+ 1159 000a FFF7FEFF 		bl	I2Cx_MspDeInit
+ 443:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_I2C_DeInit(i2c_handler); 
+ 1160              		.loc 1 443 3
+ 1161 000e 7868     		ldr	r0, [r7, #4]
+ 1162 0010 FFF7FEFF 		bl	HAL_I2C_DeInit
+ 444:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1163              		.loc 1 444 1
+ 1164 0014 00BF     		nop
+ 1165 0016 0837     		adds	r7, r7, #8
+ 1166              		.cfi_def_cfa_offset 8
+ 1167 0018 BD46     		mov	sp, r7
+ 1168              		.cfi_def_cfa_register 13
+ 1169              		@ sp needed
+ 1170 001a 80BD     		pop	{r7, pc}
+ 1171              		.cfi_endproc
+ 1172              	.LFE459:
+ 1174              		.section	.text.I2Cx_ReadMultiple,"ax",%progbits
+ 1175              		.align	1
+ 1176              		.syntax unified
+ 1177              		.thumb
+ 1178              		.thumb_func
+ 1180              	I2Cx_ReadMultiple:
+ 1181              	.LFB460:
+ 445:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 446:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 447:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Reads multiple data.
+ 448:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  i2c_handler  I2C handler
+ 449:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Addr  I2C address
+ 450:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Reg  Reg address
+ 451:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  MemAddress  memory address
+ 452:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Buffer  Pointer to data buffer
+ 453:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Length  Length of the data
+ 454:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval HAL status
+ 455:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 456:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** static HAL_StatusTypeDef I2Cx_ReadMultiple(I2C_HandleTypeDef *i2c_handler, uint8_t Addr, uint16_t R
+ 457:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 1182              		.loc 1 457 1
+ 1183              		.cfi_startproc
+ 1184              		@ args = 8, pretend = 0, frame = 24
+ 1185              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1186 0000 80B5     		push	{r7, lr}
+ 1187              		.cfi_def_cfa_offset 8
+ 1188              		.cfi_offset 7, -8
+ 1189              		.cfi_offset 14, -4
+ 1190 0002 8AB0     		sub	sp, sp, #40
+ 1191              		.cfi_def_cfa_offset 48
+ARM GAS  /tmp/ccEi5qWM.s 			page 29
+
+
+ 1192 0004 04AF     		add	r7, sp, #16
+ 1193              		.cfi_def_cfa 7, 32
+ 1194 0006 F860     		str	r0, [r7, #12]
+ 1195 0008 0846     		mov	r0, r1
+ 1196 000a 1146     		mov	r1, r2
+ 1197 000c 1A46     		mov	r2, r3
+ 1198 000e 0346     		mov	r3, r0
+ 1199 0010 FB72     		strb	r3, [r7, #11]
+ 1200 0012 0B46     		mov	r3, r1	@ movhi
+ 1201 0014 3B81     		strh	r3, [r7, #8]	@ movhi
+ 1202 0016 1346     		mov	r3, r2	@ movhi
+ 1203 0018 FB80     		strh	r3, [r7, #6]	@ movhi
+ 458:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 1204              		.loc 1 458 21
+ 1205 001a 0023     		movs	r3, #0
+ 1206 001c FB75     		strb	r3, [r7, #23]
+ 459:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 460:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   status = HAL_I2C_Mem_Read(i2c_handler, Addr, (uint16_t)Reg, MemAddress, Buffer, Length, 1000);
+ 1207              		.loc 1 460 12
+ 1208 001e FB7A     		ldrb	r3, [r7, #11]	@ zero_extendqisi2
+ 1209 0020 99B2     		uxth	r1, r3
+ 1210 0022 F888     		ldrh	r0, [r7, #6]
+ 1211 0024 3A89     		ldrh	r2, [r7, #8]
+ 1212 0026 4FF47A73 		mov	r3, #1000
+ 1213 002a 0293     		str	r3, [sp, #8]
+ 1214 002c BB8C     		ldrh	r3, [r7, #36]
+ 1215 002e 0193     		str	r3, [sp, #4]
+ 1216 0030 3B6A     		ldr	r3, [r7, #32]
+ 1217 0032 0093     		str	r3, [sp]
+ 1218 0034 0346     		mov	r3, r0
+ 1219 0036 F868     		ldr	r0, [r7, #12]
+ 1220 0038 FFF7FEFF 		bl	HAL_I2C_Mem_Read
+ 1221 003c 0346     		mov	r3, r0
+ 1222 003e FB75     		strb	r3, [r7, #23]
+ 461:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 462:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Check the communication status */
+ 463:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   if(status != HAL_OK)
+ 1223              		.loc 1 463 5
+ 1224 0040 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1225 0042 002B     		cmp	r3, #0
+ 1226 0044 04D0     		beq	.L56
+ 464:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   {
+ 465:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     /* I2C error occurred */
+ 466:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     I2Cx_Error(i2c_handler, Addr);
+ 1227              		.loc 1 466 5
+ 1228 0046 FB7A     		ldrb	r3, [r7, #11]	@ zero_extendqisi2
+ 1229 0048 1946     		mov	r1, r3
+ 1230 004a F868     		ldr	r0, [r7, #12]
+ 1231 004c FFF7FEFF 		bl	I2Cx_Error
+ 1232              	.L56:
+ 467:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   }
+ 468:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   return status;
+ 1233              		.loc 1 468 10
+ 1234 0050 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 469:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1235              		.loc 1 469 1
+ 1236 0052 1846     		mov	r0, r3
+ARM GAS  /tmp/ccEi5qWM.s 			page 30
+
+
+ 1237 0054 1837     		adds	r7, r7, #24
+ 1238              		.cfi_def_cfa_offset 8
+ 1239 0056 BD46     		mov	sp, r7
+ 1240              		.cfi_def_cfa_register 13
+ 1241              		@ sp needed
+ 1242 0058 80BD     		pop	{r7, pc}
+ 1243              		.cfi_endproc
+ 1244              	.LFE460:
+ 1246              		.section	.text.I2Cx_WriteMultiple,"ax",%progbits
+ 1247              		.align	1
+ 1248              		.syntax unified
+ 1249              		.thumb
+ 1250              		.thumb_func
+ 1252              	I2Cx_WriteMultiple:
+ 1253              	.LFB461:
+ 470:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 471:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 472:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 473:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Writes a value in a register of the device through BUS in using DMA mode.
+ 474:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  i2c_handler  I2C handler
+ 475:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Addr  Device address on BUS Bus.
+ 476:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Reg  The target register address to write
+ 477:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  MemAddress  memory address
+ 478:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Buffer  The target register value to be written
+ 479:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Length  buffer size to be written
+ 480:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval HAL status
+ 481:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 482:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** static HAL_StatusTypeDef I2Cx_WriteMultiple(I2C_HandleTypeDef *i2c_handler, uint8_t Addr, uint16_t 
+ 483:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 1254              		.loc 1 483 1
+ 1255              		.cfi_startproc
+ 1256              		@ args = 8, pretend = 0, frame = 24
+ 1257              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1258 0000 80B5     		push	{r7, lr}
+ 1259              		.cfi_def_cfa_offset 8
+ 1260              		.cfi_offset 7, -8
+ 1261              		.cfi_offset 14, -4
+ 1262 0002 8AB0     		sub	sp, sp, #40
+ 1263              		.cfi_def_cfa_offset 48
+ 1264 0004 04AF     		add	r7, sp, #16
+ 1265              		.cfi_def_cfa 7, 32
+ 1266 0006 F860     		str	r0, [r7, #12]
+ 1267 0008 0846     		mov	r0, r1
+ 1268 000a 1146     		mov	r1, r2
+ 1269 000c 1A46     		mov	r2, r3
+ 1270 000e 0346     		mov	r3, r0
+ 1271 0010 FB72     		strb	r3, [r7, #11]
+ 1272 0012 0B46     		mov	r3, r1	@ movhi
+ 1273 0014 3B81     		strh	r3, [r7, #8]	@ movhi
+ 1274 0016 1346     		mov	r3, r2	@ movhi
+ 1275 0018 FB80     		strh	r3, [r7, #6]	@ movhi
+ 484:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 1276              		.loc 1 484 21
+ 1277 001a 0023     		movs	r3, #0
+ 1278 001c FB75     		strb	r3, [r7, #23]
+ 485:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 486:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   status = HAL_I2C_Mem_Write(i2c_handler, Addr, (uint16_t)Reg, MemAddress, Buffer, Length, 1000);
+ARM GAS  /tmp/ccEi5qWM.s 			page 31
+
+
+ 1279              		.loc 1 486 12
+ 1280 001e FB7A     		ldrb	r3, [r7, #11]	@ zero_extendqisi2
+ 1281 0020 99B2     		uxth	r1, r3
+ 1282 0022 F888     		ldrh	r0, [r7, #6]
+ 1283 0024 3A89     		ldrh	r2, [r7, #8]
+ 1284 0026 4FF47A73 		mov	r3, #1000
+ 1285 002a 0293     		str	r3, [sp, #8]
+ 1286 002c BB8C     		ldrh	r3, [r7, #36]
+ 1287 002e 0193     		str	r3, [sp, #4]
+ 1288 0030 3B6A     		ldr	r3, [r7, #32]
+ 1289 0032 0093     		str	r3, [sp]
+ 1290 0034 0346     		mov	r3, r0
+ 1291 0036 F868     		ldr	r0, [r7, #12]
+ 1292 0038 FFF7FEFF 		bl	HAL_I2C_Mem_Write
+ 1293 003c 0346     		mov	r3, r0
+ 1294 003e FB75     		strb	r3, [r7, #23]
+ 487:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 488:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Check the communication status */
+ 489:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   if(status != HAL_OK)
+ 1295              		.loc 1 489 5
+ 1296 0040 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1297 0042 002B     		cmp	r3, #0
+ 1298 0044 04D0     		beq	.L59
+ 490:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   {
+ 491:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     /* Re-Initiaize the I2C Bus */
+ 492:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     I2Cx_Error(i2c_handler, Addr);
+ 1299              		.loc 1 492 5
+ 1300 0046 FB7A     		ldrb	r3, [r7, #11]	@ zero_extendqisi2
+ 1301 0048 1946     		mov	r1, r3
+ 1302 004a F868     		ldr	r0, [r7, #12]
+ 1303 004c FFF7FEFF 		bl	I2Cx_Error
+ 1304              	.L59:
+ 493:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   }
+ 494:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   return status;
+ 1305              		.loc 1 494 10
+ 1306 0050 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 495:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1307              		.loc 1 495 1
+ 1308 0052 1846     		mov	r0, r3
+ 1309 0054 1837     		adds	r7, r7, #24
+ 1310              		.cfi_def_cfa_offset 8
+ 1311 0056 BD46     		mov	sp, r7
+ 1312              		.cfi_def_cfa_register 13
+ 1313              		@ sp needed
+ 1314 0058 80BD     		pop	{r7, pc}
+ 1315              		.cfi_endproc
+ 1316              	.LFE461:
+ 1318              		.section	.text.I2Cx_IsDeviceReady,"ax",%progbits
+ 1319              		.align	1
+ 1320              		.syntax unified
+ 1321              		.thumb
+ 1322              		.thumb_func
+ 1324              	I2Cx_IsDeviceReady:
+ 1325              	.LFB462:
+ 496:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 497:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 498:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Checks if target device is ready for communication. 
+ARM GAS  /tmp/ccEi5qWM.s 			page 32
+
+
+ 499:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @note   This function is used with Memory devices
+ 500:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  i2c_handler  I2C handler
+ 501:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  DevAddress  Target device address
+ 502:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Trials  Number of trials
+ 503:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval HAL status
+ 504:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 505:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** static HAL_StatusTypeDef I2Cx_IsDeviceReady(I2C_HandleTypeDef *i2c_handler, uint16_t DevAddress, ui
+ 506:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** { 
+ 1326              		.loc 1 506 1
+ 1327              		.cfi_startproc
+ 1328              		@ args = 0, pretend = 0, frame = 16
+ 1329              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1330 0000 80B5     		push	{r7, lr}
+ 1331              		.cfi_def_cfa_offset 8
+ 1332              		.cfi_offset 7, -8
+ 1333              		.cfi_offset 14, -4
+ 1334 0002 84B0     		sub	sp, sp, #16
+ 1335              		.cfi_def_cfa_offset 24
+ 1336 0004 00AF     		add	r7, sp, #0
+ 1337              		.cfi_def_cfa_register 7
+ 1338 0006 F860     		str	r0, [r7, #12]
+ 1339 0008 0B46     		mov	r3, r1
+ 1340 000a 7A60     		str	r2, [r7, #4]
+ 1341 000c 7B81     		strh	r3, [r7, #10]	@ movhi
+ 507:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   return (HAL_I2C_IsDeviceReady(i2c_handler, DevAddress, Trials, 1000));
+ 1342              		.loc 1 507 11
+ 1343 000e 7989     		ldrh	r1, [r7, #10]
+ 1344 0010 4FF47A73 		mov	r3, #1000
+ 1345 0014 7A68     		ldr	r2, [r7, #4]
+ 1346 0016 F868     		ldr	r0, [r7, #12]
+ 1347 0018 FFF7FEFF 		bl	HAL_I2C_IsDeviceReady
+ 1348 001c 0346     		mov	r3, r0
+ 508:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1349              		.loc 1 508 1
+ 1350 001e 1846     		mov	r0, r3
+ 1351 0020 1037     		adds	r7, r7, #16
+ 1352              		.cfi_def_cfa_offset 8
+ 1353 0022 BD46     		mov	sp, r7
+ 1354              		.cfi_def_cfa_register 13
+ 1355              		@ sp needed
+ 1356 0024 80BD     		pop	{r7, pc}
+ 1357              		.cfi_endproc
+ 1358              	.LFE462:
+ 1360              		.section	.text.I2Cx_Error,"ax",%progbits
+ 1361              		.align	1
+ 1362              		.syntax unified
+ 1363              		.thumb
+ 1364              		.thumb_func
+ 1366              	I2Cx_Error:
+ 1367              	.LFB463:
+ 509:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 510:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 511:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Manages error callback by re-initializing I2C.
+ 512:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  i2c_handler  I2C handler
+ 513:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Addr  I2C Address
+ 514:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval None
+ 515:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ARM GAS  /tmp/ccEi5qWM.s 			page 33
+
+
+ 516:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** static void I2Cx_Error(I2C_HandleTypeDef *i2c_handler, uint8_t Addr)
+ 517:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 1368              		.loc 1 517 1
+ 1369              		.cfi_startproc
+ 1370              		@ args = 0, pretend = 0, frame = 8
+ 1371              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1372 0000 80B5     		push	{r7, lr}
+ 1373              		.cfi_def_cfa_offset 8
+ 1374              		.cfi_offset 7, -8
+ 1375              		.cfi_offset 14, -4
+ 1376 0002 82B0     		sub	sp, sp, #8
+ 1377              		.cfi_def_cfa_offset 16
+ 1378 0004 00AF     		add	r7, sp, #0
+ 1379              		.cfi_def_cfa_register 7
+ 1380 0006 7860     		str	r0, [r7, #4]
+ 1381 0008 0B46     		mov	r3, r1
+ 1382 000a FB70     		strb	r3, [r7, #3]
+ 518:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* De-initialize the I2C communication bus */
+ 519:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_I2C_DeInit(i2c_handler);
+ 1383              		.loc 1 519 3
+ 1384 000c 7868     		ldr	r0, [r7, #4]
+ 1385 000e FFF7FEFF 		bl	HAL_I2C_DeInit
+ 520:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   
+ 521:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Re-Initialize the I2C communication bus */
+ 522:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   I2Cx_Init(i2c_handler);
+ 1386              		.loc 1 522 3
+ 1387 0012 7868     		ldr	r0, [r7, #4]
+ 1388 0014 FFF7FEFF 		bl	I2Cx_Init
+ 523:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1389              		.loc 1 523 1
+ 1390 0018 00BF     		nop
+ 1391 001a 0837     		adds	r7, r7, #8
+ 1392              		.cfi_def_cfa_offset 8
+ 1393 001c BD46     		mov	sp, r7
+ 1394              		.cfi_def_cfa_register 13
+ 1395              		@ sp needed
+ 1396 001e 80BD     		pop	{r7, pc}
+ 1397              		.cfi_endproc
+ 1398              	.LFE463:
+ 1400              		.section	.text.SENSOR_IO_Init,"ax",%progbits
+ 1401              		.align	1
+ 1402              		.global	SENSOR_IO_Init
+ 1403              		.syntax unified
+ 1404              		.thumb
+ 1405              		.thumb_func
+ 1407              	SENSOR_IO_Init:
+ 1408              	.LFB464:
+ 524:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 525:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 526:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @}
+ 527:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 528:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 529:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /*******************************************************************************
+ 530:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****                             LINK OPERATIONS
+ 531:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** *******************************************************************************/
+ 532:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /******************************** LINK Sensors ********************************/
+ 533:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ARM GAS  /tmp/ccEi5qWM.s 			page 34
+
+
+ 534:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 535:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Initializes Sensors low level.
+ 536:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval None
+ 537:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 538:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void SENSOR_IO_Init(void)
+ 539:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 1409              		.loc 1 539 1
+ 1410              		.cfi_startproc
+ 1411              		@ args = 0, pretend = 0, frame = 0
+ 1412              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1413 0000 80B5     		push	{r7, lr}
+ 1414              		.cfi_def_cfa_offset 8
+ 1415              		.cfi_offset 7, -8
+ 1416              		.cfi_offset 14, -4
+ 1417 0002 00AF     		add	r7, sp, #0
+ 1418              		.cfi_def_cfa_register 7
+ 540:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   I2Cx_Init(&hI2cHandler);
+ 1419              		.loc 1 540 3
+ 1420 0004 0248     		ldr	r0, .L65
+ 1421 0006 FFF7FEFF 		bl	I2Cx_Init
+ 541:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1422              		.loc 1 541 1
+ 1423 000a 00BF     		nop
+ 1424 000c 80BD     		pop	{r7, pc}
+ 1425              	.L66:
+ 1426 000e 00BF     		.align	2
+ 1427              	.L65:
+ 1428 0010 00000000 		.word	hI2cHandler
+ 1429              		.cfi_endproc
+ 1430              	.LFE464:
+ 1432              		.section	.text.SENSOR_IO_DeInit,"ax",%progbits
+ 1433              		.align	1
+ 1434              		.global	SENSOR_IO_DeInit
+ 1435              		.syntax unified
+ 1436              		.thumb
+ 1437              		.thumb_func
+ 1439              	SENSOR_IO_DeInit:
+ 1440              	.LFB465:
+ 542:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 543:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 544:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  DeInitializes Sensors low level.
+ 545:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval None
+ 546:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 547:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void SENSOR_IO_DeInit(void)
+ 548:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 1441              		.loc 1 548 1
+ 1442              		.cfi_startproc
+ 1443              		@ args = 0, pretend = 0, frame = 0
+ 1444              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1445 0000 80B5     		push	{r7, lr}
+ 1446              		.cfi_def_cfa_offset 8
+ 1447              		.cfi_offset 7, -8
+ 1448              		.cfi_offset 14, -4
+ 1449 0002 00AF     		add	r7, sp, #0
+ 1450              		.cfi_def_cfa_register 7
+ 549:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   I2Cx_DeInit(&hI2cHandler);
+ 1451              		.loc 1 549 3
+ARM GAS  /tmp/ccEi5qWM.s 			page 35
+
+
+ 1452 0004 0248     		ldr	r0, .L68
+ 1453 0006 FFF7FEFF 		bl	I2Cx_DeInit
+ 550:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1454              		.loc 1 550 1
+ 1455 000a 00BF     		nop
+ 1456 000c 80BD     		pop	{r7, pc}
+ 1457              	.L69:
+ 1458 000e 00BF     		.align	2
+ 1459              	.L68:
+ 1460 0010 00000000 		.word	hI2cHandler
+ 1461              		.cfi_endproc
+ 1462              	.LFE465:
+ 1464              		.section	.text.SENSOR_IO_Write,"ax",%progbits
+ 1465              		.align	1
+ 1466              		.global	SENSOR_IO_Write
+ 1467              		.syntax unified
+ 1468              		.thumb
+ 1469              		.thumb_func
+ 1471              	SENSOR_IO_Write:
+ 1472              	.LFB466:
+ 551:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 552:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 553:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Writes a single data.
+ 554:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Addr  I2C address
+ 555:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Reg  Reg address
+ 556:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Value  Data to be written
+ 557:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval None
+ 558:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 559:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void SENSOR_IO_Write(uint8_t Addr, uint8_t Reg, uint8_t Value)
+ 560:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 1473              		.loc 1 560 1
+ 1474              		.cfi_startproc
+ 1475              		@ args = 0, pretend = 0, frame = 8
+ 1476              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1477 0000 80B5     		push	{r7, lr}
+ 1478              		.cfi_def_cfa_offset 8
+ 1479              		.cfi_offset 7, -8
+ 1480              		.cfi_offset 14, -4
+ 1481 0002 84B0     		sub	sp, sp, #16
+ 1482              		.cfi_def_cfa_offset 24
+ 1483 0004 02AF     		add	r7, sp, #8
+ 1484              		.cfi_def_cfa 7, 16
+ 1485 0006 0346     		mov	r3, r0
+ 1486 0008 FB71     		strb	r3, [r7, #7]
+ 1487 000a 0B46     		mov	r3, r1
+ 1488 000c BB71     		strb	r3, [r7, #6]
+ 1489 000e 1346     		mov	r3, r2
+ 1490 0010 7B71     		strb	r3, [r7, #5]
+ 561:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   I2Cx_WriteMultiple(&hI2cHandler, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT,(uint8_t*)&Value, 1);
+ 1491              		.loc 1 561 3
+ 1492 0012 BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+ 1493 0014 9AB2     		uxth	r2, r3
+ 1494 0016 F979     		ldrb	r1, [r7, #7]	@ zero_extendqisi2
+ 1495 0018 0123     		movs	r3, #1
+ 1496 001a 0193     		str	r3, [sp, #4]
+ 1497 001c 7B1D     		adds	r3, r7, #5
+ 1498 001e 0093     		str	r3, [sp]
+ARM GAS  /tmp/ccEi5qWM.s 			page 36
+
+
+ 1499 0020 0123     		movs	r3, #1
+ 1500 0022 0348     		ldr	r0, .L71
+ 1501 0024 FFF7FEFF 		bl	I2Cx_WriteMultiple
+ 562:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1502              		.loc 1 562 1
+ 1503 0028 00BF     		nop
+ 1504 002a 0837     		adds	r7, r7, #8
+ 1505              		.cfi_def_cfa_offset 8
+ 1506 002c BD46     		mov	sp, r7
+ 1507              		.cfi_def_cfa_register 13
+ 1508              		@ sp needed
+ 1509 002e 80BD     		pop	{r7, pc}
+ 1510              	.L72:
+ 1511              		.align	2
+ 1512              	.L71:
+ 1513 0030 00000000 		.word	hI2cHandler
+ 1514              		.cfi_endproc
+ 1515              	.LFE466:
+ 1517              		.section	.text.SENSOR_IO_Read,"ax",%progbits
+ 1518              		.align	1
+ 1519              		.global	SENSOR_IO_Read
+ 1520              		.syntax unified
+ 1521              		.thumb
+ 1522              		.thumb_func
+ 1524              	SENSOR_IO_Read:
+ 1525              	.LFB467:
+ 563:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 564:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 565:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Reads a single data.
+ 566:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Addr  I2C address
+ 567:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Reg  Reg address
+ 568:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval Data to be read
+ 569:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 570:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** uint8_t SENSOR_IO_Read(uint8_t Addr, uint8_t Reg)
+ 571:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 1526              		.loc 1 571 1
+ 1527              		.cfi_startproc
+ 1528              		@ args = 0, pretend = 0, frame = 16
+ 1529              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1530 0000 80B5     		push	{r7, lr}
+ 1531              		.cfi_def_cfa_offset 8
+ 1532              		.cfi_offset 7, -8
+ 1533              		.cfi_offset 14, -4
+ 1534 0002 86B0     		sub	sp, sp, #24
+ 1535              		.cfi_def_cfa_offset 32
+ 1536 0004 02AF     		add	r7, sp, #8
+ 1537              		.cfi_def_cfa 7, 24
+ 1538 0006 0346     		mov	r3, r0
+ 1539 0008 0A46     		mov	r2, r1
+ 1540 000a FB71     		strb	r3, [r7, #7]
+ 1541 000c 1346     		mov	r3, r2
+ 1542 000e BB71     		strb	r3, [r7, #6]
+ 572:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   uint8_t read_value = 0;
+ 1543              		.loc 1 572 11
+ 1544 0010 0023     		movs	r3, #0
+ 1545 0012 FB73     		strb	r3, [r7, #15]
+ 573:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ARM GAS  /tmp/ccEi5qWM.s 			page 37
+
+
+ 574:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   I2Cx_ReadMultiple(&hI2cHandler, Addr, Reg, I2C_MEMADD_SIZE_8BIT, (uint8_t*)&read_value, 1);
+ 1546              		.loc 1 574 3
+ 1547 0014 BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+ 1548 0016 9AB2     		uxth	r2, r3
+ 1549 0018 F979     		ldrb	r1, [r7, #7]	@ zero_extendqisi2
+ 1550 001a 0123     		movs	r3, #1
+ 1551 001c 0193     		str	r3, [sp, #4]
+ 1552 001e 07F10F03 		add	r3, r7, #15
+ 1553 0022 0093     		str	r3, [sp]
+ 1554 0024 0123     		movs	r3, #1
+ 1555 0026 0448     		ldr	r0, .L75
+ 1556 0028 FFF7FEFF 		bl	I2Cx_ReadMultiple
+ 575:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 576:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   return read_value;
+ 1557              		.loc 1 576 10
+ 1558 002c FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 577:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1559              		.loc 1 577 1
+ 1560 002e 1846     		mov	r0, r3
+ 1561 0030 1037     		adds	r7, r7, #16
+ 1562              		.cfi_def_cfa_offset 8
+ 1563 0032 BD46     		mov	sp, r7
+ 1564              		.cfi_def_cfa_register 13
+ 1565              		@ sp needed
+ 1566 0034 80BD     		pop	{r7, pc}
+ 1567              	.L76:
+ 1568 0036 00BF     		.align	2
+ 1569              	.L75:
+ 1570 0038 00000000 		.word	hI2cHandler
+ 1571              		.cfi_endproc
+ 1572              	.LFE467:
+ 1574              		.section	.text.SENSOR_IO_ReadMultiple,"ax",%progbits
+ 1575              		.align	1
+ 1576              		.global	SENSOR_IO_ReadMultiple
+ 1577              		.syntax unified
+ 1578              		.thumb
+ 1579              		.thumb_func
+ 1581              	SENSOR_IO_ReadMultiple:
+ 1582              	.LFB468:
+ 578:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 579:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 580:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Reads multiple data with I2C communication
+ 581:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *         channel from TouchScreen.
+ 582:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Addr  I2C address
+ 583:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Reg  Register address
+ 584:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Buffer  Pointer to data buffer
+ 585:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Length  Length of the data
+ 586:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval HAL status
+ 587:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 588:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** uint16_t SENSOR_IO_ReadMultiple(uint8_t Addr, uint8_t Reg, uint8_t *Buffer, uint16_t Length)
+ 589:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 1583              		.loc 1 589 1
+ 1584              		.cfi_startproc
+ 1585              		@ args = 0, pretend = 0, frame = 8
+ 1586              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1587 0000 80B5     		push	{r7, lr}
+ 1588              		.cfi_def_cfa_offset 8
+ARM GAS  /tmp/ccEi5qWM.s 			page 38
+
+
+ 1589              		.cfi_offset 7, -8
+ 1590              		.cfi_offset 14, -4
+ 1591 0002 84B0     		sub	sp, sp, #16
+ 1592              		.cfi_def_cfa_offset 24
+ 1593 0004 02AF     		add	r7, sp, #8
+ 1594              		.cfi_def_cfa 7, 16
+ 1595 0006 3A60     		str	r2, [r7]
+ 1596 0008 1A46     		mov	r2, r3
+ 1597 000a 0346     		mov	r3, r0
+ 1598 000c FB71     		strb	r3, [r7, #7]
+ 1599 000e 0B46     		mov	r3, r1
+ 1600 0010 BB71     		strb	r3, [r7, #6]
+ 1601 0012 1346     		mov	r3, r2	@ movhi
+ 1602 0014 BB80     		strh	r3, [r7, #4]	@ movhi
+ 590:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****  return I2Cx_ReadMultiple(&hI2cHandler, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, Buffer, Length);
+ 1603              		.loc 1 590 9
+ 1604 0016 BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+ 1605 0018 9AB2     		uxth	r2, r3
+ 1606 001a F979     		ldrb	r1, [r7, #7]	@ zero_extendqisi2
+ 1607 001c BB88     		ldrh	r3, [r7, #4]
+ 1608 001e 0193     		str	r3, [sp, #4]
+ 1609 0020 3B68     		ldr	r3, [r7]
+ 1610 0022 0093     		str	r3, [sp]
+ 1611 0024 0123     		movs	r3, #1
+ 1612 0026 0448     		ldr	r0, .L79
+ 1613 0028 FFF7FEFF 		bl	I2Cx_ReadMultiple
+ 1614 002c 0346     		mov	r3, r0
+ 591:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1615              		.loc 1 591 1
+ 1616 002e 1846     		mov	r0, r3
+ 1617 0030 0837     		adds	r7, r7, #8
+ 1618              		.cfi_def_cfa_offset 8
+ 1619 0032 BD46     		mov	sp, r7
+ 1620              		.cfi_def_cfa_register 13
+ 1621              		@ sp needed
+ 1622 0034 80BD     		pop	{r7, pc}
+ 1623              	.L80:
+ 1624 0036 00BF     		.align	2
+ 1625              	.L79:
+ 1626 0038 00000000 		.word	hI2cHandler
+ 1627              		.cfi_endproc
+ 1628              	.LFE468:
+ 1630              		.section	.text.SENSOR_IO_WriteMultiple,"ax",%progbits
+ 1631              		.align	1
+ 1632              		.global	SENSOR_IO_WriteMultiple
+ 1633              		.syntax unified
+ 1634              		.thumb
+ 1635              		.thumb_func
+ 1637              	SENSOR_IO_WriteMultiple:
+ 1638              	.LFB469:
+ 592:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 593:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 594:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Writes multiple data with I2C communication
+ 595:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *         channel from MCU to TouchScreen.
+ 596:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Addr  I2C address
+ 597:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Reg  Register address
+ 598:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Buffer  Pointer to data buffer
+ARM GAS  /tmp/ccEi5qWM.s 			page 39
+
+
+ 599:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Length  Length of the data
+ 600:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval None
+ 601:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 602:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void SENSOR_IO_WriteMultiple(uint8_t Addr, uint8_t Reg, uint8_t *Buffer, uint16_t Length)
+ 603:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 1639              		.loc 1 603 1
+ 1640              		.cfi_startproc
+ 1641              		@ args = 0, pretend = 0, frame = 8
+ 1642              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1643 0000 80B5     		push	{r7, lr}
+ 1644              		.cfi_def_cfa_offset 8
+ 1645              		.cfi_offset 7, -8
+ 1646              		.cfi_offset 14, -4
+ 1647 0002 84B0     		sub	sp, sp, #16
+ 1648              		.cfi_def_cfa_offset 24
+ 1649 0004 02AF     		add	r7, sp, #8
+ 1650              		.cfi_def_cfa 7, 16
+ 1651 0006 3A60     		str	r2, [r7]
+ 1652 0008 1A46     		mov	r2, r3
+ 1653 000a 0346     		mov	r3, r0
+ 1654 000c FB71     		strb	r3, [r7, #7]
+ 1655 000e 0B46     		mov	r3, r1
+ 1656 0010 BB71     		strb	r3, [r7, #6]
+ 1657 0012 1346     		mov	r3, r2	@ movhi
+ 1658 0014 BB80     		strh	r3, [r7, #4]	@ movhi
+ 604:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   I2Cx_WriteMultiple(&hI2cHandler, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, Buffer, Length);
+ 1659              		.loc 1 604 3
+ 1660 0016 BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+ 1661 0018 9AB2     		uxth	r2, r3
+ 1662 001a F979     		ldrb	r1, [r7, #7]	@ zero_extendqisi2
+ 1663 001c BB88     		ldrh	r3, [r7, #4]
+ 1664 001e 0193     		str	r3, [sp, #4]
+ 1665 0020 3B68     		ldr	r3, [r7]
+ 1666 0022 0093     		str	r3, [sp]
+ 1667 0024 0123     		movs	r3, #1
+ 1668 0026 0348     		ldr	r0, .L82
+ 1669 0028 FFF7FEFF 		bl	I2Cx_WriteMultiple
+ 605:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1670              		.loc 1 605 1
+ 1671 002c 00BF     		nop
+ 1672 002e 0837     		adds	r7, r7, #8
+ 1673              		.cfi_def_cfa_offset 8
+ 1674 0030 BD46     		mov	sp, r7
+ 1675              		.cfi_def_cfa_register 13
+ 1676              		@ sp needed
+ 1677 0032 80BD     		pop	{r7, pc}
+ 1678              	.L83:
+ 1679              		.align	2
+ 1680              	.L82:
+ 1681 0034 00000000 		.word	hI2cHandler
+ 1682              		.cfi_endproc
+ 1683              	.LFE469:
+ 1685              		.section	.text.SENSOR_IO_IsDeviceReady,"ax",%progbits
+ 1686              		.align	1
+ 1687              		.global	SENSOR_IO_IsDeviceReady
+ 1688              		.syntax unified
+ 1689              		.thumb
+ARM GAS  /tmp/ccEi5qWM.s 			page 40
+
+
+ 1690              		.thumb_func
+ 1692              	SENSOR_IO_IsDeviceReady:
+ 1693              	.LFB470:
+ 606:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 607:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 608:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Checks if target device is ready for communication. 
+ 609:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @note   This function is used with Memory devices
+ 610:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  DevAddress  Target device address
+ 611:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Trials  Number of trials
+ 612:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval HAL status
+ 613:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 614:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** HAL_StatusTypeDef SENSOR_IO_IsDeviceReady(uint16_t DevAddress, uint32_t Trials)
+ 615:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** { 
+ 1694              		.loc 1 615 1
+ 1695              		.cfi_startproc
+ 1696              		@ args = 0, pretend = 0, frame = 8
+ 1697              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1698 0000 80B5     		push	{r7, lr}
+ 1699              		.cfi_def_cfa_offset 8
+ 1700              		.cfi_offset 7, -8
+ 1701              		.cfi_offset 14, -4
+ 1702 0002 82B0     		sub	sp, sp, #8
+ 1703              		.cfi_def_cfa_offset 16
+ 1704 0004 00AF     		add	r7, sp, #0
+ 1705              		.cfi_def_cfa_register 7
+ 1706 0006 0346     		mov	r3, r0
+ 1707 0008 3960     		str	r1, [r7]
+ 1708 000a FB80     		strh	r3, [r7, #6]	@ movhi
+ 616:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   return (I2Cx_IsDeviceReady(&hI2cHandler, DevAddress, Trials));
+ 1709              		.loc 1 616 11
+ 1710 000c FB88     		ldrh	r3, [r7, #6]
+ 1711 000e 3A68     		ldr	r2, [r7]
+ 1712 0010 1946     		mov	r1, r3
+ 1713 0012 0448     		ldr	r0, .L86
+ 1714 0014 FFF7FEFF 		bl	I2Cx_IsDeviceReady
+ 1715 0018 0346     		mov	r3, r0
+ 617:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1716              		.loc 1 617 1
+ 1717 001a 1846     		mov	r0, r3
+ 1718 001c 0837     		adds	r7, r7, #8
+ 1719              		.cfi_def_cfa_offset 8
+ 1720 001e BD46     		mov	sp, r7
+ 1721              		.cfi_def_cfa_register 13
+ 1722              		@ sp needed
+ 1723 0020 80BD     		pop	{r7, pc}
+ 1724              	.L87:
+ 1725 0022 00BF     		.align	2
+ 1726              	.L86:
+ 1727 0024 00000000 		.word	hI2cHandler
+ 1728              		.cfi_endproc
+ 1729              	.LFE470:
+ 1731              		.section	.text.SENSOR_IO_Delay,"ax",%progbits
+ 1732              		.align	1
+ 1733              		.global	SENSOR_IO_Delay
+ 1734              		.syntax unified
+ 1735              		.thumb
+ 1736              		.thumb_func
+ARM GAS  /tmp/ccEi5qWM.s 			page 41
+
+
+ 1738              	SENSOR_IO_Delay:
+ 1739              	.LFB471:
+ 618:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 619:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 620:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Delay function used in Sensor low level driver.
+ 621:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Delay  Delay in ms
+ 622:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval None
+ 623:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 624:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void SENSOR_IO_Delay(uint32_t Delay)
+ 625:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 1740              		.loc 1 625 1
+ 1741              		.cfi_startproc
+ 1742              		@ args = 0, pretend = 0, frame = 8
+ 1743              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1744 0000 80B5     		push	{r7, lr}
+ 1745              		.cfi_def_cfa_offset 8
+ 1746              		.cfi_offset 7, -8
+ 1747              		.cfi_offset 14, -4
+ 1748 0002 82B0     		sub	sp, sp, #8
+ 1749              		.cfi_def_cfa_offset 16
+ 1750 0004 00AF     		add	r7, sp, #0
+ 1751              		.cfi_def_cfa_register 7
+ 1752 0006 7860     		str	r0, [r7, #4]
+ 626:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_Delay(Delay);
+ 1753              		.loc 1 626 3
+ 1754 0008 7868     		ldr	r0, [r7, #4]
+ 1755 000a FFF7FEFF 		bl	HAL_Delay
+ 627:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1756              		.loc 1 627 1
+ 1757 000e 00BF     		nop
+ 1758 0010 0837     		adds	r7, r7, #8
+ 1759              		.cfi_def_cfa_offset 8
+ 1760 0012 BD46     		mov	sp, r7
+ 1761              		.cfi_def_cfa_register 13
+ 1762              		@ sp needed
+ 1763 0014 80BD     		pop	{r7, pc}
+ 1764              		.cfi_endproc
+ 1765              	.LFE471:
+ 1767              		.section	.text.NFC_IO_Init,"ax",%progbits
+ 1768              		.align	1
+ 1769              		.global	NFC_IO_Init
+ 1770              		.syntax unified
+ 1771              		.thumb
+ 1772              		.thumb_func
+ 1774              	NFC_IO_Init:
+ 1775              	.LFB472:
+ 628:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 629:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /******************************** LINK NFC ********************************/
+ 630:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 631:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 632:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Initializes Sensors low level.
+ 633:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  GpoIrqEnable  0x0 is disable, otherwise enabled  
+ 634:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval None
+ 635:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 636:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void NFC_IO_Init(uint8_t GpoIrqEnable)
+ 637:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 1776              		.loc 1 637 1
+ARM GAS  /tmp/ccEi5qWM.s 			page 42
+
+
+ 1777              		.cfi_startproc
+ 1778              		@ args = 0, pretend = 0, frame = 32
+ 1779              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1780 0000 80B5     		push	{r7, lr}
+ 1781              		.cfi_def_cfa_offset 8
+ 1782              		.cfi_offset 7, -8
+ 1783              		.cfi_offset 14, -4
+ 1784 0002 88B0     		sub	sp, sp, #32
+ 1785              		.cfi_def_cfa_offset 40
+ 1786 0004 00AF     		add	r7, sp, #0
+ 1787              		.cfi_def_cfa_register 7
+ 1788 0006 0346     		mov	r3, r0
+ 1789 0008 FB71     		strb	r3, [r7, #7]
+ 638:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   GPIO_InitTypeDef GPIO_InitStruct;
+ 639:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 640:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* I2C init */
+ 641:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   I2Cx_Init(&hI2cHandler);
+ 1790              		.loc 1 641 3
+ 1791 000a 2448     		ldr	r0, .L92
+ 1792 000c FFF7FEFF 		bl	I2Cx_Init
+ 1793              	.LBB9:
+ 642:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   
+ 643:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* GPIO Ports Clock Enable */
+ 644:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   NFC_GPIO_CLK_ENABLE();
+ 1794              		.loc 1 644 3
+ 1795 0010 234B     		ldr	r3, .L92+4
+ 1796 0012 DB6C     		ldr	r3, [r3, #76]
+ 1797 0014 224A     		ldr	r2, .L92+4
+ 1798 0016 43F01003 		orr	r3, r3, #16
+ 1799 001a D364     		str	r3, [r2, #76]
+ 1800 001c 204B     		ldr	r3, .L92+4
+ 1801 001e DB6C     		ldr	r3, [r3, #76]
+ 1802 0020 03F01003 		and	r3, r3, #16
+ 1803 0024 BB60     		str	r3, [r7, #8]
+ 1804 0026 BB68     		ldr	r3, [r7, #8]
+ 1805              	.LBE9:
+ 645:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   
+ 646:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Configure GPIO pins for GPO (PE4) */
+ 647:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   if(GpoIrqEnable == 0)
+ 1806              		.loc 1 647 5
+ 1807 0028 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 1808 002a 002B     		cmp	r3, #0
+ 1809 002c 0ED1     		bne	.L90
+ 648:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   {
+ 649:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     GPIO_InitStruct.Pin = NFC_GPIO_GPO_PIN;
+ 1810              		.loc 1 649 25
+ 1811 002e 1023     		movs	r3, #16
+ 1812 0030 FB60     		str	r3, [r7, #12]
+ 650:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     GPIO_InitStruct.Mode = GPIO_MODE_INPUT; 
+ 1813              		.loc 1 650 26
+ 1814 0032 0023     		movs	r3, #0
+ 1815 0034 3B61     		str	r3, [r7, #16]
+ 651:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     GPIO_InitStruct.Pull = GPIO_PULLUP;
+ 1816              		.loc 1 651 26
+ 1817 0036 0123     		movs	r3, #1
+ 1818 0038 7B61     		str	r3, [r7, #20]
+ 652:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ARM GAS  /tmp/ccEi5qWM.s 			page 43
+
+
+ 1819              		.loc 1 652 27
+ 1820 003a 0323     		movs	r3, #3
+ 1821 003c BB61     		str	r3, [r7, #24]
+ 653:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     HAL_GPIO_Init(NFC_GPIO_GPO_PIN_PORT, &GPIO_InitStruct);
+ 1822              		.loc 1 653 5
+ 1823 003e 07F10C03 		add	r3, r7, #12
+ 1824 0042 1946     		mov	r1, r3
+ 1825 0044 1748     		ldr	r0, .L92+8
+ 1826 0046 FFF7FEFF 		bl	HAL_GPIO_Init
+ 1827 004a 16E0     		b	.L91
+ 1828              	.L90:
+ 654:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   }
+ 655:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   else
+ 656:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   {
+ 657:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     GPIO_InitStruct.Pin = NFC_GPIO_GPO_PIN;
+ 1829              		.loc 1 657 25
+ 1830 004c 1023     		movs	r3, #16
+ 1831 004e FB60     		str	r3, [r7, #12]
+ 658:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+ 1832              		.loc 1 658 26
+ 1833 0050 4FF40413 		mov	r3, #2162688
+ 1834 0054 3B61     		str	r3, [r7, #16]
+ 659:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     GPIO_InitStruct.Pull = GPIO_PULLUP;
+ 1835              		.loc 1 659 26
+ 1836 0056 0123     		movs	r3, #1
+ 1837 0058 7B61     		str	r3, [r7, #20]
+ 660:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 1838              		.loc 1 660 27
+ 1839 005a 0323     		movs	r3, #3
+ 1840 005c BB61     		str	r3, [r7, #24]
+ 661:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     HAL_GPIO_Init(NFC_GPIO_GPO_PIN_PORT, &GPIO_InitStruct);
+ 1841              		.loc 1 661 5
+ 1842 005e 07F10C03 		add	r3, r7, #12
+ 1843 0062 1946     		mov	r1, r3
+ 1844 0064 0F48     		ldr	r0, .L92+8
+ 1845 0066 FFF7FEFF 		bl	HAL_GPIO_Init
+ 662:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     /* Enable and set EXTI4_IRQn Interrupt to the lowest priority */
+ 663:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     HAL_NVIC_SetPriority(EXTI4_IRQn, 3, 0);
+ 1846              		.loc 1 663 5
+ 1847 006a 0022     		movs	r2, #0
+ 1848 006c 0321     		movs	r1, #3
+ 1849 006e 0A20     		movs	r0, #10
+ 1850 0070 FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 664:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     HAL_NVIC_EnableIRQ(EXTI4_IRQn);    
+ 1851              		.loc 1 664 5
+ 1852 0074 0A20     		movs	r0, #10
+ 1853 0076 FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+ 1854              	.L91:
+ 665:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   }
+ 666:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   
+ 667:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Configure GPIO pins for DISABLE (PE2)*/
+ 668:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   GPIO_InitStruct.Pin = NFC_GPIO_RFDISABLE_PIN;
+ 1855              		.loc 1 668 23
+ 1856 007a 0423     		movs	r3, #4
+ 1857 007c FB60     		str	r3, [r7, #12]
+ 669:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 1858              		.loc 1 669 24
+ARM GAS  /tmp/ccEi5qWM.s 			page 44
+
+
+ 1859 007e 0123     		movs	r3, #1
+ 1860 0080 3B61     		str	r3, [r7, #16]
+ 670:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 1861              		.loc 1 670 24
+ 1862 0082 0023     		movs	r3, #0
+ 1863 0084 7B61     		str	r3, [r7, #20]
+ 671:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_GPIO_Init(NFC_GPIO_RFDISABLE_PIN_PORT, &GPIO_InitStruct);
+ 1864              		.loc 1 671 3
+ 1865 0086 07F10C03 		add	r3, r7, #12
+ 1866 008a 1946     		mov	r1, r3
+ 1867 008c 0548     		ldr	r0, .L92+8
+ 1868 008e FFF7FEFF 		bl	HAL_GPIO_Init
+ 672:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1869              		.loc 1 672 1
+ 1870 0092 00BF     		nop
+ 1871 0094 2037     		adds	r7, r7, #32
+ 1872              		.cfi_def_cfa_offset 8
+ 1873 0096 BD46     		mov	sp, r7
+ 1874              		.cfi_def_cfa_register 13
+ 1875              		@ sp needed
+ 1876 0098 80BD     		pop	{r7, pc}
+ 1877              	.L93:
+ 1878 009a 00BF     		.align	2
+ 1879              	.L92:
+ 1880 009c 00000000 		.word	hI2cHandler
+ 1881 00a0 00100240 		.word	1073876992
+ 1882 00a4 00100048 		.word	1207963648
+ 1883              		.cfi_endproc
+ 1884              	.LFE472:
+ 1886              		.section	.text.NFC_IO_DeInit,"ax",%progbits
+ 1887              		.align	1
+ 1888              		.global	NFC_IO_DeInit
+ 1889              		.syntax unified
+ 1890              		.thumb
+ 1891              		.thumb_func
+ 1893              	NFC_IO_DeInit:
+ 1894              	.LFB473:
+ 673:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 674:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 675:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  DeInitializes Sensors low level.
+ 676:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval None
+ 677:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 678:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void NFC_IO_DeInit(void)
+ 679:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 1895              		.loc 1 679 1
+ 1896              		.cfi_startproc
+ 1897              		@ args = 0, pretend = 0, frame = 0
+ 1898              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1899 0000 80B5     		push	{r7, lr}
+ 1900              		.cfi_def_cfa_offset 8
+ 1901              		.cfi_offset 7, -8
+ 1902              		.cfi_offset 14, -4
+ 1903 0002 00AF     		add	r7, sp, #0
+ 1904              		.cfi_def_cfa_register 7
+ 680:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   I2Cx_DeInit(&hI2cHandler);
+ 1905              		.loc 1 680 3
+ 1906 0004 0248     		ldr	r0, .L95
+ARM GAS  /tmp/ccEi5qWM.s 			page 45
+
+
+ 1907 0006 FFF7FEFF 		bl	I2Cx_DeInit
+ 681:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1908              		.loc 1 681 1
+ 1909 000a 00BF     		nop
+ 1910 000c 80BD     		pop	{r7, pc}
+ 1911              	.L96:
+ 1912 000e 00BF     		.align	2
+ 1913              	.L95:
+ 1914 0010 00000000 		.word	hI2cHandler
+ 1915              		.cfi_endproc
+ 1916              	.LFE473:
+ 1918              		.section	.text.NFC_IO_ReadMultiple,"ax",%progbits
+ 1919              		.align	1
+ 1920              		.global	NFC_IO_ReadMultiple
+ 1921              		.syntax unified
+ 1922              		.thumb
+ 1923              		.thumb_func
+ 1925              	NFC_IO_ReadMultiple:
+ 1926              	.LFB474:
+ 682:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 683:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 684:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  This functions reads a response of the M24SR device
+ 685:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Addr  M24SR I2C address
+ 686:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  pBuffer  Pointer on the buffer to retrieve M24SR response
+ 687:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Length  Length of the data
+ 688:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval Status  Success or Timeout
+ 689:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 690:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** uint16_t NFC_IO_ReadMultiple (uint8_t Addr, uint8_t *pBuffer, uint16_t Length )
+ 691:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 1927              		.loc 1 691 1
+ 1928              		.cfi_startproc
+ 1929              		@ args = 0, pretend = 0, frame = 16
+ 1930              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1931 0000 80B5     		push	{r7, lr}
+ 1932              		.cfi_def_cfa_offset 8
+ 1933              		.cfi_offset 7, -8
+ 1934              		.cfi_offset 14, -4
+ 1935 0002 86B0     		sub	sp, sp, #24
+ 1936              		.cfi_def_cfa_offset 32
+ 1937 0004 02AF     		add	r7, sp, #8
+ 1938              		.cfi_def_cfa 7, 24
+ 1939 0006 0346     		mov	r3, r0
+ 1940 0008 3960     		str	r1, [r7]
+ 1941 000a FB71     		strb	r3, [r7, #7]
+ 1942 000c 1346     		mov	r3, r2	@ movhi
+ 1943 000e BB80     		strh	r3, [r7, #4]	@ movhi
+ 692:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   uint16_t status ;
+ 693:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     
+ 694:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     /* Before calling this function M24SR must be ready: check to detect potential issues */
+ 695:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   status = NFC_IO_IsDeviceReady(Addr, NFC_I2C_TRIALS);
+ 1944              		.loc 1 695 12
+ 1945 0010 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 1946 0012 0121     		movs	r1, #1
+ 1947 0014 1846     		mov	r0, r3
+ 1948 0016 FFF7FEFF 		bl	NFC_IO_IsDeviceReady
+ 1949 001a 0346     		mov	r3, r0
+ 1950 001c FB81     		strh	r3, [r7, #14]	@ movhi
+ARM GAS  /tmp/ccEi5qWM.s 			page 46
+
+
+ 696:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   if (status != NFC_I2C_STATUS_SUCCESS)
+ 1951              		.loc 1 696 6
+ 1952 001e FB89     		ldrh	r3, [r7, #14]
+ 1953 0020 002B     		cmp	r3, #0
+ 1954 0022 01D0     		beq	.L98
+ 697:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   {
+ 698:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     return NFC_I2C_ERROR_TIMEOUT;
+ 1955              		.loc 1 698 12
+ 1956 0024 1123     		movs	r3, #17
+ 1957 0026 0EE0     		b	.L99
+ 1958              	.L98:
+ 699:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   } 
+ 700:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     
+ 701:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   if( HAL_I2C_Master_Receive(&hI2cHandler, Addr, (uint8_t*)pBuffer, Length, NFC_I2C_TIMEOUT_STD) !=
+ 1959              		.loc 1 701 7
+ 1960 0028 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 1961 002a 99B2     		uxth	r1, r3
+ 1962 002c BB88     		ldrh	r3, [r7, #4]
+ 1963 002e 0822     		movs	r2, #8
+ 1964 0030 0092     		str	r2, [sp]
+ 1965 0032 3A68     		ldr	r2, [r7]
+ 1966 0034 0648     		ldr	r0, .L101
+ 1967 0036 FFF7FEFF 		bl	HAL_I2C_Master_Receive
+ 1968 003a 0346     		mov	r3, r0
+ 1969              		.loc 1 701 5 discriminator 1
+ 1970 003c 002B     		cmp	r3, #0
+ 1971 003e 01D0     		beq	.L100
+ 702:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   {
+ 703:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     return NFC_I2C_ERROR_TIMEOUT;
+ 1972              		.loc 1 703 12
+ 1973 0040 1123     		movs	r3, #17
+ 1974 0042 00E0     		b	.L99
+ 1975              	.L100:
+ 704:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   }
+ 705:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     
+ 706:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   return NFC_I2C_STATUS_SUCCESS;    
+ 1976              		.loc 1 706 10
+ 1977 0044 0023     		movs	r3, #0
+ 1978              	.L99:
+ 707:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 1979              		.loc 1 707 1
+ 1980 0046 1846     		mov	r0, r3
+ 1981 0048 1037     		adds	r7, r7, #16
+ 1982              		.cfi_def_cfa_offset 8
+ 1983 004a BD46     		mov	sp, r7
+ 1984              		.cfi_def_cfa_register 13
+ 1985              		@ sp needed
+ 1986 004c 80BD     		pop	{r7, pc}
+ 1987              	.L102:
+ 1988 004e 00BF     		.align	2
+ 1989              	.L101:
+ 1990 0050 00000000 		.word	hI2cHandler
+ 1991              		.cfi_endproc
+ 1992              	.LFE474:
+ 1994              		.section	.text.NFC_IO_WriteMultiple,"ax",%progbits
+ 1995              		.align	1
+ 1996              		.global	NFC_IO_WriteMultiple
+ARM GAS  /tmp/ccEi5qWM.s 			page 47
+
+
+ 1997              		.syntax unified
+ 1998              		.thumb
+ 1999              		.thumb_func
+ 2001              	NFC_IO_WriteMultiple:
+ 2002              	.LFB475:
+ 708:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 709:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 710:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  This functions sends the command buffer 
+ 711:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Addr  M24SR I2C address
+ 712:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  pBuffer  pointer to the buffer to send to the M24SR
+ 713:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Length  Length of the data
+ 714:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval Status  Success or Timeout
+ 715:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 716:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** uint16_t  NFC_IO_WriteMultiple (uint8_t Addr, uint8_t *pBuffer, uint16_t Length) 
+ 717:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 2003              		.loc 1 717 1
+ 2004              		.cfi_startproc
+ 2005              		@ args = 0, pretend = 0, frame = 16
+ 2006              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2007 0000 80B5     		push	{r7, lr}
+ 2008              		.cfi_def_cfa_offset 8
+ 2009              		.cfi_offset 7, -8
+ 2010              		.cfi_offset 14, -4
+ 2011 0002 86B0     		sub	sp, sp, #24
+ 2012              		.cfi_def_cfa_offset 32
+ 2013 0004 02AF     		add	r7, sp, #8
+ 2014              		.cfi_def_cfa 7, 24
+ 2015 0006 0346     		mov	r3, r0
+ 2016 0008 3960     		str	r1, [r7]
+ 2017 000a FB71     		strb	r3, [r7, #7]
+ 2018 000c 1346     		mov	r3, r2	@ movhi
+ 2019 000e BB80     		strh	r3, [r7, #4]	@ movhi
+ 718:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   uint16_t status ;
+ 719:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     
+ 720:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   /* Before calling this function M24SR must be ready: check to detect potential issues */
+ 721:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   status = NFC_IO_IsDeviceReady(Addr, NFC_I2C_TRIALS);
+ 2020              		.loc 1 721 12
+ 2021 0010 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 2022 0012 0121     		movs	r1, #1
+ 2023 0014 1846     		mov	r0, r3
+ 2024 0016 FFF7FEFF 		bl	NFC_IO_IsDeviceReady
+ 2025 001a 0346     		mov	r3, r0
+ 2026 001c FB81     		strh	r3, [r7, #14]	@ movhi
+ 722:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   if (status != NFC_I2C_STATUS_SUCCESS)
+ 2027              		.loc 1 722 6
+ 2028 001e FB89     		ldrh	r3, [r7, #14]
+ 2029 0020 002B     		cmp	r3, #0
+ 2030 0022 01D0     		beq	.L104
+ 723:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   {
+ 724:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     return NFC_I2C_ERROR_TIMEOUT;
+ 2031              		.loc 1 724 12
+ 2032 0024 1123     		movs	r3, #17
+ 2033 0026 0EE0     		b	.L105
+ 2034              	.L104:
+ 725:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   } 
+ 726:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     
+ 727:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   if( HAL_I2C_Master_Transmit(&hI2cHandler, Addr, (uint8_t*)pBuffer, Length, NFC_I2C_TIMEOUT_STD) !
+ARM GAS  /tmp/ccEi5qWM.s 			page 48
+
+
+ 2035              		.loc 1 727 7
+ 2036 0028 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 2037 002a 99B2     		uxth	r1, r3
+ 2038 002c BB88     		ldrh	r3, [r7, #4]
+ 2039 002e 0822     		movs	r2, #8
+ 2040 0030 0092     		str	r2, [sp]
+ 2041 0032 3A68     		ldr	r2, [r7]
+ 2042 0034 0648     		ldr	r0, .L107
+ 2043 0036 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+ 2044 003a 0346     		mov	r3, r0
+ 2045              		.loc 1 727 5 discriminator 1
+ 2046 003c 002B     		cmp	r3, #0
+ 2047 003e 01D0     		beq	.L106
+ 728:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   {
+ 729:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     return NFC_I2C_ERROR_TIMEOUT;
+ 2048              		.loc 1 729 12
+ 2049 0040 1123     		movs	r3, #17
+ 2050 0042 00E0     		b	.L105
+ 2051              	.L106:
+ 730:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   }
+ 731:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 732:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   return NFC_I2C_STATUS_SUCCESS;
+ 2052              		.loc 1 732 10
+ 2053 0044 0023     		movs	r3, #0
+ 2054              	.L105:
+ 733:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 2055              		.loc 1 733 1
+ 2056 0046 1846     		mov	r0, r3
+ 2057 0048 1037     		adds	r7, r7, #16
+ 2058              		.cfi_def_cfa_offset 8
+ 2059 004a BD46     		mov	sp, r7
+ 2060              		.cfi_def_cfa_register 13
+ 2061              		@ sp needed
+ 2062 004c 80BD     		pop	{r7, pc}
+ 2063              	.L108:
+ 2064 004e 00BF     		.align	2
+ 2065              	.L107:
+ 2066 0050 00000000 		.word	hI2cHandler
+ 2067              		.cfi_endproc
+ 2068              	.LFE475:
+ 2070              		.section	.text.NFC_IO_IsDeviceReady,"ax",%progbits
+ 2071              		.align	1
+ 2072              		.global	NFC_IO_IsDeviceReady
+ 2073              		.syntax unified
+ 2074              		.thumb
+ 2075              		.thumb_func
+ 2077              	NFC_IO_IsDeviceReady:
+ 2078              	.LFB476:
+ 734:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 735:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 736:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Checks if target device is ready for communication.
+ 737:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Addr  M24SR I2C address
+ 738:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Trials  Number of trials (currently not present in M24sr)
+ 739:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval Status  Success or Timeout
+ 740:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 741:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** uint16_t   NFC_IO_IsDeviceReady (uint8_t Addr, uint32_t Trials)
+ 742:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ARM GAS  /tmp/ccEi5qWM.s 			page 49
+
+
+ 2079              		.loc 1 742 1
+ 2080              		.cfi_startproc
+ 2081              		@ args = 0, pretend = 0, frame = 24
+ 2082              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2083 0000 80B5     		push	{r7, lr}
+ 2084              		.cfi_def_cfa_offset 8
+ 2085              		.cfi_offset 7, -8
+ 2086              		.cfi_offset 14, -4
+ 2087 0002 86B0     		sub	sp, sp, #24
+ 2088              		.cfi_def_cfa_offset 32
+ 2089 0004 00AF     		add	r7, sp, #0
+ 2090              		.cfi_def_cfa_register 7
+ 2091 0006 0346     		mov	r3, r0
+ 2092 0008 3960     		str	r1, [r7]
+ 2093 000a FB71     		strb	r3, [r7, #7]
+ 743:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     HAL_StatusTypeDef status;
+ 744:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     uint32_t tickstart = 0;
+ 2094              		.loc 1 744 14
+ 2095 000c 0023     		movs	r3, #0
+ 2096 000e 7B61     		str	r3, [r7, #20]
+ 745:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     uint32_t currenttick = 0;
+ 2097              		.loc 1 745 14
+ 2098 0010 0023     		movs	r3, #0
+ 2099 0012 3B61     		str	r3, [r7, #16]
+ 746:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     
+ 747:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     /* Get tick */
+ 748:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     tickstart = HAL_GetTick();
+ 2100              		.loc 1 748 17
+ 2101 0014 FFF7FEFF 		bl	HAL_GetTick
+ 2102 0018 7861     		str	r0, [r7, #20]
+ 2103              	.L111:
+ 749:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     
+ 750:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     /* Wait until M24SR is ready or timeout occurs */
+ 751:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     do
+ 752:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     {
+ 753:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****         status = HAL_I2C_IsDeviceReady(&hI2cHandler, Addr, Trials, NFC_I2C_TIMEOUT_STD);
+ 2104              		.loc 1 753 18
+ 2105 001a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 2106 001c 99B2     		uxth	r1, r3
+ 2107 001e 0823     		movs	r3, #8
+ 2108 0020 3A68     		ldr	r2, [r7]
+ 2109 0022 0D48     		ldr	r0, .L114
+ 2110 0024 FFF7FEFF 		bl	HAL_I2C_IsDeviceReady
+ 2111 0028 0346     		mov	r3, r0
+ 2112 002a FB73     		strb	r3, [r7, #15]
+ 754:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****         currenttick = HAL_GetTick();
+ 2113              		.loc 1 754 23
+ 2114 002c FFF7FEFF 		bl	HAL_GetTick
+ 2115 0030 3861     		str	r0, [r7, #16]
+ 755:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     } while( ( (currenttick - tickstart) < NFC_I2C_TIMEOUT_MAX) && (status != HAL_OK) );
+ 2116              		.loc 1 755 29 discriminator 2
+ 2117 0032 3A69     		ldr	r2, [r7, #16]
+ 2118 0034 7B69     		ldr	r3, [r7, #20]
+ 2119 0036 D31A     		subs	r3, r2, r3
+ 2120              		.loc 1 755 65 discriminator 2
+ 2121 0038 C72B     		cmp	r3, #199
+ 2122 003a 02D8     		bhi	.L110
+ARM GAS  /tmp/ccEi5qWM.s 			page 50
+
+
+ 2123              		.loc 1 755 65 is_stmt 0 discriminator 1
+ 2124 003c FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 2125 003e 002B     		cmp	r3, #0
+ 2126 0040 EBD1     		bne	.L111
+ 2127              	.L110:
+ 756:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     
+ 757:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     if (status != HAL_OK)
+ 2128              		.loc 1 757 8 is_stmt 1
+ 2129 0042 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 2130 0044 002B     		cmp	r3, #0
+ 2131 0046 01D0     		beq	.L112
+ 758:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     {
+ 759:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****         return NFC_I2C_ERROR_TIMEOUT;
+ 2132              		.loc 1 759 16
+ 2133 0048 1123     		movs	r3, #17
+ 2134 004a 00E0     		b	.L113
+ 2135              	.L112:
+ 760:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     } 
+ 761:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 762:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****     return NFC_I2C_STATUS_SUCCESS;
+ 2136              		.loc 1 762 12
+ 2137 004c 0023     		movs	r3, #0
+ 2138              	.L113:
+ 763:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 2139              		.loc 1 763 1
+ 2140 004e 1846     		mov	r0, r3
+ 2141 0050 1837     		adds	r7, r7, #24
+ 2142              		.cfi_def_cfa_offset 8
+ 2143 0052 BD46     		mov	sp, r7
+ 2144              		.cfi_def_cfa_register 13
+ 2145              		@ sp needed
+ 2146 0054 80BD     		pop	{r7, pc}
+ 2147              	.L115:
+ 2148 0056 00BF     		.align	2
+ 2149              	.L114:
+ 2150 0058 00000000 		.word	hI2cHandler
+ 2151              		.cfi_endproc
+ 2152              	.LFE476:
+ 2154              		.section	.text.NFC_IO_ReadState,"ax",%progbits
+ 2155              		.align	1
+ 2156              		.global	NFC_IO_ReadState
+ 2157              		.syntax unified
+ 2158              		.thumb
+ 2159              		.thumb_func
+ 2161              	NFC_IO_ReadState:
+ 2162              	.LFB477:
+ 764:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 765:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 766:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  This function read the state of the M24SR GPO
+ 767:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval GPIO_PinState  state of the M24SR GPO
+ 768:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 769:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void NFC_IO_ReadState(uint8_t * pPinState)
+ 770:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 2163              		.loc 1 770 1
+ 2164              		.cfi_startproc
+ 2165              		@ args = 0, pretend = 0, frame = 8
+ 2166              		@ frame_needed = 1, uses_anonymous_args = 0
+ARM GAS  /tmp/ccEi5qWM.s 			page 51
+
+
+ 2167 0000 80B5     		push	{r7, lr}
+ 2168              		.cfi_def_cfa_offset 8
+ 2169              		.cfi_offset 7, -8
+ 2170              		.cfi_offset 14, -4
+ 2171 0002 82B0     		sub	sp, sp, #8
+ 2172              		.cfi_def_cfa_offset 16
+ 2173 0004 00AF     		add	r7, sp, #0
+ 2174              		.cfi_def_cfa_register 7
+ 2175 0006 7860     		str	r0, [r7, #4]
+ 771:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   *pPinState = (uint8_t)HAL_GPIO_ReadPin(NFC_GPIO_GPO_PIN_PORT,NFC_GPIO_GPO_PIN);
+ 2176              		.loc 1 771 25
+ 2177 0008 1021     		movs	r1, #16
+ 2178 000a 0548     		ldr	r0, .L117
+ 2179 000c FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 2180 0010 0346     		mov	r3, r0
+ 2181 0012 1A46     		mov	r2, r3
+ 2182              		.loc 1 771 14 discriminator 1
+ 2183 0014 7B68     		ldr	r3, [r7, #4]
+ 2184 0016 1A70     		strb	r2, [r3]
+ 772:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 2185              		.loc 1 772 1
+ 2186 0018 00BF     		nop
+ 2187 001a 0837     		adds	r7, r7, #8
+ 2188              		.cfi_def_cfa_offset 8
+ 2189 001c BD46     		mov	sp, r7
+ 2190              		.cfi_def_cfa_register 13
+ 2191              		@ sp needed
+ 2192 001e 80BD     		pop	{r7, pc}
+ 2193              	.L118:
+ 2194              		.align	2
+ 2195              	.L117:
+ 2196 0020 00100048 		.word	1207963648
+ 2197              		.cfi_endproc
+ 2198              	.LFE477:
+ 2200              		.section	.text.NFC_IO_RfDisable,"ax",%progbits
+ 2201              		.align	1
+ 2202              		.global	NFC_IO_RfDisable
+ 2203              		.syntax unified
+ 2204              		.thumb
+ 2205              		.thumb_func
+ 2207              	NFC_IO_RfDisable:
+ 2208              	.LFB478:
+ 773:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 774:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 775:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  This function sets the state of the M24SR RF disable pin
+ 776:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  PinState  put RF disable pin of M24SR in PinState (1 or 0)
+ 777:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 778:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void NFC_IO_RfDisable(uint8_t PinState)
+ 779:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 2209              		.loc 1 779 1
+ 2210              		.cfi_startproc
+ 2211              		@ args = 0, pretend = 0, frame = 8
+ 2212              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2213 0000 80B5     		push	{r7, lr}
+ 2214              		.cfi_def_cfa_offset 8
+ 2215              		.cfi_offset 7, -8
+ 2216              		.cfi_offset 14, -4
+ARM GAS  /tmp/ccEi5qWM.s 			page 52
+
+
+ 2217 0002 82B0     		sub	sp, sp, #8
+ 2218              		.cfi_def_cfa_offset 16
+ 2219 0004 00AF     		add	r7, sp, #0
+ 2220              		.cfi_def_cfa_register 7
+ 2221 0006 0346     		mov	r3, r0
+ 2222 0008 FB71     		strb	r3, [r7, #7]
+ 780:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_GPIO_WritePin(NFC_GPIO_RFDISABLE_PIN_PORT,NFC_GPIO_RFDISABLE_PIN,(GPIO_PinState)PinState);
+ 2223              		.loc 1 780 3
+ 2224 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 2225 000c 1A46     		mov	r2, r3
+ 2226 000e 0421     		movs	r1, #4
+ 2227 0010 0348     		ldr	r0, .L120
+ 2228 0012 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 781:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 2229              		.loc 1 781 1
+ 2230 0016 00BF     		nop
+ 2231 0018 0837     		adds	r7, r7, #8
+ 2232              		.cfi_def_cfa_offset 8
+ 2233 001a BD46     		mov	sp, r7
+ 2234              		.cfi_def_cfa_register 13
+ 2235              		@ sp needed
+ 2236 001c 80BD     		pop	{r7, pc}
+ 2237              	.L121:
+ 2238 001e 00BF     		.align	2
+ 2239              	.L120:
+ 2240 0020 00100048 		.word	1207963648
+ 2241              		.cfi_endproc
+ 2242              	.LFE478:
+ 2244              		.section	.text.NFC_IO_Delay,"ax",%progbits
+ 2245              		.align	1
+ 2246              		.global	NFC_IO_Delay
+ 2247              		.syntax unified
+ 2248              		.thumb
+ 2249              		.thumb_func
+ 2251              	NFC_IO_Delay:
+ 2252              	.LFB479:
+ 782:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** 
+ 783:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** /**
+ 784:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @brief  Delay function used in M24SR low level driver.
+ 785:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @param  Delay  Delay in ms
+ 786:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   * @retval None
+ 787:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   */
+ 788:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** void NFC_IO_Delay(uint32_t Delay)
+ 789:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** {
+ 2253              		.loc 1 789 1
+ 2254              		.cfi_startproc
+ 2255              		@ args = 0, pretend = 0, frame = 8
+ 2256              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2257 0000 80B5     		push	{r7, lr}
+ 2258              		.cfi_def_cfa_offset 8
+ 2259              		.cfi_offset 7, -8
+ 2260              		.cfi_offset 14, -4
+ 2261 0002 82B0     		sub	sp, sp, #8
+ 2262              		.cfi_def_cfa_offset 16
+ 2263 0004 00AF     		add	r7, sp, #0
+ 2264              		.cfi_def_cfa_register 7
+ 2265 0006 7860     		str	r0, [r7, #4]
+ARM GAS  /tmp/ccEi5qWM.s 			page 53
+
+
+ 790:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c ****   HAL_Delay(Delay);
+ 2266              		.loc 1 790 3
+ 2267 0008 7868     		ldr	r0, [r7, #4]
+ 2268 000a FFF7FEFF 		bl	HAL_Delay
+ 791:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.c **** }
+ 2269              		.loc 1 791 1
+ 2270 000e 00BF     		nop
+ 2271 0010 0837     		adds	r7, r7, #8
+ 2272              		.cfi_def_cfa_offset 8
+ 2273 0012 BD46     		mov	sp, r7
+ 2274              		.cfi_def_cfa_register 13
+ 2275              		@ sp needed
+ 2276 0014 80BD     		pop	{r7, pc}
+ 2277              		.cfi_endproc
+ 2278              	.LFE479:
+ 2280              		.text
+ 2281              	.Letext0:
+ 2282              		.file 2 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l475xx.h"
+ 2283              		.file 3 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 2284              		.file 4 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h"
+ 2285              		.file 5 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_gpio.h"
+ 2286              		.file 6 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_dma.h"
+ 2287              		.file 7 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_i2c.h"
+ 2288              		.file 8 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h"
+ 2289              		.file 9 "Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01.h"
+ 2290              		.file 10 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_i2c_ex.h"
+ 2291              		.file 11 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h"
+ 2292              		.file 12 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_cortex.h"
+ 2293              		.file 13 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_ll_dma.h"
+ARM GAS  /tmp/ccEi5qWM.s 			page 54
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32l475e_iot01.c
+     /tmp/ccEi5qWM.s:21     .rodata.CHANNEL_OFFSET_TAB:00000000 $d
+     /tmp/ccEi5qWM.s:24     .rodata.CHANNEL_OFFSET_TAB:00000000 CHANNEL_OFFSET_TAB
+     /tmp/ccEi5qWM.s:31     .rodata.GPIO_PIN:00000000 GPIO_PIN
+     /tmp/ccEi5qWM.s:28     .rodata.GPIO_PIN:00000000 $d
+     /tmp/ccEi5qWM.s:38     .data.GPIO_PORT:00000000 GPIO_PORT
+     /tmp/ccEi5qWM.s:35     .data.GPIO_PORT:00000000 $d
+     /tmp/ccEi5qWM.s:45     .data.BUTTON_PORT:00000000 BUTTON_PORT
+     /tmp/ccEi5qWM.s:42     .data.BUTTON_PORT:00000000 $d
+     /tmp/ccEi5qWM.s:52     .rodata.BUTTON_PIN:00000000 BUTTON_PIN
+     /tmp/ccEi5qWM.s:49     .rodata.BUTTON_PIN:00000000 $d
+     /tmp/ccEi5qWM.s:59     .rodata.BUTTON_IRQn:00000000 BUTTON_IRQn
+     /tmp/ccEi5qWM.s:56     .rodata.BUTTON_IRQn:00000000 $d
+     /tmp/ccEi5qWM.s:66     .data.COM_USART:00000000 COM_USART
+     /tmp/ccEi5qWM.s:63     .data.COM_USART:00000000 $d
+     /tmp/ccEi5qWM.s:73     .data.COM_TX_PORT:00000000 COM_TX_PORT
+     /tmp/ccEi5qWM.s:70     .data.COM_TX_PORT:00000000 $d
+     /tmp/ccEi5qWM.s:80     .data.COM_RX_PORT:00000000 COM_RX_PORT
+     /tmp/ccEi5qWM.s:77     .data.COM_RX_PORT:00000000 $d
+     /tmp/ccEi5qWM.s:87     .rodata.COM_TX_PIN:00000000 COM_TX_PIN
+     /tmp/ccEi5qWM.s:84     .rodata.COM_TX_PIN:00000000 $d
+     /tmp/ccEi5qWM.s:94     .rodata.COM_RX_PIN:00000000 COM_RX_PIN
+     /tmp/ccEi5qWM.s:91     .rodata.COM_RX_PIN:00000000 $d
+     /tmp/ccEi5qWM.s:101    .rodata.COM_TX_AF:00000000 COM_TX_AF
+     /tmp/ccEi5qWM.s:98     .rodata.COM_TX_AF:00000000 $d
+     /tmp/ccEi5qWM.s:108    .rodata.COM_RX_AF:00000000 COM_RX_AF
+     /tmp/ccEi5qWM.s:105    .rodata.COM_RX_AF:00000000 $d
+     /tmp/ccEi5qWM.s:115    .bss.hI2cHandler:00000000 hI2cHandler
+     /tmp/ccEi5qWM.s:112    .bss.hI2cHandler:00000000 $d
+     /tmp/ccEi5qWM.s:122    .bss.hDiscoUart:00000000 hDiscoUart
+     /tmp/ccEi5qWM.s:119    .bss.hDiscoUart:00000000 $d
+     /tmp/ccEi5qWM.s:125    .text.BSP_GetVersion:00000000 $t
+     /tmp/ccEi5qWM.s:131    .text.BSP_GetVersion:00000000 BSP_GetVersion
+     /tmp/ccEi5qWM.s:157    .text.BSP_GetVersion:00000010 $d
+     /tmp/ccEi5qWM.s:162    .text.BSP_LED_Init:00000000 $t
+     /tmp/ccEi5qWM.s:168    .text.BSP_LED_Init:00000000 BSP_LED_Init
+     /tmp/ccEi5qWM.s:234    .text.BSP_LED_Init:00000058 $d
+     /tmp/ccEi5qWM.s:240    .text.BSP_LED_DeInit:00000000 $t
+     /tmp/ccEi5qWM.s:246    .text.BSP_LED_DeInit:00000000 BSP_LED_DeInit
+     /tmp/ccEi5qWM.s:296    .text.BSP_LED_DeInit:00000040 $d
+     /tmp/ccEi5qWM.s:301    .text.BSP_LED_On:00000000 $t
+     /tmp/ccEi5qWM.s:307    .text.BSP_LED_On:00000000 BSP_LED_On
+     /tmp/ccEi5qWM.s:345    .text.BSP_LED_On:00000028 $d
+     /tmp/ccEi5qWM.s:350    .text.BSP_LED_Off:00000000 $t
+     /tmp/ccEi5qWM.s:356    .text.BSP_LED_Off:00000000 BSP_LED_Off
+     /tmp/ccEi5qWM.s:394    .text.BSP_LED_Off:00000028 $d
+     /tmp/ccEi5qWM.s:399    .text.BSP_LED_Toggle:00000000 $t
+     /tmp/ccEi5qWM.s:405    .text.BSP_LED_Toggle:00000000 BSP_LED_Toggle
+     /tmp/ccEi5qWM.s:443    .text.BSP_LED_Toggle:00000028 $d
+     /tmp/ccEi5qWM.s:448    .text.BSP_PB_Init:00000000 $t
+     /tmp/ccEi5qWM.s:454    .text.BSP_PB_Init:00000000 BSP_PB_Init
+     /tmp/ccEi5qWM.s:563    .text.BSP_PB_Init:000000a4 $d
+     /tmp/ccEi5qWM.s:569    .text.BSP_PB_DeInit:00000000 $t
+     /tmp/ccEi5qWM.s:575    .text.BSP_PB_DeInit:00000000 BSP_PB_DeInit
+     /tmp/ccEi5qWM.s:620    .text.BSP_PB_DeInit:00000034 $d
+     /tmp/ccEi5qWM.s:625    .text.BSP_PB_GetState:00000000 $t
+ARM GAS  /tmp/ccEi5qWM.s 			page 55
+
+
+     /tmp/ccEi5qWM.s:631    .text.BSP_PB_GetState:00000000 BSP_PB_GetState
+     /tmp/ccEi5qWM.s:669    .text.BSP_PB_GetState:00000028 $d
+     /tmp/ccEi5qWM.s:674    .text.BSP_COM_Init:00000000 $t
+     /tmp/ccEi5qWM.s:680    .text.BSP_COM_Init:00000000 BSP_COM_Init
+     /tmp/ccEi5qWM.s:816    .text.BSP_COM_Init:000000c8 $d
+     /tmp/ccEi5qWM.s:824    .text.BSP_COM_DeInit:00000000 $t
+     /tmp/ccEi5qWM.s:830    .text.BSP_COM_DeInit:00000000 BSP_COM_DeInit
+     /tmp/ccEi5qWM.s:879    .text.BSP_COM_DeInit:00000038 $d
+     /tmp/ccEi5qWM.s:885    .text.I2Cx_MspInit:00000000 $t
+     /tmp/ccEi5qWM.s:890    .text.I2Cx_MspInit:00000000 I2Cx_MspInit
+     /tmp/ccEi5qWM.s:995    .text.I2Cx_MspInit:000000a8 $d
+     /tmp/ccEi5qWM.s:1001   .text.I2Cx_MspDeInit:00000000 $t
+     /tmp/ccEi5qWM.s:1006   .text.I2Cx_MspDeInit:00000000 I2Cx_MspDeInit
+     /tmp/ccEi5qWM.s:1052   .text.I2Cx_MspDeInit:00000038 $d
+     /tmp/ccEi5qWM.s:1058   .text.I2Cx_Init:00000000 $t
+     /tmp/ccEi5qWM.s:1063   .text.I2Cx_Init:00000000 I2Cx_Init
+     /tmp/ccEi5qWM.s:1131   .text.I2Cx_Init:00000054 $d
+     /tmp/ccEi5qWM.s:1137   .text.I2Cx_DeInit:00000000 $t
+     /tmp/ccEi5qWM.s:1142   .text.I2Cx_DeInit:00000000 I2Cx_DeInit
+     /tmp/ccEi5qWM.s:1175   .text.I2Cx_ReadMultiple:00000000 $t
+     /tmp/ccEi5qWM.s:1180   .text.I2Cx_ReadMultiple:00000000 I2Cx_ReadMultiple
+     /tmp/ccEi5qWM.s:1366   .text.I2Cx_Error:00000000 I2Cx_Error
+     /tmp/ccEi5qWM.s:1247   .text.I2Cx_WriteMultiple:00000000 $t
+     /tmp/ccEi5qWM.s:1252   .text.I2Cx_WriteMultiple:00000000 I2Cx_WriteMultiple
+     /tmp/ccEi5qWM.s:1319   .text.I2Cx_IsDeviceReady:00000000 $t
+     /tmp/ccEi5qWM.s:1324   .text.I2Cx_IsDeviceReady:00000000 I2Cx_IsDeviceReady
+     /tmp/ccEi5qWM.s:1361   .text.I2Cx_Error:00000000 $t
+     /tmp/ccEi5qWM.s:1401   .text.SENSOR_IO_Init:00000000 $t
+     /tmp/ccEi5qWM.s:1407   .text.SENSOR_IO_Init:00000000 SENSOR_IO_Init
+     /tmp/ccEi5qWM.s:1428   .text.SENSOR_IO_Init:00000010 $d
+     /tmp/ccEi5qWM.s:1433   .text.SENSOR_IO_DeInit:00000000 $t
+     /tmp/ccEi5qWM.s:1439   .text.SENSOR_IO_DeInit:00000000 SENSOR_IO_DeInit
+     /tmp/ccEi5qWM.s:1460   .text.SENSOR_IO_DeInit:00000010 $d
+     /tmp/ccEi5qWM.s:1465   .text.SENSOR_IO_Write:00000000 $t
+     /tmp/ccEi5qWM.s:1471   .text.SENSOR_IO_Write:00000000 SENSOR_IO_Write
+     /tmp/ccEi5qWM.s:1513   .text.SENSOR_IO_Write:00000030 $d
+     /tmp/ccEi5qWM.s:1518   .text.SENSOR_IO_Read:00000000 $t
+     /tmp/ccEi5qWM.s:1524   .text.SENSOR_IO_Read:00000000 SENSOR_IO_Read
+     /tmp/ccEi5qWM.s:1570   .text.SENSOR_IO_Read:00000038 $d
+     /tmp/ccEi5qWM.s:1575   .text.SENSOR_IO_ReadMultiple:00000000 $t
+     /tmp/ccEi5qWM.s:1581   .text.SENSOR_IO_ReadMultiple:00000000 SENSOR_IO_ReadMultiple
+     /tmp/ccEi5qWM.s:1626   .text.SENSOR_IO_ReadMultiple:00000038 $d
+     /tmp/ccEi5qWM.s:1631   .text.SENSOR_IO_WriteMultiple:00000000 $t
+     /tmp/ccEi5qWM.s:1637   .text.SENSOR_IO_WriteMultiple:00000000 SENSOR_IO_WriteMultiple
+     /tmp/ccEi5qWM.s:1681   .text.SENSOR_IO_WriteMultiple:00000034 $d
+     /tmp/ccEi5qWM.s:1686   .text.SENSOR_IO_IsDeviceReady:00000000 $t
+     /tmp/ccEi5qWM.s:1692   .text.SENSOR_IO_IsDeviceReady:00000000 SENSOR_IO_IsDeviceReady
+     /tmp/ccEi5qWM.s:1727   .text.SENSOR_IO_IsDeviceReady:00000024 $d
+     /tmp/ccEi5qWM.s:1732   .text.SENSOR_IO_Delay:00000000 $t
+     /tmp/ccEi5qWM.s:1738   .text.SENSOR_IO_Delay:00000000 SENSOR_IO_Delay
+     /tmp/ccEi5qWM.s:1768   .text.NFC_IO_Init:00000000 $t
+     /tmp/ccEi5qWM.s:1774   .text.NFC_IO_Init:00000000 NFC_IO_Init
+     /tmp/ccEi5qWM.s:1880   .text.NFC_IO_Init:0000009c $d
+     /tmp/ccEi5qWM.s:1887   .text.NFC_IO_DeInit:00000000 $t
+     /tmp/ccEi5qWM.s:1893   .text.NFC_IO_DeInit:00000000 NFC_IO_DeInit
+     /tmp/ccEi5qWM.s:1914   .text.NFC_IO_DeInit:00000010 $d
+     /tmp/ccEi5qWM.s:1919   .text.NFC_IO_ReadMultiple:00000000 $t
+ARM GAS  /tmp/ccEi5qWM.s 			page 56
+
+
+     /tmp/ccEi5qWM.s:1925   .text.NFC_IO_ReadMultiple:00000000 NFC_IO_ReadMultiple
+     /tmp/ccEi5qWM.s:2077   .text.NFC_IO_IsDeviceReady:00000000 NFC_IO_IsDeviceReady
+     /tmp/ccEi5qWM.s:1990   .text.NFC_IO_ReadMultiple:00000050 $d
+     /tmp/ccEi5qWM.s:1995   .text.NFC_IO_WriteMultiple:00000000 $t
+     /tmp/ccEi5qWM.s:2001   .text.NFC_IO_WriteMultiple:00000000 NFC_IO_WriteMultiple
+     /tmp/ccEi5qWM.s:2066   .text.NFC_IO_WriteMultiple:00000050 $d
+     /tmp/ccEi5qWM.s:2071   .text.NFC_IO_IsDeviceReady:00000000 $t
+     /tmp/ccEi5qWM.s:2150   .text.NFC_IO_IsDeviceReady:00000058 $d
+     /tmp/ccEi5qWM.s:2155   .text.NFC_IO_ReadState:00000000 $t
+     /tmp/ccEi5qWM.s:2161   .text.NFC_IO_ReadState:00000000 NFC_IO_ReadState
+     /tmp/ccEi5qWM.s:2196   .text.NFC_IO_ReadState:00000020 $d
+     /tmp/ccEi5qWM.s:2201   .text.NFC_IO_RfDisable:00000000 $t
+     /tmp/ccEi5qWM.s:2207   .text.NFC_IO_RfDisable:00000000 NFC_IO_RfDisable
+     /tmp/ccEi5qWM.s:2240   .text.NFC_IO_RfDisable:00000020 $d
+     /tmp/ccEi5qWM.s:2245   .text.NFC_IO_Delay:00000000 $t
+     /tmp/ccEi5qWM.s:2251   .text.NFC_IO_Delay:00000000 NFC_IO_Delay
+                           .group:00000000 wm4.0.e7b64c2c371cf922f2c8028878d5c18e
+                           .group:00000000 wm4.stm32l4xx_hal_conf.h.23.286c2f63aaa73ed97ffb4d26f7caa6e9
+                           .group:00000000 wm4.stm32l4xx.h.38.9f5830373ca31b8a3cd182fdc6c7b69a
+                           .group:00000000 wm4.stm32l475xx.h.34.2f1a75aed66751e299f09004aef64973
+                           .group:00000000 wm4.stdint.h.29.6d480f4ba0f60596e88234283d42444f
+                           .group:00000000 wm4.cmsis_version.h.32.46e8eccfa2cfeaae11d008bb2823a3ed
+                           .group:00000000 wm4.core_cm4.h.66.e4ff136c4a17abc46741866f64f8e729
+                           .group:00000000 wm4.cmsis_gcc.h.26.78077cef1206e937f7b56043ffca496a
+                           .group:00000000 wm4.core_cm4.h.174.fcddd62df80231752fa39eb9b61dadfe
+                           .group:00000000 wm4.mpu_armv7.h.32.4049752bb5792d4e15357775e9506cfc
+                           .group:00000000 wm4.stm32l475xx.h.423.4d783859c9ac66890c9807dd7bd3a4db
+                           .group:00000000 wm4.stm32l4xx.h.196.f5ae8047c57b6175c94f246ef967a286
+                           .group:00000000 wm4.stm32_hal_legacy.h.22.08b8350ccf512ba8d98002fb33e7cbe5
+                           .group:00000000 wm4.stddef.h.39.0dc9006b34572d4d9cae4c8b422c4971
+                           .group:00000000 wm4.stm32l4xx_hal_def.h.58.1058a33f7217e935f2a6b51956d66a69
+                           .group:00000000 wm4.stm32l4xx_hal_rcc.h.156.ab8eecc4e10f4827a2aa75d3549a356d
+                           .group:00000000 wm4.stm32l4xx_hal_rcc_ex.h.20.4a82a27d561b6d42fa16a54f82e29067
+                           .group:00000000 wm4.stm32l4xx_hal_gpio.h.21.2d2b1fd6aa6afa7b6dcc89cf752a9a25
+                           .group:00000000 wm4.stm32l4xx_hal_gpio_ex.h.21.7ea705f5185dd3c6b8ea336f2858cd46
+                           .group:00000000 wm4.stm32l4xx_ll_dma.h.21.b30e7f48d60d1fc53041ec1e3fd6e54a
+                           .group:00000000 wm4.stm32l4xx_hal_dma.h.166.54a7f8d65cee6f051d541dc010387b5a
+                           .group:00000000 wm4.stm32l4xx_hal_dfsdm.h.21.6785e38d00075079c7f2e5657def82ae
+                           .group:00000000 wm4.stm32l4xx_hal_cortex.h.21.cb491126bd2d6f44e90b66f27acb8434
+                           .group:00000000 wm4.stm32l4xx_ll_adc.h.21.0c578f71501c74365c67044efed214d6
+                           .group:00000000 wm4.stm32l4xx_hal_adc.h.411.68f60682cdb20556089756a482f23764
+                           .group:00000000 wm4.stm32l4xx_hal_adc_ex.h.21.7b82cb80166a21dfa8cb3e2fa8f8e654
+                           .group:00000000 wm4.stm32l4xx_hal_can.h.21.5019586d8e7137c0cec16eb1f9d6677b
+                           .group:00000000 wm4.stm32l4xx_ll_exti.h.21.d866eff070d6f999af2ce4ea60aa40ac
+                           .group:00000000 wm4.stm32l4xx_hal_comp.h.87.7f14cb673a463359c83faa552328844d
+                           .group:00000000 wm4.stm32l4xx_hal_crc.h.21.4c36a140cca35e6a8e478e76c6ad98e3
+                           .group:00000000 wm4.stm32l4xx_hal_crc_ex.h.21.9cc3dead436542d416ee5572c231a242
+                           .group:00000000 wm4.stm32l4xx_hal_dac.h.21.69feba704135531cf3d9b92de27b71d5
+                           .group:00000000 wm4.stm32l4xx_hal_dac_ex.h.21.c86699169bead5415cc3e94027b67df4
+                           .group:00000000 wm4.stm32l4xx_hal_exti.h.21.242e0410874d91d6d7523948fff74125
+                           .group:00000000 wm4.stm32l4xx_hal_firewall.h.21.7ed44f4228fcc2ef96d2177dd8632645
+                           .group:00000000 wm4.stm32l4xx_hal_flash.h.20.5e337018ccfa211b4afe888a79aae9f5
+                           .group:00000000 wm4.stm32l4xx_hal_flash.h.846.0445f6ea07a3f9aac82891c8687d96fb
+                           .group:00000000 wm4.stm32l4xx_ll_usb.h.21.5b5e42fb72a33dd326d7b20064953946
+                           .group:00000000 wm4.stm32l4xx_hal_hcd.h.107.73f2fd24f57e8822da5cc86bd5ad3dfd
+                           .group:00000000 wm4.stm32l4xx_hal_i2c.h.21.e7fc2065051c77019a818818e4a637d8
+                           .group:00000000 wm4.stm32l4xx_hal_i2c_ex.h.21.ad4ad4e558d4fec06df87d163a6927d7
+ARM GAS  /tmp/ccEi5qWM.s 			page 57
+
+
+                           .group:00000000 wm4.stm32l4xx_hal_i2c.h.737.fa3908c81294cf0f9894ae336466002c
+                           .group:00000000 wm4.stm32l4xx_hal_irda.h.21.136c042f9eef333167a549cc099df0c9
+                           .group:00000000 wm4.stm32l4xx_hal_irda_ex.h.21.e0ada4e6d2b2cadfb512dd3c8ac0a637
+                           .group:00000000 wm4.stm32l4xx_hal_iwdg.h.21.f94ca75f2fe1ebc7a2a8d0f5b58d8430
+                           .group:00000000 wm4.stm32l4xx_hal_lptim.h.21.78222ea6639fc8c02789d293a048991e
+                           .group:00000000 wm4.stm32l4xx_ll_sdmmc.h.21.65a5a8696b6ca7b87cc93d218084d702
+                           .group:00000000 wm4.stm32l4xx_hal_mmc.h.69.8f4159f0a88ef1ebc33c58a8f10362b9
+                           .group:00000000 wm4.stm32l4xx_ll_fmc.h.21.156a244c55010643ee92c6119049cb68
+                           .group:00000000 wm4.stm32l4xx_hal_nand.h.176.9bfeac6e4e757991088bbd0df44e2be9
+                           .group:00000000 wm4.stm32l4xx_hal_nor.h.21.d47e91e825f466bbac02fac0a7845a7a
+                           .group:00000000 wm4.stm32l4xx_hal_opamp.h.21.9d841e1eaccee939f247b3f973f8af5f
+                           .group:00000000 wm4.stm32l4xx_hal_pcd.h.169.addb1fac652268a18a0707cfcb5e2e47
+                           .group:00000000 wm4.stm32l4xx_hal_pwr.h.21.7ddab2caa97243c36e496eca17b27618
+                           .group:00000000 wm4.stm32l4xx_hal_pwr_ex.h.21.65ad8bbdbcb1950d945c0de10f22dc80
+                           .group:00000000 wm4.stm32l4xx_hal_qspi.h.21.0291dad4eaa82101f2f77d76315c9b12
+                           .group:00000000 wm4.stm32l4xx_hal_rng.h.21.96593715bdeab0c74ac9dfc538fb2feb
+                           .group:00000000 wm4.stm32l4xx_hal_rtc.h.21.9da6b1aeebde99930891f803cb7f9678
+                           .group:00000000 wm4.stm32l4xx_hal_rtc_ex.h.21.c692539378320719c7f2a2da1ca64502
+                           .group:00000000 wm4.stm32l4xx_hal_rtc.h.999.c8bd9450c783628bd606ecb31bea5cc9
+                           .group:00000000 wm4.stm32l4xx_hal_sai.h.21.c1165aaf2bbde65fae28ed4817be5cc5
+                           .group:00000000 wm4.stm32l4xx_hal_sd.h.21.b395c90a87e82f7e8d77d4a518036063
+                           .group:00000000 wm4.stm32l4xx_hal_smartcard.h.21.423c3ad63e0df35b864303e89e6d253c
+                           .group:00000000 wm4.stm32l4xx_hal_smartcard_ex.h.21.801a2ce9252a785aec000b3fc7667a74
+                           .group:00000000 wm4.stm32l4xx_hal_smbus.h.21.7480adb16468bfdce819ee591f21299e
+                           .group:00000000 wm4.stm32l4xx_hal_smbus_ex.h.21.bdc715f5f6fb6612a871d3c03c3b871f
+                           .group:00000000 wm4.stm32l4xx_hal_spi.h.21.3b51f9f7b241962f6b3483c47a43334f
+                           .group:00000000 wm4.stm32l4xx_hal_sram.h.21.285210181e158bddc1cdde63dde572fd
+                           .group:00000000 wm4.stm32l4xx_hal_swpmi.h.21.787f994f40b117a62aad9a6dd408b8fc
+                           .group:00000000 wm4.stm32l4xx_hal_tim.h.21.d190832030e7505384ad081daa7ba8d6
+                           .group:00000000 wm4.stm32l4xx_hal_tim_ex.h.21.1d0860218366ee9f64a97fd8af0ddee1
+                           .group:00000000 wm4.stm32l4xx_hal_tsc.h.21.e9010049847ea38297d4b95a5ede0d8c
+                           .group:00000000 wm4.stm32l4xx_hal_uart.h.21.480c0a64ca01596a921cda9dceb01df4
+                           .group:00000000 wm4.stm32l4xx_hal_uart_ex.h.21.d793e64693c93af07c90464aef42bd83
+                           .group:00000000 wm4.stm32l4xx_hal_usart.h.21.561c0058e33cb8df6671dcd29d5d25f9
+                           .group:00000000 wm4.stm32l4xx_hal_usart_ex.h.21.111da650523691ebc80d64103d7b26e5
+                           .group:00000000 wm4.stm32l4xx_hal_wwdg.h.21.073aa79d58120ae4fb8590c46b210051
+                           .group:00000000 wm4.stm32l4xx_hal.h.75.d364b3778b3801d2f66bb409c48d396d
+                           .group:00000000 wm4.stm32l475e_iot01.h.80.22fc749436d27c2cc4f18c5952914e12
+
+UNDEFINED SYMBOLS
+HAL_GPIO_Init
+HAL_GPIO_WritePin
+HAL_GPIO_DeInit
+HAL_GPIO_TogglePin
+HAL_NVIC_SetPriority
+HAL_NVIC_EnableIRQ
+HAL_NVIC_DisableIRQ
+HAL_GPIO_ReadPin
+HAL_UART_Init
+HAL_UART_DeInit
+HAL_I2C_Init
+HAL_I2CEx_ConfigAnalogFilter
+HAL_I2C_DeInit
+HAL_I2C_Mem_Read
+HAL_I2C_Mem_Write
+HAL_I2C_IsDeviceReady
+HAL_Delay
+ARM GAS  /tmp/ccEi5qWM.s 			page 58
+
+
+HAL_I2C_Master_Receive
+HAL_I2C_Master_Transmit
+HAL_GetTick

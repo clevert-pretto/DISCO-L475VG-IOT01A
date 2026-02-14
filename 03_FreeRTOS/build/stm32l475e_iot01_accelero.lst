@@ -1,0 +1,573 @@
+ARM GAS  /tmp/ccqkTO7R.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 6
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"stm32l475e_iot01_accelero.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c"
+  20              		.section	.rodata.CHANNEL_OFFSET_TAB,"a"
+  21              		.align	2
+  24              	CHANNEL_OFFSET_TAB:
+  25 0000 081C3044 		.ascii	"\010\0340DXl\200"
+  25      586C80
+  26              		.section	.bss.AccelerometerDrv,"aw",%nobits
+  27              		.align	2
+  30              	AccelerometerDrv:
+  31 0000 00000000 		.space	4
+  32              		.section	.text.BSP_ACCELERO_Init,"ax",%progbits
+  33              		.align	1
+  34              		.global	BSP_ACCELERO_Init
+  35              		.syntax unified
+  36              		.thumb
+  37              		.thumb_func
+  39              	BSP_ACCELERO_Init:
+  40              	.LFB445:
+   1:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** /**
+   2:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   ******************************************************************************
+   3:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @file    stm32l475e_iot01_accelero.c
+   4:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @author  MCD Application Team
+   5:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @brief   This file provides a set of functions needed to manage the accelerometer sensor
+   6:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   ******************************************************************************
+   7:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @attention
+   8:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   *
+   9:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * Copyright (c) 2017 STMicroelectronics.
+  10:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * All rights reserved.
+  11:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   *
+  12:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  13:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * in the root directory of this software component.
+  14:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  15:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   *
+  16:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   ******************************************************************************
+  17:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   */
+  18:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** 
+  19:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** /* Includes ------------------------------------------------------------------*/
+  20:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** #include "stm32l475e_iot01_accelero.h"
+  21:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** /** @addtogroup BSP
+ARM GAS  /tmp/ccqkTO7R.s 			page 2
+
+
+  22:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @{
+  23:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   */ 
+  24:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** 
+  25:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** /** @addtogroup STM32L475E_IOT01
+  26:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @{
+  27:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   */
+  28:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** 
+  29:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** /** @defgroup STM32L475E_IOT01_ACCELERO ACCELERO
+  30:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @{
+  31:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   */
+  32:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** 
+  33:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** /** @defgroup STM32L475E_IOT01_ACCELERO_Private_Variables ACCELERO Private Variables 
+  34:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @{
+  35:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   */    
+  36:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** static ACCELERO_DrvTypeDef *AccelerometerDrv;  
+  37:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** /**
+  38:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @}
+  39:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   */
+  40:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** 
+  41:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** /** @defgroup STM32L475E_IOT01_ACCELERO_Private_Functions ACCELERO Private Functions
+  42:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @{
+  43:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   */ 
+  44:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** /**
+  45:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @brief  Initialize the ACCELERO.
+  46:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @retval ACCELERO_OK or ACCELERO_ERROR
+  47:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   */
+  48:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** ACCELERO_StatusTypeDef BSP_ACCELERO_Init(void)
+  49:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** {  
+  41              		.loc 1 49 1
+  42              		.cfi_startproc
+  43              		@ args = 0, pretend = 0, frame = 16
+  44              		@ frame_needed = 1, uses_anonymous_args = 0
+  45 0000 80B5     		push	{r7, lr}
+  46              		.cfi_def_cfa_offset 8
+  47              		.cfi_offset 7, -8
+  48              		.cfi_offset 14, -4
+  49 0002 84B0     		sub	sp, sp, #16
+  50              		.cfi_def_cfa_offset 24
+  51 0004 00AF     		add	r7, sp, #0
+  52              		.cfi_def_cfa_register 7
+  50:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   ACCELERO_StatusTypeDef ret = ACCELERO_OK;
+  53              		.loc 1 50 26
+  54 0006 0023     		movs	r3, #0
+  55 0008 FB73     		strb	r3, [r7, #15]
+  51:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   uint16_t ctrl = 0x0000;
+  56              		.loc 1 51 12
+  57 000a 0023     		movs	r3, #0
+  58 000c BB81     		strh	r3, [r7, #12]	@ movhi
+  52:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   ACCELERO_InitTypeDef LSM6DSL_InitStructure;
+  53:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** 
+  54:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   if(Lsm6dslAccDrv.ReadID() != LSM6DSL_ACC_GYRO_WHO_AM_I)
+  59              		.loc 1 54 19
+  60 000e 1A4B     		ldr	r3, .L5
+  61 0010 9B68     		ldr	r3, [r3, #8]
+  62              		.loc 1 54 6
+  63 0012 9847     		blx	r3
+  64              	.LVL0:
+ARM GAS  /tmp/ccqkTO7R.s 			page 3
+
+
+  65 0014 0346     		mov	r3, r0
+  66              		.loc 1 54 5 discriminator 1
+  67 0016 6A2B     		cmp	r3, #106
+  68 0018 02D0     		beq	.L2
+  55:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   {
+  56:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     ret = ACCELERO_ERROR;
+  69              		.loc 1 56 9
+  70 001a 0123     		movs	r3, #1
+  71 001c FB73     		strb	r3, [r7, #15]
+  72 001e 25E0     		b	.L3
+  73              	.L2:
+  57:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   }
+  58:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   else
+  59:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   {
+  60:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     /* Initialize the ACCELERO accelerometer driver structure */
+  61:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     AccelerometerDrv = &Lsm6dslAccDrv;
+  74              		.loc 1 61 22
+  75 0020 164B     		ldr	r3, .L5+4
+  76 0022 154A     		ldr	r2, .L5
+  77 0024 1A60     		str	r2, [r3]
+  62:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   
+  63:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     /* MEMS configuration ------------------------------------------------------*/
+  64:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     /* Fill the ACCELERO accelerometer structure */
+  65:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     LSM6DSL_InitStructure.AccOutput_DataRate = LSM6DSL_ODR_52Hz;
+  78              		.loc 1 65 46
+  79 0026 3023     		movs	r3, #48
+  80 0028 7B71     		strb	r3, [r7, #5]
+  66:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     LSM6DSL_InitStructure.Axes_Enable = 0;
+  81              		.loc 1 66 39
+  82 002a 0023     		movs	r3, #0
+  83 002c BB71     		strb	r3, [r7, #6]
+  67:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     LSM6DSL_InitStructure.AccFull_Scale = LSM6DSL_ACC_FULLSCALE_2G;
+  84              		.loc 1 67 41
+  85 002e 0023     		movs	r3, #0
+  86 0030 BB72     		strb	r3, [r7, #10]
+  68:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     LSM6DSL_InitStructure.BlockData_Update = LSM6DSL_BDU_BLOCK_UPDATE;
+  87              		.loc 1 68 44
+  88 0032 4023     		movs	r3, #64
+  89 0034 3B72     		strb	r3, [r7, #8]
+  69:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     LSM6DSL_InitStructure.High_Resolution = 0;
+  90              		.loc 1 69 43
+  91 0036 0023     		movs	r3, #0
+  92 0038 FB71     		strb	r3, [r7, #7]
+  70:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     LSM6DSL_InitStructure.Communication_Mode = 0;
+  93              		.loc 1 70 46
+  94 003a 0023     		movs	r3, #0
+  95 003c FB72     		strb	r3, [r7, #11]
+  71:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****         
+  72:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     /* Configure MEMS: data rate, full scale  */
+  73:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     ctrl =  (LSM6DSL_InitStructure.AccOutput_DataRate | LSM6DSL_InitStructure.AccFull_Scale);
+  96              		.loc 1 73 35
+  97 003e 7A79     		ldrb	r2, [r7, #5]	@ zero_extendqisi2
+  98              		.loc 1 73 78
+  99 0040 BB7A     		ldrb	r3, [r7, #10]	@ zero_extendqisi2
+ 100              		.loc 1 73 10
+ 101 0042 1343     		orrs	r3, r3, r2
+ 102 0044 DBB2     		uxtb	r3, r3
+ARM GAS  /tmp/ccqkTO7R.s 			page 4
+
+
+ 103 0046 BB81     		strh	r3, [r7, #12]	@ movhi
+  74:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     
+  75:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     /* Configure MEMS: BDU and Auto-increment for multi read/write */
+  76:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     ctrl |= ((LSM6DSL_InitStructure.BlockData_Update | LSM6DSL_ACC_GYRO_IF_INC_ENABLED) << 8);
+ 104              		.loc 1 76 36
+ 105 0048 3B7A     		ldrb	r3, [r7, #8]	@ zero_extendqisi2
+ 106              		.loc 1 76 10
+ 107 004a 43F00403 		orr	r3, r3, #4
+ 108 004e DBB2     		uxtb	r3, r3
+ 109 0050 1BB2     		sxth	r3, r3
+ 110 0052 1B02     		lsls	r3, r3, #8
+ 111 0054 1AB2     		sxth	r2, r3
+ 112 0056 B7F90C30 		ldrsh	r3, [r7, #12]
+ 113 005a 1343     		orrs	r3, r3, r2
+ 114 005c 1BB2     		sxth	r3, r3
+ 115 005e BB81     		strh	r3, [r7, #12]	@ movhi
+  77:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** 
+  78:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     /* Configure the ACCELERO accelerometer main parameters */
+  79:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     AccelerometerDrv->Init(ctrl);
+ 116              		.loc 1 79 21
+ 117 0060 064B     		ldr	r3, .L5+4
+ 118 0062 1B68     		ldr	r3, [r3]
+ 119 0064 1B68     		ldr	r3, [r3]
+ 120              		.loc 1 79 5
+ 121 0066 BA89     		ldrh	r2, [r7, #12]
+ 122 0068 1046     		mov	r0, r2
+ 123 006a 9847     		blx	r3
+ 124              	.LVL1:
+ 125              	.L3:
+  80:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   }  
+  81:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** 
+  82:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   return ret;
+ 126              		.loc 1 82 10
+ 127 006c FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+  83:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** }
+ 128              		.loc 1 83 1
+ 129 006e 1846     		mov	r0, r3
+ 130 0070 1037     		adds	r7, r7, #16
+ 131              		.cfi_def_cfa_offset 8
+ 132 0072 BD46     		mov	sp, r7
+ 133              		.cfi_def_cfa_register 13
+ 134              		@ sp needed
+ 135 0074 80BD     		pop	{r7, pc}
+ 136              	.L6:
+ 137 0076 00BF     		.align	2
+ 138              	.L5:
+ 139 0078 00000000 		.word	Lsm6dslAccDrv
+ 140 007c 00000000 		.word	AccelerometerDrv
+ 141              		.cfi_endproc
+ 142              	.LFE445:
+ 144              		.section	.text.BSP_ACCELERO_DeInit,"ax",%progbits
+ 145              		.align	1
+ 146              		.global	BSP_ACCELERO_DeInit
+ 147              		.syntax unified
+ 148              		.thumb
+ 149              		.thumb_func
+ 151              	BSP_ACCELERO_DeInit:
+ARM GAS  /tmp/ccqkTO7R.s 			page 5
+
+
+ 152              	.LFB446:
+  84:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** 
+  85:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** /**
+  86:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @brief  DeInitialize the ACCELERO.
+  87:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @retval None.
+  88:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   */
+  89:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** void BSP_ACCELERO_DeInit(void)
+  90:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** {
+ 153              		.loc 1 90 1
+ 154              		.cfi_startproc
+ 155              		@ args = 0, pretend = 0, frame = 0
+ 156              		@ frame_needed = 1, uses_anonymous_args = 0
+ 157 0000 80B5     		push	{r7, lr}
+ 158              		.cfi_def_cfa_offset 8
+ 159              		.cfi_offset 7, -8
+ 160              		.cfi_offset 14, -4
+ 161 0002 00AF     		add	r7, sp, #0
+ 162              		.cfi_def_cfa_register 7
+  91:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   /* DeInitialize the accelerometer IO interfaces */
+  92:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   if(AccelerometerDrv != NULL)
+ 163              		.loc 1 92 23
+ 164 0004 074B     		ldr	r3, .L10
+ 165 0006 1B68     		ldr	r3, [r3]
+ 166              		.loc 1 92 5
+ 167 0008 002B     		cmp	r3, #0
+ 168 000a 08D0     		beq	.L9
+  93:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   {
+  94:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     if(AccelerometerDrv->DeInit != NULL)
+ 169              		.loc 1 94 24
+ 170 000c 054B     		ldr	r3, .L10
+ 171 000e 1B68     		ldr	r3, [r3]
+ 172 0010 5B68     		ldr	r3, [r3, #4]
+ 173              		.loc 1 94 7
+ 174 0012 002B     		cmp	r3, #0
+ 175 0014 03D0     		beq	.L9
+  95:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     {
+  96:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****       AccelerometerDrv->DeInit();
+ 176              		.loc 1 96 23
+ 177 0016 034B     		ldr	r3, .L10
+ 178 0018 1B68     		ldr	r3, [r3]
+ 179 001a 5B68     		ldr	r3, [r3, #4]
+ 180              		.loc 1 96 7
+ 181 001c 9847     		blx	r3
+ 182              	.LVL2:
+ 183              	.L9:
+  97:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     }
+  98:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   }
+  99:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** }
+ 184              		.loc 1 99 1
+ 185 001e 00BF     		nop
+ 186 0020 80BD     		pop	{r7, pc}
+ 187              	.L11:
+ 188 0022 00BF     		.align	2
+ 189              	.L10:
+ 190 0024 00000000 		.word	AccelerometerDrv
+ 191              		.cfi_endproc
+ 192              	.LFE446:
+ARM GAS  /tmp/ccqkTO7R.s 			page 6
+
+
+ 194              		.section	.text.BSP_ACCELERO_LowPower,"ax",%progbits
+ 195              		.align	1
+ 196              		.global	BSP_ACCELERO_LowPower
+ 197              		.syntax unified
+ 198              		.thumb
+ 199              		.thumb_func
+ 201              	BSP_ACCELERO_LowPower:
+ 202              	.LFB447:
+ 100:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** 
+ 101:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** /**
+ 102:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @brief  Set/Unset the ACCELERO in low power mode.
+ 103:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @param  status 0 means disable Low Power Mode, otherwise Low Power Mode is enabled
+ 104:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @retval None
+ 105:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   */
+ 106:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** void BSP_ACCELERO_LowPower(uint16_t status)
+ 107:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** {
+ 203              		.loc 1 107 1
+ 204              		.cfi_startproc
+ 205              		@ args = 0, pretend = 0, frame = 8
+ 206              		@ frame_needed = 1, uses_anonymous_args = 0
+ 207 0000 80B5     		push	{r7, lr}
+ 208              		.cfi_def_cfa_offset 8
+ 209              		.cfi_offset 7, -8
+ 210              		.cfi_offset 14, -4
+ 211 0002 82B0     		sub	sp, sp, #8
+ 212              		.cfi_def_cfa_offset 16
+ 213 0004 00AF     		add	r7, sp, #0
+ 214              		.cfi_def_cfa_register 7
+ 215 0006 0346     		mov	r3, r0
+ 216 0008 FB80     		strh	r3, [r7, #6]	@ movhi
+ 108:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   /* Set/Unset the ACCELERO in low power mode */
+ 109:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   if(AccelerometerDrv != NULL)
+ 217              		.loc 1 109 23
+ 218 000a 094B     		ldr	r3, .L15
+ 219 000c 1B68     		ldr	r3, [r3]
+ 220              		.loc 1 109 5
+ 221 000e 002B     		cmp	r3, #0
+ 222 0010 0AD0     		beq	.L14
+ 110:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   {
+ 111:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     if(AccelerometerDrv->LowPower != NULL)
+ 223              		.loc 1 111 24
+ 224 0012 074B     		ldr	r3, .L15
+ 225 0014 1B68     		ldr	r3, [r3]
+ 226 0016 1B69     		ldr	r3, [r3, #16]
+ 227              		.loc 1 111 7
+ 228 0018 002B     		cmp	r3, #0
+ 229 001a 05D0     		beq	.L14
+ 112:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     {
+ 113:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****       AccelerometerDrv->LowPower(status);
+ 230              		.loc 1 113 23
+ 231 001c 044B     		ldr	r3, .L15
+ 232 001e 1B68     		ldr	r3, [r3]
+ 233 0020 1B69     		ldr	r3, [r3, #16]
+ 234              		.loc 1 113 7
+ 235 0022 FA88     		ldrh	r2, [r7, #6]
+ 236 0024 1046     		mov	r0, r2
+ 237 0026 9847     		blx	r3
+ARM GAS  /tmp/ccqkTO7R.s 			page 7
+
+
+ 238              	.LVL3:
+ 239              	.L14:
+ 114:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     }
+ 115:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   }
+ 116:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** }
+ 240              		.loc 1 116 1
+ 241 0028 00BF     		nop
+ 242 002a 0837     		adds	r7, r7, #8
+ 243              		.cfi_def_cfa_offset 8
+ 244 002c BD46     		mov	sp, r7
+ 245              		.cfi_def_cfa_register 13
+ 246              		@ sp needed
+ 247 002e 80BD     		pop	{r7, pc}
+ 248              	.L16:
+ 249              		.align	2
+ 250              	.L15:
+ 251 0030 00000000 		.word	AccelerometerDrv
+ 252              		.cfi_endproc
+ 253              	.LFE447:
+ 255              		.section	.text.BSP_ACCELERO_AccGetXYZ,"ax",%progbits
+ 256              		.align	1
+ 257              		.global	BSP_ACCELERO_AccGetXYZ
+ 258              		.syntax unified
+ 259              		.thumb
+ 260              		.thumb_func
+ 262              	BSP_ACCELERO_AccGetXYZ:
+ 263              	.LFB448:
+ 117:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** 
+ 118:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** /**
+ 119:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @brief  Get XYZ acceleration values.
+ 120:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @param  pDataXYZ Pointer on 3 angular accelerations table with  
+ 121:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   *                  pDataXYZ[0] = X axis, pDataXYZ[1] = Y axis, pDataXYZ[2] = Z axis
+ 122:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   * @retval None
+ 123:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   */
+ 124:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** void BSP_ACCELERO_AccGetXYZ(int16_t *pDataXYZ)
+ 125:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** {
+ 264              		.loc 1 125 1
+ 265              		.cfi_startproc
+ 266              		@ args = 0, pretend = 0, frame = 8
+ 267              		@ frame_needed = 1, uses_anonymous_args = 0
+ 268 0000 80B5     		push	{r7, lr}
+ 269              		.cfi_def_cfa_offset 8
+ 270              		.cfi_offset 7, -8
+ 271              		.cfi_offset 14, -4
+ 272 0002 82B0     		sub	sp, sp, #8
+ 273              		.cfi_def_cfa_offset 16
+ 274 0004 00AF     		add	r7, sp, #0
+ 275              		.cfi_def_cfa_register 7
+ 276 0006 7860     		str	r0, [r7, #4]
+ 126:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   if(AccelerometerDrv != NULL)
+ 277              		.loc 1 126 23
+ 278 0008 084B     		ldr	r3, .L20
+ 279 000a 1B68     		ldr	r3, [r3]
+ 280              		.loc 1 126 5
+ 281 000c 002B     		cmp	r3, #0
+ 282 000e 09D0     		beq	.L19
+ 127:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   {
+ARM GAS  /tmp/ccqkTO7R.s 			page 8
+
+
+ 128:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     if(AccelerometerDrv->GetXYZ != NULL)
+ 283              		.loc 1 128 24
+ 284 0010 064B     		ldr	r3, .L20
+ 285 0012 1B68     		ldr	r3, [r3]
+ 286 0014 1B6B     		ldr	r3, [r3, #48]
+ 287              		.loc 1 128 7
+ 288 0016 002B     		cmp	r3, #0
+ 289 0018 04D0     		beq	.L19
+ 129:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     {   
+ 130:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****       AccelerometerDrv->GetXYZ(pDataXYZ);
+ 290              		.loc 1 130 23
+ 291 001a 044B     		ldr	r3, .L20
+ 292 001c 1B68     		ldr	r3, [r3]
+ 293 001e 1B6B     		ldr	r3, [r3, #48]
+ 294              		.loc 1 130 7
+ 295 0020 7868     		ldr	r0, [r7, #4]
+ 296 0022 9847     		blx	r3
+ 297              	.LVL4:
+ 298              	.L19:
+ 131:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****     }
+ 132:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c ****   }
+ 133:Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.c **** }
+ 299              		.loc 1 133 1
+ 300 0024 00BF     		nop
+ 301 0026 0837     		adds	r7, r7, #8
+ 302              		.cfi_def_cfa_offset 8
+ 303 0028 BD46     		mov	sp, r7
+ 304              		.cfi_def_cfa_register 13
+ 305              		@ sp needed
+ 306 002a 80BD     		pop	{r7, pc}
+ 307              	.L21:
+ 308              		.align	2
+ 309              	.L20:
+ 310 002c 00000000 		.word	AccelerometerDrv
+ 311              		.cfi_endproc
+ 312              	.LFE448:
+ 314              		.text
+ 315              	.Letext0:
+ 316              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 317              		.file 3 "Drivers/BSP/B-L475E-IOT01/../Components/lsm6dsl/../Common/accelero.h"
+ 318              		.file 4 "Drivers/BSP/B-L475E-IOT01/stm32l475e_iot01_accelero.h"
+ 319              		.file 5 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_ll_dma.h"
+ 320              		.file 6 "Drivers/BSP/B-L475E-IOT01/../Components/lsm6dsl/lsm6dsl.h"
+ARM GAS  /tmp/ccqkTO7R.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32l475e_iot01_accelero.c
+     /tmp/ccqkTO7R.s:21     .rodata.CHANNEL_OFFSET_TAB:00000000 $d
+     /tmp/ccqkTO7R.s:24     .rodata.CHANNEL_OFFSET_TAB:00000000 CHANNEL_OFFSET_TAB
+     /tmp/ccqkTO7R.s:27     .bss.AccelerometerDrv:00000000 $d
+     /tmp/ccqkTO7R.s:30     .bss.AccelerometerDrv:00000000 AccelerometerDrv
+     /tmp/ccqkTO7R.s:33     .text.BSP_ACCELERO_Init:00000000 $t
+     /tmp/ccqkTO7R.s:39     .text.BSP_ACCELERO_Init:00000000 BSP_ACCELERO_Init
+     /tmp/ccqkTO7R.s:139    .text.BSP_ACCELERO_Init:00000078 $d
+     /tmp/ccqkTO7R.s:145    .text.BSP_ACCELERO_DeInit:00000000 $t
+     /tmp/ccqkTO7R.s:151    .text.BSP_ACCELERO_DeInit:00000000 BSP_ACCELERO_DeInit
+     /tmp/ccqkTO7R.s:190    .text.BSP_ACCELERO_DeInit:00000024 $d
+     /tmp/ccqkTO7R.s:195    .text.BSP_ACCELERO_LowPower:00000000 $t
+     /tmp/ccqkTO7R.s:201    .text.BSP_ACCELERO_LowPower:00000000 BSP_ACCELERO_LowPower
+     /tmp/ccqkTO7R.s:251    .text.BSP_ACCELERO_LowPower:00000030 $d
+     /tmp/ccqkTO7R.s:256    .text.BSP_ACCELERO_AccGetXYZ:00000000 $t
+     /tmp/ccqkTO7R.s:262    .text.BSP_ACCELERO_AccGetXYZ:00000000 BSP_ACCELERO_AccGetXYZ
+     /tmp/ccqkTO7R.s:310    .text.BSP_ACCELERO_AccGetXYZ:0000002c $d
+                           .group:00000000 wm4.0.e7b64c2c371cf922f2c8028878d5c18e
+                           .group:00000000 wm4.stm32l4xx_hal_conf.h.23.286c2f63aaa73ed97ffb4d26f7caa6e9
+                           .group:00000000 wm4.stm32l4xx.h.38.9f5830373ca31b8a3cd182fdc6c7b69a
+                           .group:00000000 wm4.stm32l475xx.h.34.2f1a75aed66751e299f09004aef64973
+                           .group:00000000 wm4.stdint.h.29.6d480f4ba0f60596e88234283d42444f
+                           .group:00000000 wm4.cmsis_version.h.32.46e8eccfa2cfeaae11d008bb2823a3ed
+                           .group:00000000 wm4.core_cm4.h.66.e4ff136c4a17abc46741866f64f8e729
+                           .group:00000000 wm4.cmsis_gcc.h.26.78077cef1206e937f7b56043ffca496a
+                           .group:00000000 wm4.core_cm4.h.174.fcddd62df80231752fa39eb9b61dadfe
+                           .group:00000000 wm4.mpu_armv7.h.32.4049752bb5792d4e15357775e9506cfc
+                           .group:00000000 wm4.stm32l475xx.h.423.4d783859c9ac66890c9807dd7bd3a4db
+                           .group:00000000 wm4.stm32l4xx.h.196.f5ae8047c57b6175c94f246ef967a286
+                           .group:00000000 wm4.stm32_hal_legacy.h.22.08b8350ccf512ba8d98002fb33e7cbe5
+                           .group:00000000 wm4.stddef.h.39.0dc9006b34572d4d9cae4c8b422c4971
+                           .group:00000000 wm4.stm32l4xx_hal_def.h.58.1058a33f7217e935f2a6b51956d66a69
+                           .group:00000000 wm4.stm32l4xx_hal_rcc.h.156.ab8eecc4e10f4827a2aa75d3549a356d
+                           .group:00000000 wm4.stm32l4xx_hal_rcc_ex.h.20.4a82a27d561b6d42fa16a54f82e29067
+                           .group:00000000 wm4.stm32l4xx_hal_gpio.h.21.2d2b1fd6aa6afa7b6dcc89cf752a9a25
+                           .group:00000000 wm4.stm32l4xx_hal_gpio_ex.h.21.7ea705f5185dd3c6b8ea336f2858cd46
+                           .group:00000000 wm4.stm32l4xx_ll_dma.h.21.b30e7f48d60d1fc53041ec1e3fd6e54a
+                           .group:00000000 wm4.stm32l4xx_hal_dma.h.166.54a7f8d65cee6f051d541dc010387b5a
+                           .group:00000000 wm4.stm32l4xx_hal_dfsdm.h.21.6785e38d00075079c7f2e5657def82ae
+                           .group:00000000 wm4.stm32l4xx_hal_cortex.h.21.cb491126bd2d6f44e90b66f27acb8434
+                           .group:00000000 wm4.stm32l4xx_ll_adc.h.21.0c578f71501c74365c67044efed214d6
+                           .group:00000000 wm4.stm32l4xx_hal_adc.h.411.68f60682cdb20556089756a482f23764
+                           .group:00000000 wm4.stm32l4xx_hal_adc_ex.h.21.7b82cb80166a21dfa8cb3e2fa8f8e654
+                           .group:00000000 wm4.stm32l4xx_hal_can.h.21.5019586d8e7137c0cec16eb1f9d6677b
+                           .group:00000000 wm4.stm32l4xx_ll_exti.h.21.d866eff070d6f999af2ce4ea60aa40ac
+                           .group:00000000 wm4.stm32l4xx_hal_comp.h.87.7f14cb673a463359c83faa552328844d
+                           .group:00000000 wm4.stm32l4xx_hal_crc.h.21.4c36a140cca35e6a8e478e76c6ad98e3
+                           .group:00000000 wm4.stm32l4xx_hal_crc_ex.h.21.9cc3dead436542d416ee5572c231a242
+                           .group:00000000 wm4.stm32l4xx_hal_dac.h.21.69feba704135531cf3d9b92de27b71d5
+                           .group:00000000 wm4.stm32l4xx_hal_dac_ex.h.21.c86699169bead5415cc3e94027b67df4
+                           .group:00000000 wm4.stm32l4xx_hal_exti.h.21.242e0410874d91d6d7523948fff74125
+                           .group:00000000 wm4.stm32l4xx_hal_firewall.h.21.7ed44f4228fcc2ef96d2177dd8632645
+                           .group:00000000 wm4.stm32l4xx_hal_flash.h.20.5e337018ccfa211b4afe888a79aae9f5
+                           .group:00000000 wm4.stm32l4xx_hal_flash.h.846.0445f6ea07a3f9aac82891c8687d96fb
+                           .group:00000000 wm4.stm32l4xx_ll_usb.h.21.5b5e42fb72a33dd326d7b20064953946
+                           .group:00000000 wm4.stm32l4xx_hal_hcd.h.107.73f2fd24f57e8822da5cc86bd5ad3dfd
+ARM GAS  /tmp/ccqkTO7R.s 			page 10
+
+
+                           .group:00000000 wm4.stm32l4xx_hal_i2c.h.21.e7fc2065051c77019a818818e4a637d8
+                           .group:00000000 wm4.stm32l4xx_hal_i2c_ex.h.21.ad4ad4e558d4fec06df87d163a6927d7
+                           .group:00000000 wm4.stm32l4xx_hal_i2c.h.737.fa3908c81294cf0f9894ae336466002c
+                           .group:00000000 wm4.stm32l4xx_hal_irda.h.21.136c042f9eef333167a549cc099df0c9
+                           .group:00000000 wm4.stm32l4xx_hal_irda_ex.h.21.e0ada4e6d2b2cadfb512dd3c8ac0a637
+                           .group:00000000 wm4.stm32l4xx_hal_iwdg.h.21.f94ca75f2fe1ebc7a2a8d0f5b58d8430
+                           .group:00000000 wm4.stm32l4xx_hal_lptim.h.21.78222ea6639fc8c02789d293a048991e
+                           .group:00000000 wm4.stm32l4xx_ll_sdmmc.h.21.65a5a8696b6ca7b87cc93d218084d702
+                           .group:00000000 wm4.stm32l4xx_hal_mmc.h.69.8f4159f0a88ef1ebc33c58a8f10362b9
+                           .group:00000000 wm4.stm32l4xx_ll_fmc.h.21.156a244c55010643ee92c6119049cb68
+                           .group:00000000 wm4.stm32l4xx_hal_nand.h.176.9bfeac6e4e757991088bbd0df44e2be9
+                           .group:00000000 wm4.stm32l4xx_hal_nor.h.21.d47e91e825f466bbac02fac0a7845a7a
+                           .group:00000000 wm4.stm32l4xx_hal_opamp.h.21.9d841e1eaccee939f247b3f973f8af5f
+                           .group:00000000 wm4.stm32l4xx_hal_pcd.h.169.addb1fac652268a18a0707cfcb5e2e47
+                           .group:00000000 wm4.stm32l4xx_hal_pwr.h.21.7ddab2caa97243c36e496eca17b27618
+                           .group:00000000 wm4.stm32l4xx_hal_pwr_ex.h.21.65ad8bbdbcb1950d945c0de10f22dc80
+                           .group:00000000 wm4.stm32l4xx_hal_qspi.h.21.0291dad4eaa82101f2f77d76315c9b12
+                           .group:00000000 wm4.stm32l4xx_hal_rng.h.21.96593715bdeab0c74ac9dfc538fb2feb
+                           .group:00000000 wm4.stm32l4xx_hal_rtc.h.21.9da6b1aeebde99930891f803cb7f9678
+                           .group:00000000 wm4.stm32l4xx_hal_rtc_ex.h.21.c692539378320719c7f2a2da1ca64502
+                           .group:00000000 wm4.stm32l4xx_hal_rtc.h.999.c8bd9450c783628bd606ecb31bea5cc9
+                           .group:00000000 wm4.stm32l4xx_hal_sai.h.21.c1165aaf2bbde65fae28ed4817be5cc5
+                           .group:00000000 wm4.stm32l4xx_hal_sd.h.21.b395c90a87e82f7e8d77d4a518036063
+                           .group:00000000 wm4.stm32l4xx_hal_smartcard.h.21.423c3ad63e0df35b864303e89e6d253c
+                           .group:00000000 wm4.stm32l4xx_hal_smartcard_ex.h.21.801a2ce9252a785aec000b3fc7667a74
+                           .group:00000000 wm4.stm32l4xx_hal_smbus.h.21.7480adb16468bfdce819ee591f21299e
+                           .group:00000000 wm4.stm32l4xx_hal_smbus_ex.h.21.bdc715f5f6fb6612a871d3c03c3b871f
+                           .group:00000000 wm4.stm32l4xx_hal_spi.h.21.3b51f9f7b241962f6b3483c47a43334f
+                           .group:00000000 wm4.stm32l4xx_hal_sram.h.21.285210181e158bddc1cdde63dde572fd
+                           .group:00000000 wm4.stm32l4xx_hal_swpmi.h.21.787f994f40b117a62aad9a6dd408b8fc
+                           .group:00000000 wm4.stm32l4xx_hal_tim.h.21.d190832030e7505384ad081daa7ba8d6
+                           .group:00000000 wm4.stm32l4xx_hal_tim_ex.h.21.1d0860218366ee9f64a97fd8af0ddee1
+                           .group:00000000 wm4.stm32l4xx_hal_tsc.h.21.e9010049847ea38297d4b95a5ede0d8c
+                           .group:00000000 wm4.stm32l4xx_hal_uart.h.21.480c0a64ca01596a921cda9dceb01df4
+                           .group:00000000 wm4.stm32l4xx_hal_uart_ex.h.21.d793e64693c93af07c90464aef42bd83
+                           .group:00000000 wm4.stm32l4xx_hal_usart.h.21.561c0058e33cb8df6671dcd29d5d25f9
+                           .group:00000000 wm4.stm32l4xx_hal_usart_ex.h.21.111da650523691ebc80d64103d7b26e5
+                           .group:00000000 wm4.stm32l4xx_hal_wwdg.h.21.073aa79d58120ae4fb8590c46b210051
+                           .group:00000000 wm4.stm32l4xx_hal.h.75.d364b3778b3801d2f66bb409c48d396d
+                           .group:00000000 wm4.stm32l475e_iot01.h.80.22fc749436d27c2cc4f18c5952914e12
+                           .group:00000000 wm4.lsm6dsl.h.49.ace64be6fe04a5d4be136d73d5dffbb6
+
+UNDEFINED SYMBOLS
+Lsm6dslAccDrv
