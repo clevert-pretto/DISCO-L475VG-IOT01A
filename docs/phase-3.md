@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Phase 3: Building a FreeRTOS application on STM32L475 from Scratch"
-nav_order: 5
+nav_order: 4
 has_children: true
 ---
 

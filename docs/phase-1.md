@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Phase 1. Bare-Metal architecture"
-nav_order: 3
+nav_order: 2
 has_children: true
 ---
 # Phase 1. Bare-Metal architecture

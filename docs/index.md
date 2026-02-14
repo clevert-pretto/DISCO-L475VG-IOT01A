@@ -44,10 +44,16 @@ These components form the foundation of every project in this repository.
 - [**02. Preemptive Priority-Based Scheduler**](./02_Scheduler/module-2-PB-scheduler.md) - Priority preemption, state based scheduling, non-blocking delays, Idle task, High priority ready algorithm
 
 ---
+### "Phase 3: Building a FreeRTOS application on STM32L475 from Scratch"
+- [**01.Guide to prepare project setup**](./03_FreeRTOS/00-guide.md) - FreeRTOS Kernel, STM32L4 ST library, prepare build system, run blinky.
+
+---
 ## 🛠 Tech Stack
 - **Hardware:** Discovery kit IoT node (B-L475E-IOT01A)
 - **Compiler:** `arm-none-eabi-gcc` (Optimization: `-O0` for debug clarity)
 - **Debugger:** OpenOCD via ST-Link V2-1
+- **Operating environment** Ubuntu on WSL
+- **IDE** Microsoft Visual Studio Code
 
 ---
 ## Lesson learned

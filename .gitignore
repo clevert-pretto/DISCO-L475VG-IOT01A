@@ -4,6 +4,7 @@ cat <<EOF > .gitignore
 *.elf
 *.bin
 *.map
+*.lst
 
 # IDE files
 .history/

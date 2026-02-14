@@ -7,7 +7,7 @@
             "request": "launch",
             "servertype": "openocd",
             "cwd": "${workspaceFolder}/03_FreeRTOS",
-            "executable": "${workspaceFolder}/03_FreeRTOS/MyBlinky.elf",
+            "executable": "${workspaceFolder}/03_FreeRTOS/build/freeRTOSApp.elf",
             "device": "STM32L475",
             "interface": "swd",
             "runToEntryPoint": "main",

@@ -2,7 +2,7 @@
 layout: default
 title: "Setting up environment for Building a FreeRTOS application on STM32L475 from Scratch"
 nav_order: 1
-parent : "Phase 3: Phase 3: Building a FreeRTOS application on STM32L475 from Scratch"
+parent : "Phase 3: Building a FreeRTOS application on STM32L475 from Scratch"
 ---
 
 # Setting up environment to build application with freeRTOS on B-L475E-IOT01A Discovery Kit

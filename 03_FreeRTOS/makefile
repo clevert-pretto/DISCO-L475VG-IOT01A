@@ -3,10 +3,12 @@
 ################################################################################
 
 # 1. Project Name
-TARGET = blinky
+TARGET = freeRTOSApp
 
 # 2. Directories
 BUILD_DIR = build
+OBJ_DIR = $(BUILD_DIR)/obj
+LST_DIR = $(BUILD_DIR)/lst
 
 # 3. Toolchain
 CC = arm-none-eabi-gcc
@@ -55,19 +57,25 @@ LIBS = -lc -lm -lnosys
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--gc-sections
 
 # 7. Build Logic
-OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
-vpath %.c $(sort $(dir $(C_SOURCES)))
+C_OBJS = $(addprefix $(OBJ_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
+ASM_OBJS = $(addprefix $(OBJ_DIR)/,$(notdir $(ASM_SOURCES:.s=.o)))
+OBJECTS = $(C_OBJS) $(ASM_OBJS)
 
-OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.s=.o)))
+vpath %.c $(sort $(dir $(C_SOURCES)))
 vpath %.s $(sort $(dir $(ASM_SOURCES)))
 
-all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).bin
+# 8. Hardware Specifications for STM32L475VGT6
+FLASH_SIZE = 1048576 # 0x100000 
+RAM_SIZE = 98304	 # 0x18000
 
-$(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
+# Build Rules
+all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).bin print_usage
+
+$(OBJ_DIR)/%.o: %.c | $(BUILD_DIR) $(OBJ_DIR) $(LST_DIR)
 	@echo "Compiling $<..."
-	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
+	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(LST_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 
-$(BUILD_DIR)/%.o: %.s | $(BUILD_DIR)
+$(OBJ_DIR)/%.o: %.s | $(OBJ_DIR)
 	@echo "Assembling $<..."
 	$(CC) -c $(CFLAGS) $< -o $@
 
@@ -76,13 +84,27 @@ $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 	$(SZ) $@
 
-$(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
+$(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf
 	$(OBJCOPY) -O binary -S $< $@
 
-$(BUILD_DIR):
-	mkdir $@
+$(BUILD_DIR) $(OBJ_DIR) $(LST_DIR)::
+	mkdir -p $@
+
+print_usage: $(BUILD_DIR)/$(TARGET).elf
+	@echo ""
+	@echo "--------------------- MEMORY USAGE REPORT ---------------------"
+	@$(SZ) $<
+	@echo ""
+	@$(SZ) $< | python3 -c "import sys; \
+		text, data, bss = map(int, sys.stdin.read().split()[7:10]); \
+		flash_used = text + data; \
+		ram_used = data + bss; \
+		print(f'Flash: {flash_used} / $(FLASH_SIZE) bytes ({flash_used/$(FLASH_SIZE)*100:.2f}%)'); \
+		print(f'RAM:   {ram_used} / $(RAM_SIZE) bytes ({ram_used/$(RAM_SIZE)*100:.2f}%)');" \
+	@echo "---------------------------------------------------------------"
 
 clean:
+	@echo "Cleaning build directory..."
 	rm -rf $(BUILD_DIR)
 
 .PHONY: all clean
