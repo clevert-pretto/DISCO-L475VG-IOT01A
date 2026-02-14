@@ -9,3 +9,6 @@ cat <<EOF > .gitignore
 # IDE files
 .history/
 EOF
+
+#WSL specific files (don't know other way yet)
+*.Identifier

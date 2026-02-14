@@ -4,7 +4,7 @@
         {
             "label": "Manual Build",
             "type": "shell",
-            /* Just run make clean and make. It will use the MODULE defined in the Makefile */
+            /* Just make. It will use the MODULE defined in the Makefile */
             "command": "make",
             "options": {
                 "cwd": "${workspaceFolder}/03_FreeRTOS"
