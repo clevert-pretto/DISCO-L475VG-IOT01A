@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Phase 2: Lesson learned"
+title: "Lesson learned"
 parent: "Phase 2: Building custom Schedulers"
 nav_order: 99
 has_children: false
