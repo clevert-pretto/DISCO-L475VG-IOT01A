@@ -8,22 +8,12 @@ permalink: /
 # STM32L475 Platform Architecture
 
 ## 📂 Knowledge Base Roadmap
-1. **Phase 1: Bare-Metal SDK**
+1. [**Phase 1: Bare-Metal SDK**](./phase-1.md)
    - From Silicon Handshake to Interrupt-Driven Bluetooth.
-2. **Phase 2: Building custom Schedulers**
+2. [**Phase 2: Building custom Schedulers**](./phase-2.md)
    - Context Switching, Priority Inversion, and SMP concepts.
-3. **Shared SDK Architecture**
-   - The reusable `shared/` layer: Startup, Linker, and Build System.
----
-
-## 🏛 Core SDK Architecture (The `shared/` Layer)
-These components form the foundation of every project in this repository. 
-
-* **[Shared Startup Logic](./shared/shared-startup)**: Handles the Vector Table, Reset Handler, and Weak Interrupt Aliasing.
-* **[Linker Specification](./shared/shared-linker)**: Defines the LMA/VMA memory regions for Flash and RAM.
-* **[Memory Map](./shared/shared-map)**: Hardware abstraction of the STM32L475 MMIO registers.
-* **[Modular Build System](./shared/shared-build)**: The `base.mk` framework for path-agnostic builds.
-
+3. [**Phase 3: Building a FreeRTOS application on STM32L475 from Scratch**](./phase-3.md)
+   - Building a FreeRTOS application on STM32L475 (B-L475E-IOT01A) from Scratch without using IDE.
 ---
 
 ## 🚀 Engineering Modules
