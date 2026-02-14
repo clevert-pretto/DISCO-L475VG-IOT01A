@@ -1,0 +1,12 @@
+// Make code blocks slightly larger and easier to read
+pre.highlight {
+    font-size: 0.9em;
+    border-radius: 8px;
+}
+
+// Ensure your register tables don't wrap text strangely
+table {
+    display: block;
+    width: 100%;
+    overflow-x: auto; // Adds a scrollbar to the table if it's too wide for the screen
+}

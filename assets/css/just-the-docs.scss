@@ -1,0 +1,10 @@
+---
+---
+// 1. Set the width variables
+$content-width: 1200px; 
+
+// 2. Import the theme
+@import "just-the-docs";
+
+// 3. Import your specific custom tweaks from the _sass folder
+@import "custom";
