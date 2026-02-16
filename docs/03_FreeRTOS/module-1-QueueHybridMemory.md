@@ -1,11 +1,11 @@
 ---
 layout: default
-title: "01. FreeRTOS Migration & Hybrid Memory"
+title: "01. FreeRTOS Migration, Hybrid Memory and using Queue for IPC"
 parent: "Phase 3: Building a FreeRTOS application on STM32L475 from Scratch"
 nav_order: 2
 ---
 
-# Module 01: FreeRTOS Migration & Hybrid Memory Management
+# Module 01: FreeRTOS Migration, Hybrid Memory Management and using Queue for Inter-Process Communication
 
 ## 🎯 Strategic Objective
 Transition from a custom scheduler to industry-standard **FreeRTOS** on the STM32L475. 
