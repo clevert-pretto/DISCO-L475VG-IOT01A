@@ -47,6 +47,12 @@ permalink: /
 
 ---
 ## Lesson learned
-In [Lesson Learned](./lesson-learned.md) section - Everything that I learned - The references, the logic, the hurdles and outcomes.
+
+Everything that I learned - The references, the logic, the hurdles and outcomes during different phases of my excercise.
+Refer links below,
+
+1.  [Bare-Metal Lesson Learned](./01_BareMetal/phase-1-lesson-learned.md) section.
+1.  [Scheduelr Lesson Learned](./02_Scheduler//phase-2-lesson-learned.md) section.
+1.  [Bare-Metal Lesson Learned](./03_FreeRTOS/phase-3-lesson-learned.md) section.
 
 ---
