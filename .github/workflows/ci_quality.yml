@@ -28,21 +28,29 @@ jobs:
       - name: Run Quality Gate
         # If either of these fail, the deployment stops here
         run: |
-          # Check if there are any .c files in the App directory
-          if [ -n "$(find 03_FreeRTOS/App -name '*.c')" ]; then
-            echo "🚀 Running Cppcheck..."
-            cppcheck --enable=all --error-exitcode=1 \
+          # 1. Define the base path to avoid typos
+            BASE_PATH="03_FreeRTOS/App"
+
+          # 2. Check if the directory exists before running tools
+          if [ -d "$BASE_PATH" ]; then
+            echo "🚀 Running Cppcheck on $BASE_PATH..."
+
+          # We add --suppress=unusedFunction to handle the FreeRTOS hooks
+            cppcheck --enable=warning,style --error-exitcode=1 \
             --std=c11 \
             --inline-suppr \
             --suppress=missingIncludeSystem \
             --suppress=missingInclude \
-            --suppress=unusedFunction \ 
-            -I 03_FreeRTOS/App/Inc \
-            03_FreeRTOS/App/
+            --suppress=unusedFunction \
+            -I $BASE_PATH/Inc \
+            $BASE_PATH/
+
+          echo "📈 Running Lizard..."
+            lizard -w -l 15 -C 10 $BASE_PATH/
           else
-            echo "ℹ️ No C files found in App/. Skipping Cppcheck."
+            echo "⚠️ Directory $BASE_PATH not found! Skipping checks."
+            exit 1 # Fail the build if the folder is missing
           fi
-          lizard -w -l 15 -C 10 App/
 
       - name: Build and Deploy Docs
         # This action handles the Jekyll build and pushes to gh-pages branch

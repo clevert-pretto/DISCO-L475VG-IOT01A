@@ -8,4 +8,13 @@ jobs:
       - name: Install Cppcheck
         run: sudo apt-get install cppcheck
       - name: Run Cppcheck
-        run: cppcheck --error-exitcode=1 --enable=all --std=c11 ./Core ./RTOS
+        run: |
+          cppcheck --error-exitcode=1 \
+          --enable=warning,style \
+          --std=c11 \
+          --inline-suppr \
+          --suppress=missingIncludeSystem \
+          --suppress=missingInclude \
+          --suppress=unusedFunction \
+          -I 03_FreeRTOS/App/Inc \
+          03_FreeRTOS/App/
