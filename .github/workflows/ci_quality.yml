@@ -28,7 +28,13 @@ jobs:
       - name: Run Quality Gate
         # If either of these fail, the deployment stops here
         run: |
-          cppcheck --enable=all --error-exitcode=1 -I App/Inc App/
+          # Check if there are any .c files in the App directory
+          if [ -n "$(find 03_FreeRTOS/App -name '*.c')" ]; then
+            echo "🚀 Running Cppcheck..."
+            cppcheck --enable=all --error-exitcode=1 -I 03_FreeRTOS/App/Inc 03_FreeRTOS/App/
+          else
+            echo "ℹ️ No C files found in App/. Skipping Cppcheck."
+          fi
           lizard -w -l 15 -C 10 App/
 
       - name: Build and Deploy Docs
