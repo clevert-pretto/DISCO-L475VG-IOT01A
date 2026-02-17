@@ -1,4 +1,12 @@
 # _config.yml
-remote_theme: pmarsceill/just-the-docs
+remote_theme: just-the-docs/just-the-docs
 title: STM32L475 Platform Knowledge Base
 description: STM32L475 Platform Architecture Portfolio
+
+# URL Settings (Crucial for GitHub Actions)
+# Replace 'username' and 'repo-name' with yours
+url: "https://clevert-pretto.github.io"
+baseurl: "/DISCO-L475VG-IOT01A"
+
+# Search settings
+search_enabled: true
