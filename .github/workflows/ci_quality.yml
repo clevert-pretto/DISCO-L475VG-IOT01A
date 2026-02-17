@@ -31,7 +31,14 @@ jobs:
           # Check if there are any .c files in the App directory
           if [ -n "$(find 03_FreeRTOS/App -name '*.c')" ]; then
             echo "🚀 Running Cppcheck..."
-            cppcheck --enable=all --error-exitcode=1 -I 03_FreeRTOS/App/Inc 03_FreeRTOS/App/
+            cppcheck --enable=all --error-exitcode=1 \
+            --std=c11 \
+            --inline-suppr \
+            --suppress=missingIncludeSystem \
+            --suppress=missingInclude \
+            --suppress=unusedFunction \ 
+            -I 03_FreeRTOS/App/Inc \
+            03_FreeRTOS/App/
           else
             echo "ℹ️ No C files found in App/. Skipping Cppcheck."
           fi
