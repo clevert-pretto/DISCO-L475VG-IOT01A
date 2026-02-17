@@ -1,0 +1,39 @@
+name: Test and Deploy Docs
+
+on:
+  push:
+    branches: [ main ]  # Or 'master' depending on your default branch
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby (for Jekyll)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+          bundler-cache: true
+
+      - name: Install Lint/Metrics Tools
+        run: |
+          sudo apt-get install -y cppcheck
+          pip install lizard
+
+      - name: Run Quality Gate
+        # If either of these fail, the deployment stops here
+        run: |
+          cppcheck --enable=all --error-exitcode=1 -I App/Inc App/
+          lizard -w -l 15 -C 10 App/
+
+      - name: Build and Deploy Docs
+        # This action handles the Jekyll build and pushes to gh-pages branch
+        uses: helaili/jekyll-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target_branch: 'gh-pages'

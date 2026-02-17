@@ -14,6 +14,13 @@
                 "isDefault": true
             },
             "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "Run Cppcheck Full Scan",
+            "type": "shell",
+            "command": "cppcheck --enable=all --inconclusive --std=c11 ./Core ./RTOS",
+            "problemMatcher": "$gcc",
+            "group": "test"
         }
     ]
 }

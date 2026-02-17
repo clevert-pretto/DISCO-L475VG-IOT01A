@@ -1,0 +1,11 @@
+name: Cppcheck Linter
+on: [push, pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Cppcheck
+        run: sudo apt-get install cppcheck
+      - name: Run Cppcheck
+        run: cppcheck --error-exitcode=1 --enable=all --std=c11 ./Core ./RTOS

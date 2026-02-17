@@ -14,6 +14,7 @@ permalink: /
    - Context Switching, Priority Inversion, and SMP concepts.
 3. [**Phase 3: Building a FreeRTOS application on STM32L475 from Scratch**](./phase-3.md)
    - Building a FreeRTOS application on STM32L475 (B-L475E-IOT01A) from Scratch without using IDE.
+
 ---
 
 ## 🚀 Engineering Modules
@@ -54,5 +55,10 @@ Refer links below,
 1.  [Bare-Metal Lesson Learned](./01_BareMetal/phase-1-lesson-learned.md) section.
 1.  [Scheduelr Lesson Learned](./02_Scheduler//phase-2-lesson-learned.md) section.
 1.  [Bare-Metal Lesson Learned](./03_FreeRTOS/phase-3-lesson-learned.md) section.
+
+
+## Code Quality & Automation
+
+To ensure the reliability of the **FreeRTOS** scheduler and application logic, this project uses an automated [Code Quality & Automation](./code-quality.md) so that every commit is audited before being deployed.
 
 ---

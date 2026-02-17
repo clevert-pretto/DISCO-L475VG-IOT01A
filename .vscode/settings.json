@@ -1,8 +1,31 @@
 {
+    //COrtex-Debug related settings
     "cortex-debug.armToolchainPath": "/usr/bin", 
     "cortex-debug.gdbPath": "/usr/bin/gdb-multiarch",
     "cortex-debug.objdumpPath": "arm-none-eabi-objdump",
     "cortex-debug.nmPath": "arm-none-eabi-nm",
     "cortex-debug.variableUseNaturalFormat": false,
-    "editor.rulers": [80,100,120]
+
+    //Editor related setting
+    "editor.rulers": [80,100,120],
+    
+    // Linting related settings
+    "c-cpp-flylint.cppcheck.enable": true,
+    "c-cpp-flylint.run": "onSave",
+    "c-cpp-flylint.cppcheck.addons": ["cert", "misra"],
+    "c-cpp-flylint.cppcheck.quiet": true,
+    "c-cpp-flylint.cppcheck.unusedFunctions": true,
+    
+    // Focus only on your Application and RTOS configuration
+    "c-cpp-flylint.cppcheck.includePaths": [
+        "${workspaceFolder}/App/Inc",
+        "${workspaceFolder}/Drivers/CMSIS/Core/Include",
+        "${workspaceFolder}/Middlewares/FreeRTOS/include"
+    ],
+    // Exclude the heavy HAL and Middlewares from scanning to save CPU
+    "c-cpp-flylint.cppcheck.excludePaths": [
+        "${workspaceFolder}/Drivers/STM32L4xx_HAL_Driver",
+        "${workspaceFolder}/Middlewares/FreeRTOS"
+    ],
+    "c-cpp-flylint.cppcheck.standard": "c11"
 }

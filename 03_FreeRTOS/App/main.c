@@ -101,7 +101,9 @@ void vApplicationGetTimerTaskMemory(StaticTask_t **ppxTimerTaskTCBBuffer,
     *pulTimerTaskStackSize = configTIMER_TASK_STACK_DEPTH;
 }
 
+
 /* Hook called when a task overflows its stack */
+// cppcheck-suppress unusedFunction
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName) {
     /* Serious Error: Block here for debugging */
     (void)xTask;
@@ -116,14 +118,13 @@ void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName) {
 }
 
 /* Hook called if pvPortMalloc fails (Optional but recommended) */
+// cppcheck-suppress unusedFunction
 void vApplicationMallocFailedHook(void) {
     /* Serious Error: Heap is full */
     while (1);
 }
 
 /* ============================ TASK HOOKS END ============================== */
-
-
 
 int main(void) {
   /* STM32L4xx HAL library initialization:
@@ -169,7 +170,8 @@ int main(void) {
         xheartbeatTaskStack,       // Stack Buffer
         &xHeartbeatTaskTCB         // TCB Buffer
     );
-
+    int x = 12;
+    test_complexity_warning(x);
     /* Create a DYNAMIC Task (Flexible, uses Heap) */
     /* Pass 200 as a parameter for 200ms delay */
     xTaskCreate(

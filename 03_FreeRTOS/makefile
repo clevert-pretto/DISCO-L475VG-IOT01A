@@ -1,6 +1,8 @@
 ################################################################################
 # Makefile for STM32L475 FreeRTOS Blinky - Full Driver Version
 ################################################################################
+# Define the tool path
+LIZARD = /home/ravichilwant/.local/bin/lizard
 
 # 1. Project Name
 TARGET = freeRTOSApp
@@ -107,4 +109,19 @@ clean:
 	@echo "Cleaning build directory..."
 	rm -rf $(BUILD_DIR)
 
-.PHONY: all clean
+# --- Static Analysis ---
+lint:
+	@echo "--- Running Lint analysis ---"
+	cppcheck --enable=all --inline-suppr --std=c11 \
+	-I App/Inc -I Drivers/CMSIS/Core/Include \
+	--suppress=*:Drivers/* --suppress=*:Middlewares/* \
+	App/
+	@echo "--- Lint Analysis Finished ---"
+
+# --- Complexity Metrics ---
+metrics:
+	@echo "Running Complexity Analysis on App folder..."
+	lizard -w -l 15 -C 10 App/
+	@echo "--- Code complexity Analysis Finished ---"
+
+.PHONY: all clean lint metrics
