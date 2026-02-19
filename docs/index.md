@@ -57,8 +57,10 @@ Refer links below,
 1.  [Bare-Metal Lesson Learned](./03_FreeRTOS/phase-3-lesson-learned.md) section.
 
 
-## Code Quality & Automation
+## Code Quality & Automation (applies to FreeRTOS project only)
 
 To ensure the reliability of the **FreeRTOS** scheduler and application logic, this project uses an automated [Code Quality & Automation](./code-quality.md) so that every commit is audited before being deployed.
+
+The comprehensive guide for setting up MISRA C, cppCheck and Lizard guide is [here](./03_FreeRTOS/misra-setup-guide.md)
 
 ---
