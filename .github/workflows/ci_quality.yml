@@ -29,6 +29,7 @@ jobs:
 
       - name: Install Lint/Metrics Tools
         run: |
+          sudo apt-get update
           sudo apt-get install -y cppcheck
           pip install lizard
 
@@ -43,12 +44,12 @@ jobs:
             echo "🚀 Running Cppcheck on $BASE_PATH..."
 
           # We add --suppress=unusedFunction to handle the FreeRTOS hooks
-            cppcheck --enable=warning,style --error-exitcode=1 \
-            --std=c11 \
-            --inline-suppr \
-            --suppress=missingIncludeSystem \
+            cppcheck --enable=all \
+            --addon=build_utils/misra_rules.json \
+            --suppressions-list=build_utils/cppcheck_suppressions.txt \
             --suppress=missingInclude \
-            --suppress=unusedFunction \
+            --error-exitcode=1 \
+            --std=c11 \
             -I $BASE_PATH/Inc \
             $BASE_PATH/
 
@@ -60,7 +61,7 @@ jobs:
           fi
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Build Jekyll Site
         uses: actions/jekyll-build-pages@v1

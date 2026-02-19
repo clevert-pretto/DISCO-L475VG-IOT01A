@@ -1,0 +1,17 @@
+unusedFunction:03_FreeRTOS/App/main.c
+unusedFunction:03_FreeRTOS/App/main.c:vApplicationGetIdleTaskMemory
+unusedFunction:03_FreeRTOS/App/main.c:vApplicationGetTimerTaskMemory
+unusedFunction:03_FreeRTOS/App/main.c:vApplicationStackOverflowHook
+unusedFunction:03_FreeRTOS/App/main.c:vApplicationMallocFailedHook
+unusedFunction:03_FreeRTOS/App/main.c:assert_failed
+missingInclude
+missingIncludeSystem
+misra-config
+misra-c2012-17.3
+misra-c2012-8.4:03_FreeRTOS/App/main.c:vApplicationGetIdleTaskMemory
+misra-c2012-8.4:03_FreeRTOS/App/main.c:vApplicationGetTimerTaskMemory
+misra-c2012-8.4:03_FreeRTOS/App/main.c:vApplicationStackOverflowHook
+misra-c2012-8.4:03_FreeRTOS/App/main.c:vApplicationMallocFailedHook
+misra-c2012-8.4:03_FreeRTOS/App/main.c:assert_failed
+misra-c2012-11.8:03_FreeRTOS/App/main.c
+unmatchedSuppression

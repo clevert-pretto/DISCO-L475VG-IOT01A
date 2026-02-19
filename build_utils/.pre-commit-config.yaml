@@ -1,0 +1,30 @@
+repos:
+  - repo: local
+    hooks:
+      # --- Cppcheck Hook ---
+      - id: cppcheck
+        name: cppcheck
+        entry: cppcheck
+        language: system
+        types: [c]
+        files: ^03_FreeRTOS/App/
+        args:
+          [
+            "--enable=all",
+            "--addon=build_utils/misra_rules.json",
+            "--suppressions-list=build_utils/cppcheck_suppressions.txt",
+            "--error-exitcode=1",
+            "--std=c11",
+            "-I",
+            "03_FreeRTOS/App/Inc",
+          ]
+
+      # --- Lizard Hook ---
+      - id: lizard
+        name: lizard
+        entry: lizard
+        language: python
+        additional_dependencies: ["lizard==1.17.10"]
+        types: [c]
+        files: ^03_FreeRTOS/App/
+        args: ["-w", "-l", "15", "-C", "10"]

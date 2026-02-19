@@ -1,0 +1,12 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+IndentWidth: 4
+ColumnLimit: 80
+# MISRA prefers braces on new lines for all control statements
+BreakBeforeBraces: Allman
+# Forces 'uint32_t x = 0U;' style alignment
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+# Ensures no tabs are used, only spaces
+UseTab: Never

@@ -1,0 +1,9 @@
+{
+    "script": "misra.py",
+    "args": [
+        
+        "--rule-texts=build_utils/misra_rules.txt"
+    ]
+}
+// Rule text downloaded from  https://gitlab.com/MISRA/MISRA-C/MISRA-C-2012/tools
+// Original file name : misra_c_2012__headlines_for_cppcheck - AMD1+AMD2.txt
