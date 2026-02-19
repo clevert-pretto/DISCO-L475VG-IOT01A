@@ -31,7 +31,7 @@ To keep the project root clean and mimic enterprise-level repositories, all conf
 We utilize pre-commit to manage both cppcheck (for MISRA) and lizard (for complexity). Both are run as local hooks to avoid GitHub repository tag issues and ensure stable Python environments.
 
 ### B. MISRA Mapping (`build_utils/misra_rules.json`)
-Maps the internal Cppcheck MISRA script to our rules text file downlaoded from [MISRA C 2012](https://gitlab.com/MISRA/MISRA-C/MISRA-C-2012/tools). I used [misra_c_2012__headlines_for_cppcheck%20-%20AMD1+AMD2.txt](https://gitlab.com/MISRA/MISRA-C/MISRA-C-2012/tools/-/blob/main/misra_c_2012__headlines_for_cppcheck%20-%20AMD1+AMD2.txt?ref_type=heads).
+Maps the internal Cppcheck MISRA script to our rules text file downlaoded from [MISRA C 2012](https://gitlab.com/MISRA/MISRA-C/MISRA-C-2012/tools). I used [misra_c_2012__headlines_for_cppcheck - AMD1+AMD2.txt](https://gitlab.com/MISRA/MISRA-C/MISRA-C-2012/tools/-/blob/main/misra_c_2012__headlines_for_cppcheck%20-%20AMD1+AMD2.txt?ref_type=heads).
 
 ### C. Suppressions (`build_utils/cppcheck_suppressions.txt`)
 Essential for silencing false positives from FreeRTOS kernel hooks and vendor HAL quirks without disabling the rules entirely.
