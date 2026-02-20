@@ -15,3 +15,21 @@ misra-c2012-8.4:03_FreeRTOS/App/main.c:vApplicationMallocFailedHook
 misra-c2012-8.4:03_FreeRTOS/App/main.c:assert_failed
 misra-c2012-11.8:03_FreeRTOS/App/main.c
 unmatchedSuppression
+# Suppress "unknown variable/constant" errors for vendor code
+misra-config:03_FreeRTOS/App/*
+# Suppress "implicit function declaration" for HAL/RTOS functions
+misra-c2012-17.3:03_FreeRTOS/App/*
+
+# Ignore all MISRA violations in Middleware and Drivers
+*:*03_FreeRTOS/Middlewares/*
+*:*03_FreeRTOS/Drivers/*
+
+# Ignore specific macro and unused definitions in vendor code
+unusedMacro:*03_FreeRTOS/Middlewares/*
+unusedMacro:*03_FreeRTOS/Drivers/*
+
+# HeartBeatTask is called by the kernel, linter thinks it's unused
+unusedFunction:03_FreeRTOS/App/Src/appHeartbeat.c
+
+# Ignore unused macros in the main header (often used for future-proofing)
+misra-c2012-2.5:03_FreeRTOS/App/main.h

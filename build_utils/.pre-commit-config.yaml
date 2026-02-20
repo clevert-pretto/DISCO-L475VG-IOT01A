@@ -15,8 +15,23 @@ repos:
             "--suppressions-list=build_utils/cppcheck_suppressions.txt",
             "--error-exitcode=1",
             "--std=c11",
-            "-I",
-            "03_FreeRTOS/App/Inc",
+            #"--library=free_rtos", # tells cppcheck to treat RTOS as a library
+            "-I", "03_FreeRTOS/App/Inc",
+            "-I", "03_FreeRTOS/Middlewares/FreeRTOS",
+            "-I", "03_FreeRTOS/Middlewares/FreeRTOS/include",
+            "-I", "03_FreeRTOS/Middlewares/FreeRTOS/portable",
+            #"-I", "03_FreeRTOS/Drivers/BSP/B-L475E-IOT01",
+            #"-I", "03_FreeRTOS/Drivers/BSP/Components/Common",
+            #"-I", "03_FreeRTOS/Drivers/BSP/Components/hts221",
+            #"-I", "03_FreeRTOS/Drivers/BSP/Components/lis3mdl",
+            #"-I", "03_FreeRTOS/Drivers/BSP/Components/lps22hd",
+            #"-I", "03_FreeRTOS/Drivers/BSP/Components/lsm6dsl",
+            #"-I", "03_FreeRTOS/Drivers/BSP/Components/mx25r6435f",
+            #"-I", "03_FreeRTOS/Drivers/CMSIS/Core/Include",
+            #"-I", "03_FreeRTOS/Drivers/CMSIS/Device/ST/STM32L4xx/Include",
+            "-I", "03_FreeRTOS/Drivers/STM32L4xx_HAL_Driver",
+            "-I", "03_FreeRTOS/Drivers/STM32L4xx_HAL_Driver/Inc",
+            "-D", "STM32L475xx" # Tells the linter which chip you are using
           ]
 
       # --- Lizard Hook ---
