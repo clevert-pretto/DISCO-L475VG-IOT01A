@@ -44,9 +44,10 @@ This ensures serialization without the priority inversion risks sometimes associ
 ---
 
 ## 🛠 Deliverables
-- [x] **Hybrid Scheduler:** Running `xTaskCreate` (Dynamic) and `xTaskCreateStatic` (Static) side-by-side.
-- [x] **Queue IPC:** Successful string passing from Sensor Task to UART Task.
-- [x] **Stack Overflow Protection:** Working `vApplicationStackOverflowHook` with visual error indication (Fast Blink).
-- [x] **Custom BSP Override:** Functional UART on PB6/PB7 despite library defaults.
-- [x] **v2.1** - Tagged rightly
+* **Hybrid Scheduler:** Running `xTaskCreate` (Dynamic) and `xTaskCreateStatic` (Static) side-by-side.
+* **Queue IPC:** Successful string passing from Sensor Task to UART Task.
+* **Stack Overflow Protection:** Working `vApplicationStackOverflowHook` with visual error indication (Fast Blink).
+* **Custom BSP Override:** Functional UART on PB6/PB7 despite library defaults.
+* **v2.1** - Tagged rightly
+
 ---
