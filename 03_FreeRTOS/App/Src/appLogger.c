@@ -32,12 +32,12 @@ void appLoggerMessageEntry( const char *pcMessage,
     sLogMsg.pcMessage[sizeof(sLogMsg.pcMessage) - 1U] = '\0';
 
     // Send to queue
-    (void)xQueueSend(xPrintQueue, &sLogMsg, pdMS_TO_TICKS(MAX_DELAY_FOR_LOGGER_QUEUEms));
+    (void)xQueueSend(xPrintQueue, &sLogMsg, 0);
 }
 
 static BaseType_t LogMessageProcess(sAppLoggerMessage_t* sLogMsg)
 {
-    return xQueueReceive(xPrintQueue, sLogMsg, pdMS_TO_TICKS(MAX_DELAY_FOR_LOGGER_QUEUEms));
+    return xQueueReceive(xPrintQueue, sLogMsg, portMAX_DELAY);
 }
 
 void vAppLoggerTask(void *pvParameters)
@@ -53,7 +53,7 @@ void vAppLoggerTask(void *pvParameters)
             {
                 //Print to UART
                 (void) HAL_UART_Transmit(&discoveryUART1, (const uint8_t *)sLogMsg.pcMessage,
-                                (uint16_t)strlen(sLogMsg.pcMessage), (uint32_t)100);
+                                (uint16_t)strlen(sLogMsg.pcMessage), DISCO_BOARD_UART_TIMEOUT_MS);
             }
             //If this is critical fault as per event table, log it to fault section.
             else if(sLogMsg.enumEventCode == sAPPLOGGER_EVENT_CODE_LOG_FAULT)

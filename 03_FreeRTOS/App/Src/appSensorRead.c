@@ -85,7 +85,7 @@ void vSensorReadTask(void *pvParameters)
     (void)pvParameters;
     float fTemp; 
     float fHumidity;
-    char pcMessage[LOGGER_MESSAGE_STR_LEN] = {0}; // Temporary struct to fill
+    static char pcMessage[LOGGER_MESSAGE_STR_LEN] = {0}; // Temporary struct to fill
     //char tempBuf[5];
 
     for (;;)
@@ -96,23 +96,9 @@ void vSensorReadTask(void *pvParameters)
             fTemp = BSP_TSENSOR_ReadTemp();
             fHumidity = BSP_HSENSOR_ReadHumidity();
 
-            // (void)strncat(pcMessage, "Sensor Data : Temp: ", sizeof(pcMessage) - 1U);
-            // app_ftoa(fTemp, tempBuf, (uint32_t)sizeof(tempBuf));
-            // (void)strncat(pcMessage, tempBuf, sizeof(pcMessage) - strlen(pcMessage) - 1U);
-            // (void)strncat(pcMessage, "C\r\n", sizeof(pcMessage) - strlen(pcMessage) - 1U);
-            // (void)strncat(pcMessage, "Humidity: ", sizeof(pcMessage) - 1U);
-            // app_ftoa(fHumidity, tempBuf, (uint32_t)sizeof(tempBuf));
-            // (void)strncat(pcMessage, tempBuf, sizeof(pcMessage) - strlen(pcMessage) - 1U);
-            // (void)strncat(pcMessage, "%%\r\n", sizeof(pcMessage) - strlen(pcMessage) - 1U);
-
-            // Usage:
             LOG_SENSOR(pcMessage, "Temp", fTemp, "C");
             appLoggerMessageEntry(pcMessage, sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
             LOG_SENSOR(pcMessage, "Humidity", fHumidity, "%");
-            // Compose the string
-            //(void)snprintf(pcMessage, sizeof(pcMessage), 
-            //         "Sensor Data : Temp: %.2f C Humidity: %.2f%% \r\n", fTemp, fHumidity);
-            // Send to logger
             appLoggerMessageEntry(pcMessage, sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
         }
         // Add a delay so we don't spam the queue infinitely

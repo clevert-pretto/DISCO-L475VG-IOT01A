@@ -24,23 +24,36 @@
 #include "stm32l4xx_hal.h"
 #include "stm32l475e_iot01.h"
 
+// Kernel includes
+#include "FreeRTOS.h"
+#include "event_groups.h"
+
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* External declaration for MISRA Rule 8.4 */
 extern UART_HandleTypeDef discoveryUART1;
 
 /* Exported macro ------------------------------------------------------------*/
-#define TASK_PRIORITY_HEARTBEAT_TASK      1
-#define TASK_PRIORITY_SYS_MANAGER_TASK    1
+#define TASK_PRIORITY_HEARTBEAT_TASK      0
+#define TASK_PRIORITY_SYS_MANAGER_TASK    3
 #define TASK_PRIORITY_SENSOR_READ_TASK    1
-#define TASK_PRIORITY_APPLOGGER_TASK      1
+#define TASK_PRIORITY_APPLOGGER_TASK      2
 
 #define TASK_STACK_SIZE_HEARTBEAT_TASK    configMINIMAL_STACK_SIZE
 #define TASK_STACK_SIZE_SYS_MANAGER_TASK  configMINIMAL_STACK_SIZE
 #define TASK_STACK_SIZE_SENSOR_READ_TASK  (configMINIMAL_STACK_SIZE * 2u)
 #define TASK_STACK_SIZE_APPLOGGER_TASK    (configMINIMAL_STACK_SIZE * 2u)
 
-#define DISCO_BOARD_VCP_BAUDRATE   (uint32_t) 115200
+#define DISCO_BOARD_VCP_BAUDRATE          (uint32_t) 115200
+#define DISCO_BOARD_UART_TIMEOUT_MS       100U
+
+/* Event Group Bits */
+#define EVENT_BIT_INIT_SUCCESS    (1UL << 0U)
+#define EVENT_BIT_INIT_FAILED     (1UL << 1U)
+#define EVENT_BIT_FAULT_DETECTED  (1UL << 2U)
+
+/* Handle for the Event Group */
+extern EventGroupHandle_t xSystemEventGroup;
 /* Exported functions ------------------------------------------------------- */
 
 #endif /* MAIN_H */

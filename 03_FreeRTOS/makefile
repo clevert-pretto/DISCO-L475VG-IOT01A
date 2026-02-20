@@ -39,6 +39,7 @@ MCU = -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard
 C_DEFS = -DSTM32L475xx -DUSE_HAL_DRIVER
 
 C_INCLUDES =  \
+-IApp \
 -IApp/Inc \
 -IDrivers/BSP/B-L475E-IOT01 \
 -IDrivers/BSP/Components/hts221 \

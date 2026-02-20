@@ -12,7 +12,7 @@
 #include "appSensorRead.h"
 #include "appLogger.h"
 #include "sysManager.h"
-
+#include "main.h"
 
 SystemState_t currentState = SYS_STATE_INIT_HARDWARE;
 
@@ -28,10 +28,14 @@ void vSystemManagerTask(void *pvParameters)
                                         sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
                 
                 initStatus = appSensorRead_Init();
-                //TODO : Add other sensors bit check here
-                if (initStatus == (uint8_t)pdPASS)
+                
+                if ((initStatus & (appSENSOR_TEMPERATURE | appSENSOR_HUMIDITY)) != 0U)
                 {
                     currentState = SYS_STATE_OPERATIONAL;
+
+                    /* Clear any fault bits and set Success */
+                    (void)xEventGroupClearBits(xSystemEventGroup, EVENT_BIT_INIT_FAILED | EVENT_BIT_FAULT_DETECTED);
+                    (void)xEventGroupSetBits(xSystemEventGroup, EVENT_BIT_INIT_SUCCESS);
                 } 
                 else 
                 {
@@ -47,12 +51,15 @@ void vSystemManagerTask(void *pvParameters)
                     }
                     else
                     {
-
+                        appLoggerMessageEntry("Other Initialization Failed!\r\n", 
+                                            sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
                     }
                     //TODO: Move to error section later
                     appLoggerMessageEntry("Hardware Initialization Failed!\r\n", 
                                         sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
                     currentState = SYS_STATE_FAULT;
+                    
+                    (void)xEventGroupSetBits(xSystemEventGroup, EVENT_BIT_INIT_FAILED);
                 }
                 break;
 

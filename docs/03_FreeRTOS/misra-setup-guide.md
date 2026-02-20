@@ -177,3 +177,8 @@ Enforcing MISRA C completely changes how C code must be written:
 **The Struggle:** Maintaining simple function calls for logging without using prohibited variadic functions.
 **The Cause:** MISRA Rule 17.1 forbids `stdarg.h`, making `snprintf` unusable in strict environments.
 **The Solution:** Implement "Fixed-Argument Formatters." By defining a function with a specific number of parameters (Label, Value, Unit), we achieve the convenience of a single call while maintaining 100% type safety and stack predictability.
+
+### Learning 23: Implicit Types and FreeRTOS Headers
+**The Struggle:** Error: `unknown type name 'EventGroupHandle_t'` followed by `passing argument... makes pointer from integer`.
+**The Cause:** Using a FreeRTOS type in a header without including the required FreeRTOS source headers first. The compiler defaults unknown types to `int`, leading to pointer-mismatch warnings during API calls.
+**The Solution:** Always include `FreeRTOS.h` followed by the specific feature header (like `event_groups.h` or `semphr.h`) before declaring handles in global headers.

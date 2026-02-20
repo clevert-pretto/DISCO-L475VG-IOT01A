@@ -8,6 +8,7 @@
 #include "FreeRTOS.h"
 #include "queue.h"
 #include "task.h"
+#include "event_groups.h"
 
 //Application includes
 #include "appHeartbeat.h"
@@ -31,6 +32,7 @@ void assert_failed(uint8_t *file, uint32_t line);
 
 /* ============================ COMMON RESOURCES ============================ */
 UART_HandleTypeDef discoveryUART1;
+EventGroupHandle_t xSystemEventGroup;
 
 // Hardware Setup
 /**
@@ -222,6 +224,13 @@ int main(void)
 
     appLogger_Init();
 
+    /* Create the event group */
+    xSystemEventGroup = xEventGroupCreate();
+
+    if (xSystemEventGroup == NULL) {
+        // Handle error: No memory for Event Group
+    }
+    
     /* Create a HeartBeat Task (Permanent, deterministic memory) */
     (void)xTaskCreateStatic(HeartBeatTask,              // Function
                       "HeartBeatTask",                  // Name
