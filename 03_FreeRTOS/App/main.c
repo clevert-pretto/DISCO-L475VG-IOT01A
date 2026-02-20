@@ -11,9 +11,11 @@
 
 //Application includes
 #include "appHeartbeat.h"
+#include "appSensorRead.h"
+#include "appLogger.h"
+#include "sysManager.h"
 
-
-/* FreeRTOS Hook Prototypes */
+/*===================== FreeRTOS Hook Prototypes ============================ */
 void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer, 
                                     StackType_t **ppxIdleTaskStackBuffer, 
                                     size_t  *pulIdleTaskStackSize);
@@ -24,57 +26,88 @@ void vApplicationGetTimerTaskMemory(StaticTask_t **ppxTimerTaskTCBBuffer,
 
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName);
 void vApplicationMallocFailedHook(void);
+static void SystemClock_Config(void);
 void assert_failed(uint8_t *file, uint32_t line);
 
 /* ============================ COMMON RESOURCES ============================ */
-static QueueHandle_t xPrintQueue;
-static UART_HandleTypeDef discoveryUART1;
-// struct to hold message pointer
-
-typedef struct
-{
-    const char *pcMessage;
-} printMessage_t;
+UART_HandleTypeDef discoveryUART1;
 
 // Hardware Setup
-static void SystemClock_Config(void);
-
-/* =========================== COMMON RESOURCES END ========================= */
-
-
-
-/* ============================ TASK FUNCTION =============================== */
-
-
-static void vPrintqueuetask(void *pvParameters)
+/**
+ * @brief  System Clock Configuration
+ *         The system Clock is configured as follow :
+ *            System Clock source            = PLL (MSI)
+ *            SYSCLK(Hz)                     = 80000000
+ *            HCLK(Hz)                       = 80000000
+ *            AHB Prescaler                  = 1
+ *            APB1 Prescaler                 = 1
+ *            APB2 Prescaler                 = 1
+ *            MSI Frequency(Hz)              = 4000000
+ *            PLL_M                          = 1
+ *            PLL_N                          = 40
+ *            PLL_R                          = 2
+ *            PLL_P                          = 7
+ *            PLL_Q                          = 4
+ *            Flash Latency(WS)              = 4
+ * @param  None
+ * @retval None
+ */
+static void SystemClock_Config(void)
 {
-    (void)pvParameters;
-    printMessage_t printMsg;
-    for (;;)
+    RCC_ClkInitTypeDef RCC_ClkInitStruct;
+    RCC_OscInitTypeDef RCC_OscInitStruct;
+
+    /* MSI is enabled after System reset, activate PLL with MSI as source */
+    RCC_OscInitStruct.OscillatorType      = RCC_OSCILLATORTYPE_MSI;
+    RCC_OscInitStruct.MSIState            = RCC_MSI_ON;
+    RCC_OscInitStruct.MSIClockRange       = RCC_MSIRANGE_6;
+    RCC_OscInitStruct.MSICalibrationValue = RCC_MSICALIBRATION_DEFAULT;
+    RCC_OscInitStruct.PLL.PLLState        = RCC_PLL_ON;
+    RCC_OscInitStruct.PLL.PLLSource       = RCC_PLLSOURCE_MSI;
+
+    /* PLL Math for 80MHz System Clock:
+       Input (MSI) = 4 MHz
+       PLLM (Div)  = 1   -> 4 MHz / 1 = 4 MHz (VCO Input)
+       PLLN (Mul)  = 10  -> 4 MHz * 40 = 160 MHz (VCO Output)
+       PLLR (Div)  = 2   -> 160 MHz / 2 = 80 MHz (SYSCLK)
+    */
+
+    RCC_OscInitStruct.PLL.PLLM = 1;
+    RCC_OscInitStruct.PLL.PLLN = 40;
+    RCC_OscInitStruct.PLL.PLLR = 2;
+    RCC_OscInitStruct.PLL.PLLP = 7;
+    RCC_OscInitStruct.PLL.PLLQ = 4;
+
+    if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
     {
-        if (xQueueReceive(xPrintQueue, &printMsg, portMAX_DELAY) == pdTRUE)
+        /* Initialization Error */
+        while (1)
         {
-            (void)HAL_UART_Transmit(&discoveryUART1, (const char *)printMsg.pcMessage,
-                              strlen(printMsg.pcMessage), 100);
+
+        }
+    }
+
+    /* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2
+       clocks dividers */
+    RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK |
+                                   RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
+    RCC_ClkInitStruct.SYSCLKSource   = RCC_SYSCLKSOURCE_PLLCLK;
+    RCC_ClkInitStruct.AHBCLKDivider  = RCC_SYSCLK_DIV1;
+    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
+    {
+        /* Initialization Error */
+        while (1)
+        {
+
         }
     }
 }
 
-static void tempSensorTask(void *pvParameters)
-{
-    (void)pvParameters;
-    printMessage_t temperaturMsg;
-    temperaturMsg.pcMessage = "temperature sensor data : 25.0 C \r\n";
-
-    for (;;)
-    {
-        // Send to queue
-        (void)xQueueSend(xPrintQueue, &temperaturMsg, 0);
-
-        // Add a delay so we don't spam the queue infinitely
-        vTaskDelay(pdMS_TO_TICKS(1000)); // Send data once per second
-    }
-}
+/* =========================== COMMON RESOURCES END ========================= */
+/* ============================ TASK FUNCTION =============================== */
+ 
 /* ========================== TASK FUNCTION END ============================= */
 
 /* =============================== TASK HOOKS =============================== */
@@ -150,14 +183,22 @@ static void BSP_UART1_Init(uint32_t BaudRate)
     BSP_COM_Init(COM1, &discoveryUART1);
 }
 
-
+/* ============================== MAIN ====================================== */
 int main(void)
 {
+    //For Heartbeat task
     static StaticTask_t xHeartbeatTaskTCB;
-    static StackType_t  xheartbeatTaskStack[configMINIMAL_STACK_SIZE];
-    static StaticTask_t xTempSensorTaskTCB;
-    static StackType_t  xTempSensorStack[configMINIMAL_STACK_SIZE * 2u];
-    static TaskHandle_t xPrintQueueTaskHandle = NULL;
+    static StackType_t  xheartbeatTaskStack[TASK_STACK_SIZE_HEARTBEAT_TASK];
+    //For system manager task
+    static StaticTask_t xSysMgrTaskTCB;
+    static StackType_t  xSysMgrTaskStack[TASK_STACK_SIZE_SYS_MANAGER_TASK];
+    
+    //For sensor read task
+    static StaticTask_t xvSensorReadTaskTCB;
+    static StackType_t  xSensorReadStack[TASK_STACK_SIZE_SENSOR_READ_TASK];
+    
+    ////For App Logger task
+    static TaskHandle_t xAppLoggerTaskHandle = NULL;
 
     /* STM32L4xx HAL library initialization:
       - Configure the Flash prefetch, Flash preread and Buffer caches
@@ -179,36 +220,44 @@ int main(void)
     // Initialize UART as Virtual COM Port
     BSP_UART1_Init(DISCO_BOARD_VCP_BAUDRATE);
 
-    xPrintQueue = xQueueCreate(5, sizeof(printMessage_t));
+    appLogger_Init();
 
     /* Create a HeartBeat Task (Permanent, deterministic memory) */
-    /* Pass 1000 as a parameter for 1000ms delay */
-    (void)xTaskCreateStatic(HeartBeatTask,            // Function
-                      "HeartBeatTask",          // Name
-                      configMINIMAL_STACK_SIZE, // Stack Size
-                      NULL, // Parameter (heart beat Blink)
-                      1,                        // Priority
-                      xheartbeatTaskStack,      // Stack Buffer
-                      &xHeartbeatTaskTCB        // TCB Buffer
+    (void)xTaskCreateStatic(HeartBeatTask,              // Function
+                      "HeartBeatTask",                  // Name
+                      TASK_STACK_SIZE_HEARTBEAT_TASK,   // Stack Size
+                      NULL,                             // Parameter
+                      TASK_PRIORITY_HEARTBEAT_TASK,     // Priority
+                      xheartbeatTaskStack,              // Stack Buffer
+                      &xHeartbeatTaskTCB                // TCB Buffer
+    );
+
+    /* Create a system state machine manager Task (Permanent, deterministic memory) */
+    (void)xTaskCreateStatic(vSystemManagerTask,         // Function
+                      "SysManagerTask",                 // Name
+                      TASK_STACK_SIZE_SYS_MANAGER_TASK, // Stack Size
+                      NULL,                             // Parameter (heart beat Blink)
+                      TASK_PRIORITY_SYS_MANAGER_TASK,   // Priority
+                      xSysMgrTaskStack,                 // Stack Buffer
+                      &xSysMgrTaskTCB                   // TCB Buffer
+    );
+    /* Create Sensor Read task (Permenant, deterministic memory)*/
+    (void)xTaskCreateStatic(vSensorReadTask,            // Function
+                      "SensorReadTask",                 // Name
+                      TASK_STACK_SIZE_SENSOR_READ_TASK, // Stack Size
+                      (void *)NULL,                     // Parameter
+                      TASK_PRIORITY_SENSOR_READ_TASK,   // Priority
+                      xSensorReadStack,                 // Stack Buffer
+                      &xvSensorReadTaskTCB              // TCB Buffer
     );
 
     /* Create a DYNAMIC Task (Flexible, uses Heap) */
-    /* Pass 200 as a parameter for 200ms delay */
-    (void)xTaskCreate(vPrintqueuetask,                // Function
-                "printQueueTask",               // Name
-                (configMINIMAL_STACK_SIZE * 2u), // Stack Size
-                (void *)NULL,                   // Parameter
-                1,                              // Priority
-                &xPrintQueueTaskHandle          // Handle Storage
-    );
-
-    (void)xTaskCreateStatic(tempSensorTask,                 // Function
-                      "tempSensorTask",               // Name
-                      (configMINIMAL_STACK_SIZE * 2u), // Stack Size
-                      (void *)NULL,                   // Parameter
-                      1,                              // Priority
-                      xTempSensorStack,               // Stack Buffer
-                      &xTempSensorTaskTCB             // TCB Buffer
+    (void)xTaskCreate(vAppLoggerTask,                   // Function
+                "AppLoggerTask",                        // Name
+                TASK_STACK_SIZE_APPLOGGER_TASK,         // Stack Size
+                (void *)NULL,                           // Parameter
+                TASK_PRIORITY_APPLOGGER_TASK,           // Priority
+                &xAppLoggerTaskHandle                   // Handle Storage
     );
 
     // Start Scheduler (Should not return)
@@ -221,77 +270,7 @@ int main(void)
     }
 }
 
-/**
- * @brief  System Clock Configuration
- *         The system Clock is configured as follow :
- *            System Clock source            = PLL (MSI)
- *            SYSCLK(Hz)                     = 80000000
- *            HCLK(Hz)                       = 80000000
- *            AHB Prescaler                  = 1
- *            APB1 Prescaler                 = 1
- *            APB2 Prescaler                 = 1
- *            MSI Frequency(Hz)              = 4000000
- *            PLL_M                          = 1
- *            PLL_N                          = 40
- *            PLL_R                          = 2
- *            PLL_P                          = 7
- *            PLL_Q                          = 4
- *            Flash Latency(WS)              = 4
- * @param  None
- * @retval None
- */
-static void SystemClock_Config(void)
-{
-    RCC_ClkInitTypeDef RCC_ClkInitStruct;
-    RCC_OscInitTypeDef RCC_OscInitStruct;
 
-    /* MSI is enabled after System reset, activate PLL with MSI as source */
-    RCC_OscInitStruct.OscillatorType      = RCC_OSCILLATORTYPE_MSI;
-    RCC_OscInitStruct.MSIState            = RCC_MSI_ON;
-    RCC_OscInitStruct.MSIClockRange       = RCC_MSIRANGE_6;
-    RCC_OscInitStruct.MSICalibrationValue = RCC_MSICALIBRATION_DEFAULT;
-    RCC_OscInitStruct.PLL.PLLState        = RCC_PLL_ON;
-    RCC_OscInitStruct.PLL.PLLSource       = RCC_PLLSOURCE_MSI;
-
-    /* PLL Math for 80MHz System Clock:
-       Input (MSI) = 4 MHz
-       PLLM (Div)  = 1   -> 4 MHz / 1 = 4 MHz (VCO Input)
-       PLLN (Mul)  = 10  -> 4 MHz * 40 = 160 MHz (VCO Output)
-       PLLR (Div)  = 2   -> 160 MHz / 2 = 80 MHz (SYSCLK)
-    */
-
-    RCC_OscInitStruct.PLL.PLLM = 1;
-    RCC_OscInitStruct.PLL.PLLN = 40;
-    RCC_OscInitStruct.PLL.PLLR = 2;
-    RCC_OscInitStruct.PLL.PLLP = 7;
-    RCC_OscInitStruct.PLL.PLLQ = 4;
-
-    if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-    {
-        /* Initialization Error */
-        while (1)
-        {
-
-        }
-    }
-
-    /* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2
-       clocks dividers */
-    RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK |
-                                   RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
-    RCC_ClkInitStruct.SYSCLKSource   = RCC_SYSCLKSOURCE_PLLCLK;
-    RCC_ClkInitStruct.AHBCLKDivider  = RCC_SYSCLK_DIV1;
-    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
-    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
-    {
-        /* Initialization Error */
-        while (1)
-        {
-
-        }
-    }
-}
 
 #ifdef USE_FULL_ASSERT
 

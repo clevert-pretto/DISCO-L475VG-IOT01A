@@ -30,6 +30,14 @@ unusedMacro:*03_FreeRTOS/Drivers/*
 
 # HeartBeatTask is called by the kernel, linter thinks it's unused
 unusedFunction:03_FreeRTOS/App/Src/appHeartbeat.c
+unusedFunction:03_FreeRTOS/App/Src/appSensorRead.c
+unusedFunction:03_FreeRTOS/App/Src/appLogger.c
+unusedFunction:03_FreeRTOS/App/Src/xtoa.c
 
 # Ignore unused macros in the main header (often used for future-proofing)
 misra-c2012-2.5:03_FreeRTOS/App/main.h
+misra-c2012-2.3:03_FreeRTOS/App/Inc/appLogger.h
+misra-c2012-2.4:03_FreeRTOS/App/Inc/appLogger.h
+misra-c2012-2.3:03_FreeRTOS/App/Inc/appLogger.h
+misra-c2012-2.5:03_FreeRTOS/App/Inc/appSensorRead.h
+misra-c2012-2.5:03_FreeRTOS/App/Inc/sysManager.h

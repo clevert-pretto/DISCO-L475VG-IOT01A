@@ -133,3 +133,47 @@ Enforcing MISRA C completely changes how C code must be written:
 **The Reality:** This is expected behavior. The total count includes C++ specific rules, experimental checkers, and premium addons that do not apply to a pure C MISRA project.
 **The Professional Approach:** Use the `--checkers-report=<filename>` flag to audit the active ruleset. This audit file serves as evidence of compliance during a "Code Quality Review" or "Safety Audit."
 
+### Learning 14: Managing Linter Metadata (.cppcheck-addon-ctu-file)
+**The Observation:** Temporary directories named `.cppcheck-addon-ctu-file` appeared in the project root after running the Quality Gate.
+**The Cause:** These are Cross Translation Unit (CTU) artifacts used by Cppcheck to analyze function calls across multiple files.
+**The Solution:** Build artifacts should never be tracked in version control. Explicitly add `.cppcheck-addon-ctu-file/` to the `.gitignore` file to keep the repository clean.
+
+### Learning 15: Advanced Gitignore Patterns
+**The Struggle:** Build artifacts like `ctu-file` and `ctu-info` appeared in multiple project subdirectories.
+**The Cause:** Static analysis tools often create temporary metadata near the source files they are analyzing.
+**The Solution:** Use global wildcard patterns (`**/*pattern*`) in the `.gitignore` file. This ensures that regardless of which subdirectory the linter is currently processing, its temporary artifacts will never clutter the repository or the pull request.
+
+### Learning 16: Unused Macro Definitions (Rule 2.5)
+**The Struggle:** MISRA violation: `A project should not contain unused macro definitions`.
+**The Cause:** Macros defined in header files that are not utilized in the source code are flagged as "dead code."
+**The Solution:** Either remove the macro, implement its intended logic, or use a file-specific suppression if the macro is part of a standard API that is required for future-proofing or cross-platform compatibility.
+
+### Learning 17: External Linkage and Declarations (Rule 8.4)
+**The Struggle:** MISRA violation: `A compatible declaration shall be visible when an object... with external linkage is defined`.
+**The Cause:** Global variables defined in a `.c` file without a corresponding `extern` declaration in a `.h` file.
+**The Solution:** Either move the variable to `static` scope if it's local to the file, or add an `extern` declaration to the header file to provide a visible interface for other translation units.
+
+### Learning 18: Standard Library & Dead Declarations
+**The Struggle:** Violations for `<stdio.h>` and unused `typedef struct`.
+**The Cause:** MISRA Rule 21.6 prohibits standard I/O to ensure determinism, and Rules 2.3/2.4 prohibit unused types to minimize code complexity.
+**The Solution:** Replace standard I/O with hardware-specific drivers or lightweight custom formatters. Remove all unused type and tag declarations to ensure the codebase remains "lean" and fully traceable to requirements.
+
+### Learning 19: Custom Utilities vs. Standard Library
+**The Struggle:** MISRA 21.6 flags `stdio.h` usage, but string formatting is needed for UART.
+**The Cause:** `stdio.h` is non-deterministic and heavy for safety-critical systems.
+**The Solution:** Implement a lightweight, MISRA-compliant `app_itoa` and `app_ftoa` function using fixed-width types (`uint32_t` or `float`), explicit unsigned literals (`U`), and bounds checking. This ensures the binary remains small and the execution time remains predictable.
+
+### Learning 20: Floating Point Formatting without stdio
+**The Struggle:** Needing to log temperature/humidity floats while complying with MISRA 21.6.
+**The Cause:** Floating point support in `printf` is resource-heavy and non-deterministic.
+**The Solution:** Use the "Scale and Split" method. Cast the float to integers to separate the whole and fractional parts. This approach satisfies MISRA's determinism requirements and avoids pulling in the large standard I/O library.
+
+### Learning 21: Avoiding Variadic Functions (Rule 17.1)
+**The Struggle:** Wanting to use `snprintf`-like formatting for easy logging.
+**The Cause:** MISRA Rule 17.1 prohibits `<stdarg.h>`, meaning `%d` and `%f` formatters are not allowed because they lack type safety.
+**The Solution:** Use explicit data structures for logging or manual string concatenation. This ensures every piece of data is type-checked at compile time, preventing the stack corruption risks associated with `printf`.
+
+### Learning 22: Fixed-Argument Formatters vs. snprintf
+**The Struggle:** Maintaining simple function calls for logging without using prohibited variadic functions.
+**The Cause:** MISRA Rule 17.1 forbids `stdarg.h`, making `snprintf` unusable in strict environments.
+**The Solution:** Implement "Fixed-Argument Formatters." By defining a function with a specific number of parameters (Label, Value, Unit), we achieve the convenience of a single call while maintaining 100% type safety and stack predictability.

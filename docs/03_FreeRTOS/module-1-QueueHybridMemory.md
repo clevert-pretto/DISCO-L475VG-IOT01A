@@ -28,7 +28,7 @@ Following are the advanced aspects of the system we developed:
 ### The Queue-Based Gatekeeper
 To prevent UART corruption (e.g., "Hello World" interleaved with "Temp: 25C"), we avoided raw `HAL_UART_Transmit` calls from multiple tasks.
 * **Producer:** `tempSensorTask` sends a struct pointer to `xPrintQueue`.
-* **Consumer:** `vPrintqueuetask` blocks waiting for the queue. Once data arrives, it claims the UART.
+* **Consumer:** `vAppLoggerTask` blocks waiting for the queue. Once data arrives, it claims the UART.
 This ensures serialization without the priority inversion risks sometimes associated with Mutexes.
 
 ---

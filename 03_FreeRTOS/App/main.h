@@ -26,7 +26,19 @@
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
+/* External declaration for MISRA Rule 8.4 */
+extern UART_HandleTypeDef discoveryUART1;
+
 /* Exported macro ------------------------------------------------------------*/
+#define TASK_PRIORITY_HEARTBEAT_TASK      1
+#define TASK_PRIORITY_SYS_MANAGER_TASK    1
+#define TASK_PRIORITY_SENSOR_READ_TASK    1
+#define TASK_PRIORITY_APPLOGGER_TASK      1
+
+#define TASK_STACK_SIZE_HEARTBEAT_TASK    configMINIMAL_STACK_SIZE
+#define TASK_STACK_SIZE_SYS_MANAGER_TASK  configMINIMAL_STACK_SIZE
+#define TASK_STACK_SIZE_SENSOR_READ_TASK  (configMINIMAL_STACK_SIZE * 2u)
+#define TASK_STACK_SIZE_APPLOGGER_TASK    (configMINIMAL_STACK_SIZE * 2u)
 
 #define DISCO_BOARD_VCP_BAUDRATE   (uint32_t) 115200
 /* Exported functions ------------------------------------------------------- */

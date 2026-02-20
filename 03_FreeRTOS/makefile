@@ -23,6 +23,7 @@ C_SOURCES = $(sort \
 	$(wildcard App/*.c) \
 	$(wildcard App/Src/*.c) \
 	$(wildcard Drivers/BSP/B-L475E-IOT01/*.c) \
+	$(wildcard Drivers/BSP/Components/hts221/*.c) \
 	$(wildcard Drivers/CMSIS/Device/ST/STM32L4xx/Source/*.c) \
 	$(wildcard Drivers/STM32L4xx_HAL_Driver/Src/*.c) \
 	$(wildcard Middlewares/FreeRTOS/*.c) \
@@ -40,6 +41,7 @@ C_DEFS = -DSTM32L475xx -DUSE_HAL_DRIVER
 C_INCLUDES =  \
 -IApp/Inc \
 -IDrivers/BSP/B-L475E-IOT01 \
+-IDrivers/BSP/Components/hts221 \
 -IDrivers/CMSIS/Core/Include \
 -IDrivers/CMSIS/Device/ST/STM32L4xx/Include \
 -IDrivers/STM32L4xx_HAL_Driver \
@@ -56,7 +58,7 @@ CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-
 LDSCRIPT = STM32L475VGTx_FLASH.ld
 LIBS = -lc -lm -lnosys
 # --gc-sections is CRITICAL here. It removes the massive amount of unused HAL code we just copied.
-LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--gc-sections
+LDFLAGS = $(MCU) -specs=nosys.specs -T$(LDSCRIPT) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--gc-sections
 
 # 7. Build Logic
 C_OBJS = $(addprefix $(OBJ_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
