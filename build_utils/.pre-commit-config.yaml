@@ -31,7 +31,9 @@ repos:
             #"-I", "03_FreeRTOS/Drivers/CMSIS/Device/ST/STM32L4xx/Include",
             "-I", "03_FreeRTOS/Drivers/STM32L4xx_HAL_Driver",
             "-I", "03_FreeRTOS/Drivers/STM32L4xx_HAL_Driver/Inc",
-            "-D", "STM32L475xx" # Tells the linter which chip you are using
+            "-D", "STM32L475xx", # Tells the linter which chip you are using
+            #"--cppcheck-build-dir=.cppcheck_cache", # Consolidates artifacts here
+            "--quiet"
           ]
 
       # --- Lizard Hook ---

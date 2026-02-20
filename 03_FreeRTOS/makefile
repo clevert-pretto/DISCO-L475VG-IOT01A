@@ -73,6 +73,9 @@ vpath %.s $(sort $(dir $(ASM_SOURCES)))
 FLASH_SIZE = 1048576 # 0x100000 
 RAM_SIZE = 98304	 # 0x18000
 
+# --- Artifacts to Purge ---
+LINTER_ARTIFACTS = .cppcheck-addon-ctu-file ctu-info .cppcheck_cache
+
 # Build Rules
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).bin print_usage
 
@@ -111,6 +114,9 @@ print_usage: $(BUILD_DIR)/$(TARGET).elf
 clean:
 	@echo "Cleaning build directory..."
 	rm -rf $(BUILD_DIR)
+	rm -rf .cppcheck-addon-ctu-file/
+	rm -f .ctu-info
+	rm -f .dump
 
 # --- Static Analysis ---
 lint:
@@ -127,4 +133,9 @@ metrics:
 	lizard -w -l 15 -C 10 App/
 	@echo "--- Code complexity Analysis Finished ---"
 
-.PHONY: all clean lint metrics
+# Deep clean: Use this before a final commit or if linter acts weird
+linter-clean:
+	rm -rf $(LINTER_ARTIFACTS)
+	@echo "Linter artifacts purged."
+
+.PHONY: all clean lint metrics linter-clean

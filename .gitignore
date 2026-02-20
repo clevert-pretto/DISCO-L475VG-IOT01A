@@ -5,6 +5,7 @@ cat <<EOF > .gitignore
 *.bin
 *.map
 *.lst
+*.dump
 
 # IDE files
 .history/
