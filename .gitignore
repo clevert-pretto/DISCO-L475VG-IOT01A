@@ -12,3 +12,7 @@ EOF
 
 #WSL specific files (don't know other way yet)
 *.Identifier
+
+# Ignore any file or folder containing "ctu-file" or "ctu-info" anywhere in the project
+**/*ctu-file*
+**/*ctu-info*
