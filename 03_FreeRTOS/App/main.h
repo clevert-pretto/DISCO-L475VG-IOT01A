@@ -38,11 +38,13 @@ extern UART_HandleTypeDef discoveryUART1;
 #define TASK_PRIORITY_SYS_MANAGER_TASK    3
 #define TASK_PRIORITY_SENSOR_READ_TASK    1
 #define TASK_PRIORITY_APPLOGGER_TASK      2
+#define TASK_PRIORITY_COMMAND_TASK        2
 
 #define TASK_STACK_SIZE_HEARTBEAT_TASK    configMINIMAL_STACK_SIZE
-#define TASK_STACK_SIZE_SYS_MANAGER_TASK  configMINIMAL_STACK_SIZE
-#define TASK_STACK_SIZE_SENSOR_READ_TASK  (configMINIMAL_STACK_SIZE * 2u)
-#define TASK_STACK_SIZE_APPLOGGER_TASK    (configMINIMAL_STACK_SIZE * 2u)
+#define TASK_STACK_SIZE_SYS_MANAGER_TASK  (configMINIMAL_STACK_SIZE * 2u)
+#define TASK_STACK_SIZE_SENSOR_READ_TASK  (configMINIMAL_STACK_SIZE * 4u)
+#define TASK_STACK_SIZE_APPLOGGER_TASK    (configMINIMAL_STACK_SIZE * 4u)
+#define TASK_STACK_SIZE_COMMAND_TASK      (configMINIMAL_STACK_SIZE * 4u)
 
 #define DISCO_BOARD_VCP_BAUDRATE          (uint32_t) 115200
 #define DISCO_BOARD_UART_TIMEOUT_MS       100U
@@ -52,8 +54,17 @@ extern UART_HandleTypeDef discoveryUART1;
 #define EVENT_BIT_INIT_FAILED     (1UL << 1U)
 #define EVENT_BIT_FAULT_DETECTED  (1UL << 2U)
 
+
+#define TASK_ID_SYS_MANAGER     1U
+#define TASK_ID_HEART_BEAT      2U
+#define TASK_ID_SENSOR_READ     3U
+#define TASK_ID_APP_LOGGER      4U
+
+
 /* Handle for the Event Group */
 extern EventGroupHandle_t xSystemEventGroup;
+  extern TaskHandle_t xAppLoggerTaskHandle;
+  extern TaskHandle_t xAppCommandTaskHandle;
 /* Exported functions ------------------------------------------------------- */
 
 #endif /* MAIN_H */

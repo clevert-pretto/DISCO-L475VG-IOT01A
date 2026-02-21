@@ -1,0 +1,422 @@
+Starting Hardware Init...
+Storage: Magic Signature Found. Scanning flash...
+Storage: Resuming at addr: 3856
+QSPI Init OK | Size: 8 MB
+Hardware Init successful
+Command: Triggering Bulk Erase...
+Storage: Starting Full Chip Erase, system feels hang, but it don't (Wait ~25s)...
+Storage: Chip Erase Complete. Flash has Event Sector header only.
+Storage: RAM Page full, Written to flash...
+Command: Triggering Flash Dump...
+--- FLASH LOG DUMP START ---
+--- SECTOR HEADER ---
+Signature: 287454020
+Version: 1
+max event: 255
+Erase Count: 1
+---------------------
+TS: 20 | T: 2.
+TS: 20 | H: 2.
+TS: 1021 | T: 1.21
+TS: 1021 | H: 1.21
+TS: 2022 | T: 2.22
+TS: 2022 | H: 2.22
+TS: 43840 | T: 4.840
+TS: 43840 | H: 4.840
+TS: 44846 | T: 4.846
+TS: 44846 | H: 4.846
+TS: 45847 | T: 4.847
+TS: 45847 | H: 4.847
+TS: 46848 | T: 4.848
+TS: 46848 | H: 4.848
+TS: 47849 | T: 4.849
+--- FLASH LOG DUMP END ---
+Storage: RAM Page full, Written to flash...
+Command: Triggering Flash Dump...
+--- FLASH LOG DUMP START ---
+--- SECTOR HEADER ---
+Signature: 287454020
+Version: 1
+max event: 255
+Erase Count: 1
+---------------------
+TS: 20 | T: 2.
+TS: 20 | H: 2.
+TS: 1021 | T: 1.21
+TS: 1021 | H: 1.21
+TS: 2022 | T: 2.22
+TS: 2022 | H: 2.22
+TS: 43840 | T: 4.840
+TS: 43840 | H: 4.840
+TS: 44846 | T: 4.846
+TS: 44846 | H: 4.846
+TS: 45847 | T: 4.847
+TS: 45847 | H: 4.847
+TS: 46848 | T: 4.848
+TS: 46848 | H: 4.848
+TS: 47849 | T: 4.849
+TS: 47849 | H: 4.09
+TS: 48855 | T: 4.855
+TS: 48855 | H: 4.01
+TS: 49856 | T: 4.856
+TS: 49856 | H: 4.02
+TS: 50857 | T: 5.857
+TS: 50857 | H: 5.08
+TS: 51858 | T: 5.858
+TS: 51858 | H: 5.07
+TS: 52859 | T: 5.859
+TS: 52859 | H: 5.02
+TS: 53860 | T: 5.860
+TS: 53860 | H: 5.03
+TS: 54861 | T: 5.861
+TS: 54861 | H: 5.03
+TS: 55862 | T: 5.862
+--- FLASH LOG DUMP END ---
+Command: Triggering Event sector erase...
+Storage: Starting Event log sector Erase (Wait ~5s)...
+Storage: Log Partition Full. Sector Erased & Wrapped.
+Storage: RAM Page full, Written to flash...
+Storage: RAM Page full, Written to flash...
+Storage: RAM Page full, Written to flash...
+Storage: RAM Page full, Written to flash...
+Storage: RAM Page full, Written to flash...
+Storage: RAM Page full, Written to flash...
+Storage: RAM Page full, Written to flash...
+Storage: RAM Page full, Written to flash...
+Command: Triggering Flash Dump...
+--- FLASH LOG DUMP START ---
+--- SECTOR HEADER ---
+Signature: 287454020
+Version: 1
+max event: 255
+Erase Count: 2
+---------------------
+TS: 55862 | H: 5.862
+TS: 56868 | T: 5.868
+TS: 56868 | H: 5.01
+TS: 57869 | T: 5.869
+TS: 57869 | H: 5.02
+TS: 58870 | T: 5.870
+TS: 58870 | H: 5.03
+TS: 59871 | T: 5.871
+TS: 59871 | H: 5.03
+TS: 60872 | T: 6.872
+TS: 60872 | H: 6.872
+TS: 61873 | T: 6.873
+TS: 61873 | H: 6.03
+TS: 62874 | T: 6.874
+TS: 62874 | H: 6.874
+TS: 63875 | T: 6.875
+TS: 63875 | H: 6.875
+TS: 64881 | T: 6.881
+TS: 64881 | H: 6.881
+TS: 65882 | T: 6.882
+TS: 65882 | H: 6.03
+TS: 66883 | T: 6.883
+TS: 66883 | H: 6.883
+TS: 67884 | T: 6.884
+TS: 67884 | H: 6.884
+TS: 68885 | T: 6.885
+TS: 68885 | H: 6.885
+TS: 69886 | T: 6.886
+TS: 69886 | H: 6.886
+TS: 70887 | T: 7.887
+TS: 70887 | H: 7.887
+TS: 71888 | T: 7.888
+TS: 71888 | H: 7.888
+TS: 72894 | T: 7.894
+TS: 72894 | H: 7.894
+TS: 73895 | T: 7.895
+TS: 73895 | H: 7.895
+TS: 74896 | T: 7.896
+TS: 74896 | H: 7.896
+TS: 75897 | T: 7.897
+TS: 75897 | H: 7.897
+TS: 76898 | T: 7.898
+TS: 76898 | H: 7.898
+TS: 77899 | T: 7.899
+TS: 77899 | H: 7.899
+TS: 78900 | T: 7.900
+TS: 78900 | H: 7.900
+TS: 79901 | T: 7.901
+TS: 79901 | H: 7.901
+TS: 80907 | T: 8.907
+TS: 80907 | H: 8.907
+TS: 81908 | T: 8.908
+TS: 81908 | H: 8.908
+TS: 82909 | T: 8.909
+TS: 82909 | H: 8.909
+TS: 83910 | T: 8.910
+TS: 83910 | H: 8.910
+TS: 84911 | T: 8.911
+TS: 84911 | H: 8.911
+TS: 85912 | T: 8.912
+TS: 85912 | H: 8.912
+TS: 86913 | T: 8.913
+TS: 86913 | H: 8.913
+TS: 87914 | T: 8.914
+TS: 87914 | H: 8.914
+TS: 88920 | T: 8.920
+TS: 88920 | H: 8.920
+TS: 89921 | T: 8.921
+TS: 89921 | H: 8.921
+TS: 90922 | T: 9.922
+TS: 90922 | H: 9.922
+TS: 91923 | T: 9.923
+TS: 91923 | H: 9.923
+TS: 92924 | T: 9.924
+TS: 92924 | H: 9.924
+TS: 93925 | T: 9.925
+TS: 93925 | H: 9.925
+TS: 94926 | T: 9.926
+TS: 94926 | H: 9.926
+TS: 95927 | T: 9.927
+TS: 95927 | H: 9.927
+TS: 96933 | T: 9.933
+TS: 96933 | H: 9.933
+TS: 97934 | T: 9.934
+TS: 97934 | H: 9.01
+TS: 98935 | T: 9.935
+TS: 98935 | H: 9.935
+TS: 99936 | T: 9.936
+TS: 99936 | H: 9.936
+TS: 100937 | T: 1.0937
+TS: 100937 | H: 1.0937
+TS: 101938 | T: 1.1938
+TS: 101938 | H: 1.1938
+TS: 102939 | T: 1.2939
+TS: 102939 | H: 1.2939
+TS: 103940 | T: 1.3940
+TS: 103940 | H: 1.3940
+TS: 104946 | T: 1.4946
+TS: 104946 | H: 1.4946
+TS: 105947 | T: 1.5947
+TS: 105947 | H: 1.5947
+TS: 106948 | T: 1.6948
+TS: 106948 | H: 1.6948
+TS: 107949 | T: 1.7949
+TS: 107949 | H: 1.7949
+TS: 108950 | T: 1.8950
+TS: 108950 | H: 1.8950
+TS: 109951 | T: 1.9951
+TS: 109951 | H: 1.9951
+TS: 110952 | T: 1.0952
+TS: 110952 | H: 1.0952
+TS: 111953 | T: 1.1953
+TS: 111953 | H: 1.1953
+TS: 112959 | T: 1.2959
+TS: 112959 | H: 1.2959
+TS: 113960 | T: 1.3960
+TS: 113960 | H: 1.3960
+TS: 114961 | T: 1.4961
+TS: 114961 | H: 1.4961
+TS: 115962 | T: 1.5962
+TS: 115962 | H: 1.5962
+TS: 116963 | T: 1.6963
+TS: 116963 | H: 1.6963
+TS: 117964 | T: 1.7964
+TS: 117964 | H: 1.7964
+TS: 118965 | T: 1.8965
+TS: 118965 | H: 1.8965
+TS: 119966 | T: 1.9966
+--- FLASH LOG DUMP END ---
+Storage: RAM Page full, Written to flash...
+Command: Triggering Event sector erase...
+Storage: Starting Event log sector Erase (Wait ~5s)...
+Storage: Log Partition Full. Sector Erased & Wrapped.
+Command: Triggering Flash Dump...
+--- FLASH LOG DUMP START ---
+--- SECTOR HEADER ---
+Signature: 287454020
+Version: 1
+max event: 255
+Erase Count: 3
+---------------------
+--- FLASH LOG DUMP END ---
+Storage: RAM Page full, Written to flash...
+Command: Triggering Flash Dump...
+--- FLASH LOG DUMP START ---
+--- SECTOR HEADER ---
+Signature: 287454020
+Version: 1
+max event: 255
+Erase Count: 3
+---------------------
+TS: 127979 | H: 1.7979
+TS: 128985 | T: 1.8985
+TS: 128985 | H: 1.8985
+TS: 129986 | T: 1.9986
+TS: 129986 | H: 1.9986
+TS: 130987 | T: 1.0987
+TS: 130987 | H: 1.0987
+TS: 131988 | T: 1.1988
+TS: 131988 | H: 1.1988
+TS: 132989 | T: 1.2989
+TS: 132989 | H: 1.2989
+TS: 133990 | T: 1.3990
+TS: 133990 | H: 1.3990
+TS: 134991 | T: 1.4991
+TS: 134991 | H: 1.4991
+TS: 135992 | T: 1.5992
+--- FLASH LOG DUMP END ---
+Storage: RAM Page full, Written to flash...
+Storage: RAM Page full, Written to flash...
+Command: Triggering Flash Dump...
+--- FLASH LOG DUMP START ---
+--- SECTOR HEADER ---
+Signature: 287454020
+Version: 1
+max event: 255
+Erase Count: 3
+---------------------
+TS: 127979 | H: 1.7979
+TS: 128985 | T: 1.8985
+TS: 128985 | H: 1.8985
+TS: 129986 | T: 1.9986
+TS: 129986 | H: 1.9986
+TS: 130987 | T: 1.0987
+TS: 130987 | H: 1.0987
+TS: 131988 | T: 1.1988
+TS: 131988 | H: 1.1988
+TS: 132989 | T: 1.2989
+TS: 132989 | H: 1.2989
+TS: 133990 | T: 1.3990
+TS: 133990 | H: 1.3990
+TS: 134991 | T: 1.4991
+TS: 134991 | H: 1.4991
+TS: 135992 | T: 1.5992
+TS: 135992 | H: 1.5992
+TS: 136998 | T: 1.6998
+TS: 136998 | H: 1.6998
+TS: 137999 | T: 1.7999
+TS: 137999 | H: 1.7999
+TS: 139000 | T: 1.9000
+TS: 139000 | H: 1.9000
+TS: 140001 | T: 1.0001
+TS: 140001 | H: 1.0001
+TS: 141002 | T: 1.1002
+TS: 141002 | H: 1.1002
+TS: 142003 | T: 1.2003
+TS: 142003 | H: 1.2003
+TS: 143004 | T: 1.3004
+TS: 143004 | H: 1.3004
+TS: 144005 | T: 1.4005
+TS: 144005 | H: 1.4005
+TS: 145011 | T: 1.5011
+TS: 145011 | H: 1.5011
+TS: 146012 | T: 1.6012
+TS: 146012 | H: 1.6012
+TS: 147013 | T: 1.7013
+TS: 147013 | H: 1.7013
+TS: 148014 | T: 1.8014
+TS: 148014 | H: 1.8014
+TS: 149015 | T: 1.9015
+TS: 149015 | H: 1.9015
+TS: 150016 | T: 1.0016
+TS: 150016 | H: 1.0016
+TS: 151017 | T: 1.1017
+TS: 151017 | H: 1.1017
+TS: 152018 | T: 1.2018
+--- FLASH LOG DUMP END ---
+Command: Triggering Event sector erase...
+Storage: Starting Event log sector Erase (Wait ~5s)...
+Storage: Log Partition Full. Sector Erased & Wrapped.
+Command: Triggering Flash Dump...
+--- FLASH LOG DUMP START ---
+--- SECTOR HEADER ---
+Signature: 287454020
+Version: 1
+max event: 255
+Erase Count: 4
+---------------------
+--- FLASH LOG DUMP END ---
+Command: Triggering Event sector erase...
+Storage: Starting Event log sector Erase (Wait ~5s)...
+Storage: Log Partition Full. Sector Erased & Wrapped.
+Command: Triggering Flash Dump...
+--- FLASH LOG DUMP START ---
+--- SECTOR HEADER ---
+Signature: 287454020
+Version: 1
+max event: 255
+Erase Count: 5
+---------------------
+--- FLASH LOG DUMP END ---
+Storage: RAM Page full, Written to flash...
+Command: Triggering Event sector erase...
+Storage: Starting Event log sector Erase (Wait ~5s)...
+Storage: Log Partition Full. Sector Erased & Wrapped.
+Command: Triggering Flash Dump...
+--- FLASH LOG DUMP START ---
+--- SECTOR HEADER ---
+Signature: 287454020
+Version: 1
+max event: 255
+Erase Count: 6
+---------------------
+--- FLASH LOG DUMP END ---
+Storage: RAM Page full, Written to flash...
+Storage: RAM Page full, Written to flash...
+Storage: RAM Page full, Written to flash...
+Command: Triggering Flash Dump...
+--- FLASH LOG DUMP START ---
+--- SECTOR HEADER ---
+Signature: 287454020
+Version: 1
+max event: 255
+Erase Count: 6
+---------------------
+TS: 160035 | H: 1.0035
+TS: 161041 | T: 1.1041
+TS: 161041 | H: 1.1041
+TS: 162047 | T: 1.2047
+TS: 162047 | H: 1.2047
+TS: 163048 | T: 1.3048
+TS: 163048 | H: 1.3048
+TS: 164049 | T: 1.4049
+TS: 164049 | H: 1.4049
+TS: 165050 | T: 1.5050
+TS: 165050 | H: 1.5050
+TS: 166051 | T: 1.6051
+TS: 166051 | H: 1.6051
+TS: 167052 | T: 1.7052
+TS: 167052 | H: 1.7052
+TS: 168053 | T: 1.8053
+TS: 16 | T: 1.
+TS: 16 | H: 1.
+TS: 1017 | T: 1.17
+TS: 1017 | H: 1.17
+TS: 2018 | T: 2.18
+TS: 2018 | H: 2.18
+TS: 3019 | T: 3.19
+TS: 3019 | H: 3.19
+TS: 4020 | T: 4.20
+TS: 4020 | H: 4.20
+TS: 5021 | T: 5.21
+TS: 5021 | H: 5.21
+TS: 6022 | T: 6.22
+TS: 6022 | H: 6.22
+TS: 7023 | T: 7.23
+TS: 7023 | H: 7.23
+TS: 8029 | T: 8.29
+TS: 8029 | H: 8.29
+TS: 9030 | T: 9.30
+TS: 9030 | H: 9.30
+TS: 10031 | T: 1.031
+TS: 10031 | H: 1.031
+TS: 11032 | T: 1.032
+TS: 11032 | H: 1.032
+TS: 12033 | T: 1.033
+TS: 12033 | H: 1.033
+TS: 13034 | T: 1.034
+TS: 13034 | H: 1.034
+TS: 14035 | T: 1.035
+TS: 14035 | H: 1.035
+TS: 15036 | T: 1.036
+--- FLASH LOG DUMP END ---
+Storage: RAM Page full, Written to flash...
+Storage: RAM Page full, Written to flash...
+Storage: RAM Page full, Written to flash...
+Storage: RAM Page full, Written to flash...
+Storage: RAM Page full, Written to flash...
+

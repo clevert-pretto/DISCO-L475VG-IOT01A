@@ -12,6 +12,7 @@ repos:
           [
             "--enable=all",
             "--addon=build_utils/misra_rules.json",
+            "--inline-suppr",
             "--suppressions-list=build_utils/cppcheck_suppressions.txt",
             "--error-exitcode=1",
             "--std=c11",

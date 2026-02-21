@@ -38,6 +38,18 @@ unusedFunction:03_FreeRTOS/App/Src/xtoa.c
 misra-c2012-2.5:03_FreeRTOS/App/main.h
 misra-c2012-2.3:03_FreeRTOS/App/Inc/appLogger.h
 misra-c2012-2.4:03_FreeRTOS/App/Inc/appLogger.h
-misra-c2012-2.3:03_FreeRTOS/App/Inc/appLogger.h
+misra-c2012-2.5:03_FreeRTOS/App/Inc/appLogger.h
 misra-c2012-2.5:03_FreeRTOS/App/Inc/appSensorRead.h
 misra-c2012-2.5:03_FreeRTOS/App/Inc/sysManager.h
+
+# Allow memcpy for raw byte-to-struct translation in appLogger, sensor logic
+misra-c2012-21.15:03_FreeRTOS/App/Src/appLogger.c
+misra-c2012-21.16:03_FreeRTOS/App/Src/appLogger.c
+misra-c2012-21.15:03_FreeRTOS/App/Src/appSensorRead.c
+misra-c2012-21.16:03_FreeRTOS/App/Src/appSensorRead.c
+
+# FreeRTOS portYIELD_FROM_ISR uses internal constants without U suffix
+misra-c2012-7.2:03_FreeRTOS/App/Src/appLogger.c
+
+# Ignore missing const in HAL callbacks (Vendor signature)
+constParameterPointer:*appLogger.c

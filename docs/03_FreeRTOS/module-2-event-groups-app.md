@@ -43,8 +43,6 @@ Initially, the system state was managed via a global `enum`. To align with produ
 * **The Mechanism:** The System Manager acts as the "Producer," setting specific bits (e.g., `EVENT_BIT_INIT_SUCCESS` or `EVENT_BIT_FAULT_DETECTED`) upon completing hardware checks.
 * **The Consumers:** Worker tasks (like the Heartbeat) act as consumers. Instead of polling a variable and wasting CPU cycles, they block on `xEventGroupWaitBits`, consuming 0% CPU until the exact state condition is met.
 
-
-
 ---
 
 ## 🛠️ Engineering Journal & Lessons Learned

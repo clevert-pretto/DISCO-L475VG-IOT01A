@@ -43,6 +43,7 @@ C_INCLUDES =  \
 -IApp/Inc \
 -IDrivers/BSP/B-L475E-IOT01 \
 -IDrivers/BSP/Components/hts221 \
+-IDrivers/BSP/Components/mx25r6435f \
 -IDrivers/CMSIS/Core/Include \
 -IDrivers/CMSIS/Device/ST/STM32L4xx/Include \
 -IDrivers/STM32L4xx_HAL_Driver \

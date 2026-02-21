@@ -18,7 +18,8 @@ SystemState_t currentState = SYS_STATE_INIT_HARDWARE;
 
 void vSystemManagerTask(void *pvParameters) 
 {
-    uint8_t initStatus = 0;
+    uint8_t sensorInitStatus = 0;
+    uint8_t QSPIFlashInitStatus = 0;
     (void)pvParameters;
 
     while(1) {
@@ -27,26 +28,36 @@ void vSystemManagerTask(void *pvParameters)
                 appLoggerMessageEntry("Starting Hardware Init...\r\n", 
                                         sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
                 
-                initStatus = appSensorRead_Init();
-                
-                if ((initStatus & (appSENSOR_TEMPERATURE | appSENSOR_HUMIDITY)) != 0U)
+                sensorInitStatus = appSensorRead_Init();
+                QSPIFlashInitStatus = appLogger_storage_Init();
+                if (((sensorInitStatus & (appSENSOR_TEMPERATURE | appSENSOR_HUMIDITY)) == 
+                         (appSENSOR_TEMPERATURE | appSENSOR_HUMIDITY)) &&
+                            (QSPIFlashInitStatus == (uint8_t)pdPASS))
                 {
                     currentState = SYS_STATE_OPERATIONAL;
-
+                    
+                    appLoggerMessageEntry("Hardware Init successful\r\n", 
+                                        sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
+                                        
                     /* Clear any fault bits and set Success */
                     (void)xEventGroupClearBits(xSystemEventGroup, EVENT_BIT_INIT_FAILED | EVENT_BIT_FAULT_DETECTED);
                     (void)xEventGroupSetBits(xSystemEventGroup, EVENT_BIT_INIT_SUCCESS);
                 } 
                 else 
                 {
-                    if(!(initStatus & appSENSOR_TEMPERATURE))
+                    if(!(sensorInitStatus & appSENSOR_TEMPERATURE))
                     {
                         appLoggerMessageEntry("Temperature Sensor Initialization Failed!\r\n", 
                                             sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
                     }
-                    else if(!(initStatus & appSENSOR_HUMIDITY))
+                    else if(!(sensorInitStatus & appSENSOR_HUMIDITY))
                     {
                         appLoggerMessageEntry("Humidity Sensor Initialization Failed!\r\n", 
+                                            sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
+                    }
+                    else if((QSPIFlashInitStatus == (uint8_t)pdFAIL))
+                    {
+                        appLoggerMessageEntry("QSPI Initialization Failed!\r\n", 
                                             sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
                     }
                     else

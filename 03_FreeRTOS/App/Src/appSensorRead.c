@@ -85,9 +85,16 @@ void vSensorReadTask(void *pvParameters)
     (void)pvParameters;
     float fTemp; 
     float fHumidity;
-    static char pcMessage[LOGGER_MESSAGE_STR_LEN] = {0}; // Temporary struct to fill
+    //static char pcMessage[LOGGER_MESSAGE_STR_LEN] = {0}; // Temporary struct to fill
     //char tempBuf[5];
+    sStorageEvent_t tEvent;
+    sStorageEvent_t hEvent;
 
+    tEvent.eventID =  EVENT_ID_T_SENSOR_DATA_POINT;
+    tEvent.taskID = TASK_ID_SENSOR_READ;
+    hEvent.eventID =  EVENT_ID_H_SENSOR_DATA_POINT;
+    hEvent.taskID = TASK_ID_SENSOR_READ;
+    
     for (;;)
     {
         if(currentState == SYS_STATE_OPERATIONAL)
@@ -95,11 +102,18 @@ void vSensorReadTask(void *pvParameters)
             //Read temperature sensor
             fTemp = BSP_TSENSOR_ReadTemp();
             fHumidity = BSP_HSENSOR_ReadHumidity();
+            
+            tEvent.timestamp = xTaskGetTickCount();
+            hEvent.timestamp = tEvent.timestamp;
+            (void)memcpy(&tEvent.payload[0], &fTemp, sizeof(float));
+            (void)memcpy(&hEvent.payload[0], &fHumidity, sizeof(float));
+            appLoggerEventEntry(&tEvent);
+            appLoggerEventEntry(&hEvent);
 
-            LOG_SENSOR(pcMessage, "Temp", fTemp, "C");
-            appLoggerMessageEntry(pcMessage, sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
-            LOG_SENSOR(pcMessage, "Humidity", fHumidity, "%");
-            appLoggerMessageEntry(pcMessage, sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
+            //LOG_SENSOR(pcMessage, "Temp", fTemp, "C");
+            //appLoggerMessageEntry(pcMessage, sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
+            // LOG_SENSOR(pcMessage, "Humidity", fHumidity, "%");
+            // appLoggerMessageEntry(pcMessage, sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
         }
         // Add a delay so we don't spam the queue infinitely
         vTaskDelay(SENSOR_READ_SLEEP_DURATION); // Send data once per second

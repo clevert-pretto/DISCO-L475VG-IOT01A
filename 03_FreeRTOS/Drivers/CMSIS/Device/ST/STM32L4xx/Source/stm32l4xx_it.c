@@ -23,6 +23,10 @@
 #include "stm32l4xx_it.h"
 #include <stdint.h>
 #include <stdio.h> // Ensure you include this for printf
+#include "FreeRTOS.h"
+#include "stm32l4xx.h"
+#include "stm32l4xx_hal.h"
+#include "stm32l4xx_hal_uart.h"
 
 /** @addtogroup STM32L4xx_HAL_Examples
   * @{
@@ -166,6 +170,19 @@ void DebugMon_Handler(void)
 // {
 //   HAL_IncTick();
 // }
+
+/* 1. External reference to the UART handle defined in main.c */
+extern UART_HandleTypeDef discoveryUART1;
+
+/**
+  * @brief This function handles USART1 global interrupt.
+  */
+void USART1_IRQHandler(void)
+{
+  /* 2. Route the hardware signal to the HAL's internal state machine */
+  /* This function clears flags and eventually calls HAL_UART_RxCpltCallback */
+  HAL_UART_IRQHandler(&discoveryUART1);
+}
 
 /******************************************************************************/
 /*                 STM32L4xx Peripherals Interrupt Handlers                   */

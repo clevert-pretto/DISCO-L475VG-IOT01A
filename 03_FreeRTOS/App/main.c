@@ -34,6 +34,12 @@ void assert_failed(uint8_t *file, uint32_t line);
 UART_HandleTypeDef discoveryUART1;
 EventGroupHandle_t xSystemEventGroup;
 
+//For App Logger task
+TaskHandle_t xAppLoggerTaskHandle = NULL;
+
+//For Command task
+TaskHandle_t xAppCommandTaskHandle = NULL;
+
 // Hardware Setup
 /**
  * @brief  System Clock Configuration
@@ -199,9 +205,6 @@ int main(void)
     static StaticTask_t xvSensorReadTaskTCB;
     static StackType_t  xSensorReadStack[TASK_STACK_SIZE_SENSOR_READ_TASK];
     
-    ////For App Logger task
-    static TaskHandle_t xAppLoggerTaskHandle = NULL;
-
     /* STM32L4xx HAL library initialization:
       - Configure the Flash prefetch, Flash preread and Buffer caches
       - Systick timer is configured by default as source of time base, but user
@@ -267,6 +270,15 @@ int main(void)
                 (void *)NULL,                           // Parameter
                 TASK_PRIORITY_APPLOGGER_TASK,           // Priority
                 &xAppLoggerTaskHandle                   // Handle Storage
+    );
+
+    /* Create a DYNAMIC Task (Flexible, uses Heap) */
+    (void)xTaskCreate(vCommandTask,                     // Function
+                "CommandTask",                          // Name
+                TASK_STACK_SIZE_COMMAND_TASK,           // Stack Size
+                (void *)NULL,                           // Parameter
+                TASK_PRIORITY_COMMAND_TASK,             // Priority
+                &xAppCommandTaskHandle                  // Handle Storage
     );
 
     // Start Scheduler (Should not return)
