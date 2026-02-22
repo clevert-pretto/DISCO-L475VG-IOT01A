@@ -63,7 +63,7 @@ The `vSystemManagerTask` serves as the central Quality Gate. It utilizes `xEvent
 * **Fault-Tolerant Watchdog:** A synchronized hardware/software safety system that detects and recovers from task deadlocks or infinite loops.
 * **Non-Blocking Hardware Operations:** Bulk Erase implementation that offloads status monitoring to the QSPI peripheral, maintaining system responsiveness during flash maintenance.
 * **Deterministic Reliability Gate:** A centralized health monitor in the System Manager that enforces strict task-level check-ins before petting the hardware watchdog.
-* **v3.1** - Tag to refer.
+* **v2.3** - Tag to refer.
 
 --- 
 
