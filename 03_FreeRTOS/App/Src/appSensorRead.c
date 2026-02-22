@@ -117,5 +117,7 @@ void vSensorReadTask(void *pvParameters)
         }
         // Add a delay so we don't spam the queue infinitely
         vTaskDelay(SENSOR_READ_SLEEP_DURATION); // Send data once per second
+
+        (void)xEventGroupSetBits(xWatchdogEventGroup, WATCHDOG_EVENT_BIT_TASK_SENSOR_READ);
     }
 }

@@ -184,6 +184,13 @@ void USART1_IRQHandler(void)
   HAL_UART_IRQHandler(&discoveryUART1);
 }
 
+extern QSPI_HandleTypeDef QSPIHandle;
+void QUADSPI_IRQHandler(void)
+{
+  /* Forward the hardware signal to the HAL State Machine */
+  HAL_QSPI_IRQHandler(&QSPIHandle);
+}
+
 /******************************************************************************/
 /*                 STM32L4xx Peripherals Interrupt Handlers                   */
 /*  Add here the Interrupt Handler for the used peripheral(s) (PPP), for the  */

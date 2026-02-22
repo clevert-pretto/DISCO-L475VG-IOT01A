@@ -44,5 +44,6 @@ void HeartBeatTask(void *pvParameters)
             BSP_LED_Toggle(LED2);
             vTaskDelay(pdMS_TO_TICKS(heartbeat_fault_delay_ms));
         }
+        (void)xEventGroupSetBits(xWatchdogEventGroup, WATCHDOG_EVENT_BIT_TASK_HEARTBEAT);
     }
 }

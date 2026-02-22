@@ -26,6 +26,8 @@ static QueueHandle_t xCommandQueue;
 static QueueHandle_t xEventQueue;
 static SemaphoreHandle_t xQSPIMutex = NULL;
 static SemaphoreHandle_t xUART1Mutex = NULL;
+static SemaphoreHandle_t xEraseCompleteSemaphore = NULL;
+//extern QSPI_HandleTypeDef QSPIHandle;
 
 /* Global variable tracking the head of the log */
 static uint32_t u32CurrentWriteAddress = 0U;
@@ -234,45 +236,90 @@ static void appLogger_storage_EventSectorErase(void)
     }
 }
 
+/**
+  * @brief  Status Match callback for QSPI.
+  * @param  hqspi: QSPI handle
+  * @retval None
+  */
+
+/* cppcheck-suppress [constParameterPointer, misra-c2012-2.7] */
+/* cppcheck-suppress [constParameterPointer, misra-c2012-8.4] */
+void HAL_QSPI_StatusMatchCallback(QSPI_HandleTypeDef *hqspi)
+{
+    /* Signal that the erase/write is physically complete on the silicon */
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    
+    if (xEraseCompleteSemaphore != NULL)
+    {
+        (void)xSemaphoreGiveFromISR(xEraseCompleteSemaphore, &xHigherPriorityTaskWoken);
+    }
+
+    /* Force a context switch if the Command Task was waiting */
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+
 static void appLogger_storage_BulkErase(void)
 {
     appLoggerMessageEntry("Storage: Starting Full Chip Erase, system feels hang, but it don't (Wait ~25s)...\r\n", 
                         sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
 
+    QSPI_CommandTypeDef s_command = {0};
+    QSPI_AutoPollingTypeDef s_config = {0};
+
     if (xSemaphoreTake(xQSPIMutex, portMAX_DELAY) == pdTRUE)
     {
-        sLogSectorHeader_t currentHeader;
 
-        /* Re-write the header with the new count */
-        currentHeader.magicSignature = STORAGE_EVENT_SECTOR_MAGIC_SIGNATURE;
-        currentHeader.version = LOG_EVENT_SECTOR_VERSION;
-        currentHeader.maxEvents = MAX_LOG_EVENTS;
-        currentHeader.eraseCount = 1;
-        
 
-        /* 1. Initiate the Bulk Erase */
-        if (BSP_QSPI_Erase_Chip() == QSPI_OK)
+        s_command.Instruction = CHIP_ERASE_CMD;
+        s_command.InstructionMode = QSPI_INSTRUCTION_1_LINE;
+        s_command.AddressMode = QSPI_ADDRESS_NONE;
+        s_command.DataMode = QSPI_DATA_NONE;
+
+        if (HAL_QSPI_Command(&QSPIHandle, &s_command, 100) == HAL_OK)
         {
-            /* 2. Wait for completion without blocking the entire CPU */
-            while (BSP_QSPI_GetStatus() == QSPI_BUSY)
+            /* 2. Configure Auto-Polling for WIP (Bit 0) to become 0 */
+            s_config.Match = 0x00;
+            s_config.Mask  = 0x01;
+            s_config.MatchMode = QSPI_MATCH_MODE_AND;
+            s_config.Interval = 0x10;
+            s_config.StatusBytesSize = 1;
+
+            /* 3. Start Interrupt-driven polling */
+            if (HAL_QSPI_AutoPolling_IT(&QSPIHandle, &s_command, &s_config) == HAL_OK)
             {
-                /* Give 100ms to other tasks while hardware is busy */
-                vTaskDelay(pdMS_TO_TICKS(100));
+                bool eraseFinishedSignalReceived = false;
+                for(int i = 0; i < 30; i++) 
+                {
+                    /* We MUST check the return value of xSemaphoreTake */
+                    if (xSemaphoreTake(xEraseCompleteSemaphore, pdMS_TO_TICKS(1000)) == pdTRUE)
+                    {
+                        eraseFinishedSignalReceived = true;
+                        break;
+                    }
+                    (void)HAL_IWDG_Refresh(&IWDG_handle);
+                    (void)xEventGroupSetBits(xWatchdogEventGroup, WATCHDOG_EVENT_BIT_TASK_COMMAND);
+                }
+                if (eraseFinishedSignalReceived) 
+                {
+                    appLoggerMessageEntry("Storage: Bulk Erase Complete via ISR.\r\n", sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
+
+                    /* 3. Re-write the header with the new count */
+                    sLogSectorHeader_t currentHeader;
+                    currentHeader.magicSignature = STORAGE_EVENT_SECTOR_MAGIC_SIGNATURE;
+                    currentHeader.version = LOG_EVENT_SECTOR_VERSION;
+                    currentHeader.maxEvents = MAX_LOG_EVENTS;
+                    //currentHeader.eraseCount = 1; //
+                    (void)BSP_QSPI_Write((uint8_t*)&currentHeader, LOG_PARTITION_START, LOG_HEADER_SIZE);
+
+                    u32CurrentWriteAddress = LOG_DATA_START;
+                }
+                else 
+                {
+                    appLoggerMessageEntry("CRITICAL: Erase Timeout! Interrupt never arrived.\r\n", sAPPLOGGER_EVENT_CODE_LOG_ERROR);
+                }
             }
-
-            BSP_QSPI_Write((uint8_t*)&currentHeader, LOG_PARTITION_START, LOG_HEADER_SIZE);
-
-            /* Reset the software write head */
-            u32CurrentWriteAddress = LOG_DATA_START;
-            appLoggerMessageEntry("Storage: Chip Erase Complete. Flash has Event Sector header only.\r\n", 
-                                sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
         }
-        else
-        {
-            appLoggerMessageEntry("Storage: Chip Erase FAILED!\r\n", 
-                                sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
-        }
-
         (void)xSemaphoreGive(xQSPIMutex);
     }
 }
@@ -378,12 +425,15 @@ void appLogger_Init(void)
     xEventQueue = xQueueCreate(20, LOG_ENTRY_SIZE);
     /* Create the Mutex before any task tries to use it */
     xQSPIMutex = xSemaphoreCreateMutex();
+    xEraseCompleteSemaphore = xSemaphoreCreateBinary();
     xUART1Mutex = xSemaphoreCreateMutex();
     xCommandQueue = xQueueCreate(10, sizeof(uint8_t));
 
     /* Manually enable the interrupt in NVIC (BSP usually skips this) */
     HAL_NVIC_SetPriority(USART1_IRQn, 6, 0); 
+    HAL_NVIC_SetPriority(QUADSPI_IRQn, 6, 0); 
     HAL_NVIC_EnableIRQ(USART1_IRQn);
+    HAL_NVIC_EnableIRQ(QUADSPI_IRQn);
 }
 
 /* cppcheck-suppress misra-c2012-8.7 */
@@ -560,6 +610,7 @@ void vAppLoggerTask(void *pvParameters)
                 eventCount = 0;
             }
         }
+        (void)xEventGroupSetBits(xWatchdogEventGroup, WATCHDOG_EVENT_BIT_TASK_APP_LOGGER);
     }
 }
 
@@ -704,10 +755,11 @@ void vCommandTask(void *pvParameters)
 
     for (;;)
     {
-        /* This task will SLEEP here until a key is pressed */
-        if (xQueueReceive(xCommandQueue, &rxChar, portMAX_DELAY) == pdPASS)
+        /* This task will SLEEP for 1000 sec */
+        if (xQueueReceive(xCommandQueue, &rxChar, 1000) == pdPASS)
         {
             Command_ProcessChar(rxChar);
         }
+        (void)xEventGroupSetBits(xWatchdogEventGroup, WATCHDOG_EVENT_BIT_TASK_COMMAND);
     }
 }

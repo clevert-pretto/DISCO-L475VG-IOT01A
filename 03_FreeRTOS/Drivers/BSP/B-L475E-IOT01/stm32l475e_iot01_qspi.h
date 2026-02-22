@@ -40,7 +40,7 @@
 /** @addtogroup STM32L475E_IOT01_QSPI
   * @{
   */
-
+extern QSPI_HandleTypeDef QSPIHandle;
 /* Exported constants --------------------------------------------------------*/ 
 /** @defgroup STM32L475E_IOT01_QSPI_Exported_Constants QSPI Exported Constants
   * @{

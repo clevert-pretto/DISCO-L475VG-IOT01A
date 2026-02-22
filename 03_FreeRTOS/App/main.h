@@ -32,7 +32,7 @@
 /* Exported constants --------------------------------------------------------*/
 /* External declaration for MISRA Rule 8.4 */
 extern UART_HandleTypeDef discoveryUART1;
-
+extern IWDG_HandleTypeDef IWDG_handle;
 /* Exported macro ------------------------------------------------------------*/
 #define TASK_PRIORITY_HEARTBEAT_TASK      0
 #define TASK_PRIORITY_SYS_MANAGER_TASK    3
@@ -54,6 +54,18 @@ extern UART_HandleTypeDef discoveryUART1;
 #define EVENT_BIT_INIT_FAILED     (1UL << 1U)
 #define EVENT_BIT_FAULT_DETECTED  (1UL << 2U)
 
+/* Watchdog event Group Bits */
+#define WATCHDOG_EVENT_BIT_TASK_APP_LOGGER     (1UL << 0U)
+#define WATCHDOG_EVENT_BIT_TASK_HEARTBEAT      (1UL << 1U)
+#define WATCHDOG_EVENT_BIT_TASK_SENSOR_READ    (1UL << 2U)
+#define WATCHDOG_EVENT_BIT_TASK_COMMAND        (1UL << 3U)
+
+#define WATCHDOG_MANDATORY_TASKS_BITMASK       (WATCHDOG_EVENT_BIT_TASK_APP_LOGGER | \
+                                                WATCHDOG_EVENT_BIT_TASK_HEARTBEAT | \
+                                                WATCHDOG_EVENT_BIT_TASK_SENSOR_READ | \
+                                                WATCHDOG_EVENT_BIT_TASK_COMMAND)
+
+#define IWDG_TIMEOUT_ms                         5000U
 
 #define TASK_ID_SYS_MANAGER     1U
 #define TASK_ID_HEART_BEAT      2U
@@ -63,6 +75,8 @@ extern UART_HandleTypeDef discoveryUART1;
 
 /* Handle for the Event Group */
 extern EventGroupHandle_t xSystemEventGroup;
+extern EventGroupHandle_t xWatchdogEventGroup;
+
   extern TaskHandle_t xAppLoggerTaskHandle;
   extern TaskHandle_t xAppCommandTaskHandle;
 /* Exported functions ------------------------------------------------------- */

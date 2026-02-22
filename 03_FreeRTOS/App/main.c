@@ -33,7 +33,8 @@ void assert_failed(uint8_t *file, uint32_t line);
 /* ============================ COMMON RESOURCES ============================ */
 UART_HandleTypeDef discoveryUART1;
 EventGroupHandle_t xSystemEventGroup;
-
+EventGroupHandle_t xWatchdogEventGroup;
+IWDG_HandleTypeDef IWDG_handle;
 //For App Logger task
 TaskHandle_t xAppLoggerTaskHandle = NULL;
 
@@ -64,7 +65,7 @@ static void SystemClock_Config(void)
 {
     RCC_ClkInitTypeDef RCC_ClkInitStruct;
     RCC_OscInitTypeDef RCC_OscInitStruct;
-
+    
     /* MSI is enabled after System reset, activate PLL with MSI as source */
     RCC_OscInitStruct.OscillatorType      = RCC_OSCILLATORTYPE_MSI;
     RCC_OscInitStruct.MSIState            = RCC_MSI_ON;
@@ -73,6 +74,13 @@ static void SystemClock_Config(void)
     RCC_OscInitStruct.PLL.PLLState        = RCC_PLL_ON;
     RCC_OscInitStruct.PLL.PLLSource       = RCC_PLLSOURCE_MSI;
 
+    /* To get 5 seconds: 32kHz / 64 = 500Hz. 
+       500Hz * 2500 ticks = 5000ms (5 seconds) */
+    IWDG_handle.Instance        = IWDG;
+    IWDG_handle.Init.Prescaler  = IWDG_PRESCALER_64; // 32Khz/64 = 0.5Khz (0.5ms per tick) 
+    IWDG_handle.Init.Reload     = 2500; //5 second timeout
+    IWDG_handle.Init.Window     = IWDG_WINDOW_DISABLE;
+    
     /* PLL Math for 80MHz System Clock:
        Input (MSI) = 4 MHz
        PLLM (Div)  = 1   -> 4 MHz / 1 = 4 MHz (VCO Input)
@@ -229,11 +237,16 @@ int main(void)
 
     /* Create the event group */
     xSystemEventGroup = xEventGroupCreate();
+    xWatchdogEventGroup = xEventGroupCreate();
 
     if (xSystemEventGroup == NULL) {
         // Handle error: No memory for Event Group
     }
     
+    if (xWatchdogEventGroup == NULL) 
+    {
+        // Handle error: No memory for Event Group
+    }
     /* Create a HeartBeat Task (Permanent, deterministic memory) */
     (void)xTaskCreateStatic(HeartBeatTask,              // Function
                       "HeartBeatTask",                  // Name
