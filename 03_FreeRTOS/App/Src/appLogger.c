@@ -625,7 +625,7 @@ static void appLogger_CheckStackUsage(void)
     }
 }
 
-/* In stm32l4xx_it.c or main.c */
+/* cppcheck-suppress [constParameterPointer, misra-c2012-8.4] */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     if (huart != NULL) 

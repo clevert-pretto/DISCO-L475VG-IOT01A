@@ -45,11 +45,13 @@ jobs:
 
           # We add --suppress=unusedFunction to handle the FreeRTOS hooks
             cppcheck --enable=all \
+            --inline-suppr \
             --addon=build_utils/misra_rules.json \
             --suppressions-list=build_utils/cppcheck_suppressions.txt \
             --suppress=missingInclude \
             --error-exitcode=1 \
             --std=c11 \
+            -D STM32L475xx \
             -I $BASE_PATH/Inc \
             $BASE_PATH/
 
