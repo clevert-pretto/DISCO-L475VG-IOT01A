@@ -32,6 +32,13 @@ We will create a specific directory structure to separate Drivers, Middleware, a
 ├── App/                                   # Application layer files, including main.c
 │   ├── Src/                               # Application specific source files
 │   ├── Inc/                               # Application specific Headers
+│   ├── USB_Device/                        # Custom USB device implementation
+│   │       ├── App/
+│   │       │   ├── usb_device.c           # High-level init
+│   │       │   ├── usbd_cdc_if.c          # CDC Interface (The "Serial" logic)
+│   │       │   └── usbd_desc.c            # Device Descriptors (VID/PID)
+│   │       └── Target/
+│   │              └── usbd_conf.c         # Hardware-to-Middleware glue
 │   └── main.c                             # Main
 ├── Drivers/                               # CMSIS, BSP & STM32L4 Core Drivers
 │      ├── BSP/                            # Board Support Packages
@@ -57,9 +64,42 @@ We will create a specific directory structure to separate Drivers, Middleware, a
 │                 └── Src/                 # Source
 │                      └── Legacy/         # Legacy source
 ├── Middlewares/                           # Selected Middleware files
-│   └── FreeRTOS/                          # FreeRTOS specific files
-│           ├── include/                   # RTOS Kernel files
-│           └── portable/                  # RTOS Portable files
+│   │── FreeRTOS/                          # FreeRTOS specific files
+│   │       ├── include/                   # RTOS Kernel files
+│   │       └── portable/                  # RTOS Portable files
+│   └── ST/                                # The ST Library
+│       ├── STM32_USB_device_Library/
+│       │   ├── Core/                      # Core stack (Src/Inc)
+│       │   │     ├── Src/                 
+│       │   │     └── Inc/                 
+│       │   └── Class/
+│       │       ├── CDC/                   # Specific to Virtual COM Port (Src/Inc)
+│       │       │     ├── Src/                 
+│       │       │     └── Inc/                 
+│       │       ├── HID/                   # Specific to Human Interface Device (Src/Inc)
+│       │       │     ├── Src/                 
+│       │       │     └── Inc/                 
+│       │       ├── MSC/                   # Specific to MSC (Src/Inc)
+│       │       │     ├── Src/                 
+│       │       │     └── Inc/                 
+│       │       └── Many more/             # further more (Src/Inc)
+│       │             ├── Src/                 
+│       │             └── Inc/                 
+│       └── STM32_USB_Host_Library/
+│           ├── Core/                      # Core stack (Src/Inc)
+│           │     ├── Src/                 
+│           │     └── Inc/                 
+│           └── Class/
+│               ├── CDC/                   # Specific to Virtual COM Port (Src/Inc)
+│               │     ├── Src/                 
+│               │     └── Inc/                 
+│               └── HID/                   # Specific to  Human Interface Device (Src/Inc)
+│               │     ├── Src/                 
+│               │     └── Inc/                 
+│               └── MSC/                   # Specific to MSC (Src/Inc)
+│                     ├── Src/                 
+│                     └── Inc/                 
+│
 ├── Makefile                               # Build Script
 └── STM32L475VGTx_FLASH.ld                 # Linker Script
 
