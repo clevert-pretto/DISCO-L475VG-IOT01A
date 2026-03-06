@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "05. USB Classes - CDC< HID and MSC"
+title: "05. USB Classes - CDC, HID and MSC"
 parent: "Phase 3: Building a FreeRTOS application on STM32L475 from Scratch"
 nav_order: 6
 ---
@@ -527,20 +527,7 @@ Vendor-specific classes are are not part of the official USB specifications but 
 
 These classes may require vendor-specific drivers or software to operate properly and may not be compatible with all operating systems or host devices.
 
-# Implementing USB on STM32 DISCO-L475E-IOT01A Board with FreeRTOS
 
-## Prerequisite:
-Over and above current setup before I started this module, following are further requirements,
-
-1. Copied `STM32_USB_Host_Library` and `STM32_USB_Device_Library` from `STM32CubeL4` and placed at `03_FreeRTOS/Middlewares/ST/` folder. 
-
-2. Added `USB_Device` folder under `App` contains USB device specific custom implementation.
-
-Refer updated folder structure on [Setting up environment for Building a FreeRTOS application on STM32L475 from Scratch](./00-guide.md).
-
-2. Updated makefile to include newly added libraries.
-
-3. 
 
 
 
