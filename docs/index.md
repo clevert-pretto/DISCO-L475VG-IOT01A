@@ -39,6 +39,14 @@ permalink: /
 - [**01.Guide to prepare project setup**](./03_FreeRTOS/00-guide.md) - FreeRTOS Kernel, STM32L4 ST library, prepare build system, run blinky.
 
 ---
+### Phase 4: Modern C++ Transition & RTOS Architecture
+- [**01. Architectural Migration, Modern Build Systems and advanced Debugging & Reliability**](./04_FreeRTOS_Cpp/01-transition.md) 
+   - C to C++17 transition, RAII, and Dependency Injection in RTOS.
+   - Modular CMake architecture, Toolchain files, and automated size reporting.
+   - Cortex-Debug, Watchdog Event Groups, and HW/SW state synchronization.
+---
+
+---
 ## 🛠 Tech Stack
 - **Hardware:** Discovery kit IoT node (B-L475E-IOT01A)
 - **Compiler:** `arm-none-eabi-gcc` (Optimization: `-O0` for debug clarity)
@@ -53,8 +61,7 @@ Everything that I learned - The references, the logic, the hurdles and outcomes 
 Refer links below,
 
 1.  [Bare-Metal Lesson Learned](./01_BareMetal/phase-1-lesson-learned.md) section.
-1.  [Scheduelr Lesson Learned](./02_Scheduler//phase-2-lesson-learned.md) section.
-1.  [Bare-Metal Lesson Learned](./03_FreeRTOS/phase-3-lesson-learned.md) section.
+2.  [Scheduelr Lesson Learned](./02_Scheduler//phase-2-lesson-learned.md) section.
 
 
 ## Code Quality & Automation (applies to FreeRTOS project only)
