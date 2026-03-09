@@ -20,7 +20,7 @@
     // Linting related settings
     "c-cpp-flylint.cppcheck.enable": true,
     "c-cpp-flylint.run": "onSave",
-    "c-cpp-flylint.cppcheck.standard": ["c11"],
+    "c-cpp-flylint.cppcheck.standard": ["c11", "c++17"],
     "c-cpp-flylint.cppcheck.addons": [
         "${workspaceFolder}/build_utils/misra_rules.json"
     ],
@@ -30,11 +30,11 @@
     ],
     // Focus only on your Application and RTOS configuration
     "c-cpp-flylint.cppcheck.includePaths": [
-        "${workspaceFolder}/03_FreeRTOS/App/Inc"
+        "${workspaceFolder}/04_FreeRTOS_Cpp/App/Inc"
     ],
     // Exclude directories from flylint
     "c-cpp-flylint.excludeFromWorkspacePaths": [
-        "**/03_FreeRTOS/Drivers/**",
-        "**/03_FreeRTOS/Middlewares/**"
+        "**/04_FreeRTOS_Cpp/Drivers/**",
+        "**/04_FreeRTOS_Cpp/Middlewares/**"
     ]
 }

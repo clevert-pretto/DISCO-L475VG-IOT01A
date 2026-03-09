@@ -9,7 +9,6 @@ cat <<EOF > .gitignore
 
 # IDE files
 .history/
-EOF
 
 #WSL specific files (don't know other way yet)
 *.Identifier
@@ -17,3 +16,7 @@ EOF
 # Ignore any file or folder containing "ctu-file" or "ctu-info" anywhere in the project
 **/*ctu-file*
 **/*ctu-info*
+
+04_FreeRTOS_Cpp/build/
+
+EOF
