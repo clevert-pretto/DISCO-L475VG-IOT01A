@@ -14,6 +14,7 @@ permalink: /
    - Context Switching, Priority Inversion, and SMP concepts.
 3. [**Phase 3: Building a FreeRTOS application on STM32L475 from Scratch**](./phase-3.md)
    - Building a FreeRTOS application on STM32L475 (B-L475E-IOT01A) from Scratch without using IDE.
+4. [**Phase 4: Modern C++ Transition & RTOS Architecture**](./phase-4.md)
 
 ---
 

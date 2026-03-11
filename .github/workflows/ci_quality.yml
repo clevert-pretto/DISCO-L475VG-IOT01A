@@ -15,53 +15,73 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  quality-gate-and-build:
+  # ==========================================
+  # JOB 1: Parallel Quality Gates
+  # ==========================================
+  quality-gate:
+    runs-on: ubuntu-latest
+
+    # 1. Define the matrix
+    strategy:
+      matrix:
+        project_path: ["03_FreeRTOS", "04_FreeRTOS_Cpp"]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # ... tool installation steps ..
+      - name: Install Lint/Metrics Tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cppcheck
+          pipx install lizard
+
+      - name: Run Quality Gate for ${{ matrix.project_path }}
+        run: |
+          BASE_PATH="${{ matrix.project_path }}/App"
+
+          if [ ! -d "$BASE_PATH" ]; then
+            echo "⚠️ Directory $BASE_PATH not found! Skipping checks."
+            exit 1
+          fi
+
+          echo "🚀 Running Cppcheck on $BASE_PATH..."
+          
+          # Check which project we are linting and apply the correct rules
+          if [ "${{ matrix.project_path }}" == "03_FreeRTOS" ]; then
+            # Legacy C Project (MISRA C:2012)
+            cppcheck --enable=all --inline-suppr \
+            --addon=build_utils/misra_rules.json \
+            --suppressions-list=build_utils/cppcheck_suppressions.txt \
+            --error-exitcode=1 --std=c11 \
+            -D STM32L475xx -I $BASE_PATH/Inc $BASE_PATH/
+          else
+            # Modern C++ Project (Native C++ Checks)
+            cppcheck --enable=all --inline-suppr \
+            --suppressions-list=build_utils/cppcheck_suppressions.txt \
+            --error-exitcode=1 --std=c++17 \
+            -D STM32L475xx -I $BASE_PATH/Inc $BASE_PATH/
+          fi
+
+          echo "📈 Running Lizard..."
+          lizard -w -l 15 -C 10 $BASE_PATH/
+
+  # ==========================================
+  # JOB 2: Build Documentation (Runs ONCE)
+  # ==========================================
+  build-docs:
+    needs: quality-gate # Waits for BOTH C and C++ gates to pass!
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up Ruby (for Jekyll)
+      - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1'
           bundler-cache: true
-
-      - name: Install Lint/Metrics Tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y cppcheck
-          pip install lizard
-
-      - name: Run Quality Gate
-        # If either of these fail, the deployment stops here
-        run: |
-          # 1. Define the base path to avoid typos
-            BASE_PATH="03_FreeRTOS/App"
-
-          # 2. Check if the directory exists before running tools
-          if [ -d "$BASE_PATH" ]; then
-            echo "🚀 Running Cppcheck on $BASE_PATH..."
-
-          # We add --suppress=unusedFunction to handle the FreeRTOS hooks
-            cppcheck --enable=all \
-            --inline-suppr \
-            --addon=build_utils/misra_rules.json \
-            --suppressions-list=build_utils/cppcheck_suppressions.txt \
-            --suppress=missingInclude \
-            --error-exitcode=1 \
-            --std=c11 \
-            -D STM32L475xx \
-            -I $BASE_PATH/Inc \
-            $BASE_PATH/
-
-          echo "📈 Running Lizard..."
-            lizard -w -l 15 -C 10 $BASE_PATH/
-          else
-            echo "⚠️ Directory $BASE_PATH not found! Skipping checks."
-            exit 1 # Fail the build if the folder is missing
-          fi
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
@@ -73,13 +93,15 @@ jobs:
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
-
+  # ==========================================
+  # JOB 3: Deploy to GitHub Pages
+  # ==========================================
   deploy:
       environment:
         name: github-pages
         url: ${{ steps.deployment.outputs.page_url }}
       runs-on: ubuntu-latest
-      needs: quality-gate-and-build
+      needs: build-docs
       steps:
         - name: Deploy to GitHub Pages
           id: deployment

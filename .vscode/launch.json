@@ -2,7 +2,26 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Cortex Debug (CMake)",
+            "name": "Cortex Debug for 03_FreeRTOS",
+            "type": "cortex-debug",
+            "request": "launch",
+            "servertype": "openocd",
+            "cwd": "${workspaceFolder}/03_FreeRTOS",
+            "executable": "${workspaceFolder}/03_FreeRTOS/build/freeRTOSApp.elf",
+            "device": "STM32L475",
+            "interface": "swd",
+            "runToEntryPoint": "main",
+            "configFiles": [
+                "interface/stlink.cfg",
+                "target/stm32l4x.cfg"
+            ],
+            /* This is the key: it triggers the dropdown menu from tasks.json */
+            "preLaunchTask": "Build 03_FreeRTOS",
+            /* Important for WSL: points to the gdb you installed */
+            "gdbPath": "/usr/bin/gdb-multiarch",
+        },
+        {
+            "name": "Cortex Debug (CMake) for 04_FreeRTOS_Cpp",
             "type": "cortex-debug",
             "request": "launch",
             "servertype": "openocd",
@@ -16,7 +35,7 @@
                 "target/stm32l4x.cfg"
             ],
             /* This is the key: it triggers the dropdown menu from tasks.json */
-            "preLaunchTask": "CMake Build",
+            "preLaunchTask": "CMake Build 04_FreeRTOS_Cpp",
             /* Important for WSL: points to the gdb you installed */
             "gdbPath": "/usr/bin/gdb-multiarch"
         }

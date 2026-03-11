@@ -53,3 +53,19 @@ misra-c2012-7.2:03_FreeRTOS/App/Src/appLogger.c
 
 # Ignore missing const in HAL callbacks (Vendor signature)
 constParameterPointer:*appLogger.c
+
+# ==========================================
+# Modern C++ Project (04_FreeRTOS_Cpp)
+# ==========================================
+# Ignore unused functions (RTOS tasks and callbacks are called by the kernel/hardware)
+unusedFunction:*04_FreeRTOS_Cpp/*
+unusedPrivateFunction:*04_FreeRTOS_Cpp/*
+
+# Ignore unused class members (Common in hardware structs and config constants)
+unusedStructMember:*04_FreeRTOS_Cpp/*
+
+# Ignore uninitialized arrays/variables (Handled by DMA, external hardware, or zero-init)
+uninitMemberVar:*04_FreeRTOS_Cpp/*
+
+# Ignore unused local variables temporarily during development
+unreadVariable:*04_FreeRTOS_Cpp/*

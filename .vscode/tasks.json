@@ -2,7 +2,21 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "CMake Build",
+            "label": "Build 03_FreeRTOS",
+            "type": "shell",
+            /* Just make. It will use the MODULE defined in the Makefile */
+            "command": "make",
+            "options": {
+                "cwd": "${workspaceFolder}/03_FreeRTOS"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "CMake Build 04_FreeRTOS_Cpp",
             "type": "shell",
             /* Just make. It will use the MODULE defined in the Makefile */
             "command": "mkdir -p build && cd build && cmake -DCMAKE_TOOLCHAIN_FILE=../my.cmake .. && make -j$(nproc)",
