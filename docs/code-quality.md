@@ -2,6 +2,7 @@
 layout: default
 title: Code Quality Metrics
 nav_order: 93
+has_children: true
 ---
 
 # Code Quality & Automation 🛡️
