@@ -1,50 +1,44 @@
 
 // Application include
 #include "appHeartbeat.hpp"
-#include "sysManager.hpp"
-
-// standard includes
-#include <string.h>
-#include <stdint.h>
-
+#include "appDefines.hpp"
 // hardware includes
-#include "../main.hpp"
+//#include "../main.hpp"
 
 namespace FreeRTOS_Cpp
 {
 
     // Constructor initializes the private member handles
-    AppHeartbeat::AppHeartbeat(EventGroupHandle_t sysEvents, EventGroupHandle_t wdgEvents)
-        : _sysEvents(sysEvents), _wdgEvents(wdgEvents) 
+    AppHeartbeat::AppHeartbeat(IRTOS* rtos, IHardware* hw, void* sysEvents, void* wdgEvents)
+        : _rtos(rtos), _hw(hw), _sysEvents(sysEvents), _wdgEvents(wdgEvents) 
     {
 
     }
 
+    void AppHeartbeat::update() {
+        // Logic uses the interface, not the raw RTOS/HAL calls
+        uint32_t uxBits = _rtos->getEventBits(_sysEvents);
+
+        if ((uxBits & EVENT_BIT_INIT_SUCCESS) != 0U) {
+            _hw->toggleLed(HW_ID_STATUS_LED);
+            _rtos->delay(DELAY_OPERATIONAL_MS);
+        } else if ((uxBits & EVENT_BIT_INIT_FAILED) != 0U) {
+            _hw->toggleLed(HW_ID_STATUS_LED);
+            _rtos->delay(DELAY_INIT_MS);
+        } else {
+            _hw->toggleLed(HW_ID_STATUS_LED);
+            _rtos->delay(DELAY_FAULT_MS);
+        }
+        
+        _rtos->setEventBits(_wdgEvents, WATCHDOG_BIT_HEARTBEAT);
+    }
 
     void AppHeartbeat::HeartBeatTask(void *pvParameters)
     {
         AppHeartbeat* self = static_cast<AppHeartbeat*>(pvParameters);
         for (;;)
         {
-            /* Read current state bits WITHOUT clearing them via our encapsulated handle */
-            EventBits_t uxBits = xEventGroupGetBits(self->_sysEvents);
-
-            if ((uxBits & EVENT_BIT_INIT_SUCCESS) != 0U)
-            {
-                BSP_LED_Toggle(LED2);
-                vTaskDelay(pdMS_TO_TICKS(AppHeartbeat::DELAY_OPERATIONAL_MS));
-            }
-            else if((uxBits & EVENT_BIT_INIT_FAILED) != 0U)
-            {
-                BSP_LED_Toggle(LED2);
-                vTaskDelay(pdMS_TO_TICKS(AppHeartbeat::DELAY_INIT_MS));
-            }
-            else
-            {
-                BSP_LED_Toggle(LED2);
-                vTaskDelay(pdMS_TO_TICKS(AppHeartbeat::DELAY_FAULT_MS));
-            }
-            (void)xEventGroupSetBits(self->_wdgEvents, WATCHDOG_EVENT_BIT_TASK_HEARTBEAT);
+            self->update();
         }
     }
 

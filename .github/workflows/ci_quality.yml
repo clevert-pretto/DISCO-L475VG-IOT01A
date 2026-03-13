@@ -9,10 +9,6 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
 
 jobs:
   # ==========================================
@@ -31,41 +27,53 @@ jobs:
         uses: actions/checkout@v4
 
       # ... tool installation steps ..
-      - name: Install Lint/Metrics Tools
+      - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cppcheck
+          sudo apt-get install -y cppcheck lcov cmake build-essential
           pipx install lizard
 
-      - name: Run Quality Gate for ${{ matrix.project_path }}
+      - name: Install Python Tools
         run: |
-          BASE_PATH="${{ matrix.project_path }}/App"
+          python -m pip install --upgrade pip
+          pip install lizard plotly junit2html pre-commit
 
-          if [ ! -d "$BASE_PATH" ]; then
-            echo "⚠️ Directory $BASE_PATH not found! Skipping checks."
-            exit 1
-          fi
+      # --- 1. MISRA & Complexity Runs for ALL projects in the matrix ---
+      - name: Run Pre-Commit Quality Gates
+        run: pre-commit run --all-files --config build_utils/.pre-commit-config.yaml
 
-          echo "🚀 Running Cppcheck on $BASE_PATH..."
-          
-          # Check which project we are linting and apply the correct rules
-          if [ "${{ matrix.project_path }}" == "03_FreeRTOS" ]; then
-            # Legacy C Project (MISRA C:2012)
-            cppcheck --enable=all --inline-suppr \
-            --addon=build_utils/misra_rules.json \
-            --suppressions-list=build_utils/cppcheck_suppressions.txt \
-            --error-exitcode=1 --std=c11 \
-            -D STM32L475xx -I $BASE_PATH/Inc $BASE_PATH/
-          else
-            # Modern C++ Project (Native C++ Checks)
-            cppcheck --enable=all --inline-suppr \
-            --suppressions-list=build_utils/cppcheck_suppressions.txt \
-            --error-exitcode=1 --std=c++17 \
-            -D STM32L475xx -I $BASE_PATH/Inc $BASE_PATH/
-          fi
+      # --- 2. Runs ONLY for new C++ projects ---
+      - name: Build and Run Unit Tests
+        if: matrix.project_path != '03_FreeRTOS'
+        working-directory: ${{ matrix.project_path }}
+        run: |
+          mkdir -p build_host
+          cd build_host
+          cmake ..
+          make -j$(nproc)
+          ./tests/unit_tests --gtest_output="xml:Reports/unit_test_results.xml"
+      
+      # 3. Code Coverage (Skips 03_FreeRTOS)
+      - name: Generate Coverage Report
+        if: matrix.project_path != '03_FreeRTOS'
+        working-directory: ${{ matrix.project_path }}
+        run: |
+          lcov --capture --directory build_host --output-file build_host/Reports/coverage.info --ignore-errors mismatch,unused,empty
+          lcov --remove build_host/Reports/coverage.info '/usr/*' '*_deps/*' '*tests/*' --output-file build_host/Reports/filtered_coverage.info --ignore-errors unused,empty
+          genhtml build_host/Reports/filtered_coverage.info --output-directory build_host/Reports/coverage --ignore-errors mismatch
 
-          echo "📈 Running Lizard..."
-          lizard -w -l 15 -C 10 $BASE_PATH/
+      # 4. Generate Dashboard HTML (Skips 03_FreeRTOS)
+      - name: Generate Unified Dashboard
+        if: matrix.project_path != '03_FreeRTOS'
+        run: python3 generate_dashboard.py ${{ matrix.project_path }}
+
+      # 5. Upload HTML files to GitHub (Skips 03_FreeRTOS)
+      - name: Upload Quality Reports
+        if: matrix.project_path != '03_FreeRTOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-reports-${{ matrix.project_path }}
+          path: ${{ matrix.project_path }}/build_host/Reports/
 
   # ==========================================
   # JOB 2: Build Documentation (Runs ONCE)
@@ -76,6 +84,14 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      # --- Download the artifacts from Job 1 ---
+      - name: Download Quality Reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: quality-reports-*
+          path: docs/reports
+          merge-multiple: false # Keeps projects in separate subfolders
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1

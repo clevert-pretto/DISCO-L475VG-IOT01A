@@ -14,6 +14,7 @@ add_definitions(-DSTM32L475xx -DUSE_HAL_DRIVER)
 file(GLOB_RECURSE SOURCES 
     "App/*.cpp"
     "App/Src/*.cpp"
+    "Platforms/Stm32/Src/*.cpp"
     "../03_FreeRTOS/Drivers/BSP/B-L475E-IOT01/*.c"
     "../03_FreeRTOS/Drivers/BSP/Components/hts221/*.c"
     "../03_FreeRTOS/Drivers/CMSIS/Device/ST/STM32L4xx/Source/*.c"
@@ -28,71 +29,95 @@ list(APPEND SOURCES "../03_FreeRTOS/Drivers/CMSIS/Device/ST/STM32L4xx/Source/sta
 # Executable & Linker Script
 set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/STM32L475VGTx_FLASH.ld)
 
-add_executable(${PROJECT_NAME}.elf ${SOURCES})
+# =========================================================================
+# EMBEDDED FIRMWARE TARGET (ARM CROSS-COMPILATION ONLY)
+# =========================================================================
+if(CMAKE_CROSSCOMPILING)
+    message(STATUS "--- CROSS-COMPILING: Building STM32 Firmware ---")
 
-# Apply base flags to everything 
-target_compile_options(${PROJECT_NAME}.elf PRIVATE 
-    -Wall 
-    -Wextra
-    -Wno-unused-parameter
-    -Wno-missing-field-initializers
-    -Wno-unused-variable
-)
+    list(APPEND SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/Platforms/Stm32/Src/Stm32Platform.cpp")
+    
+    add_executable(${PROJECT_NAME}.elf ${SOURCES})
 
-# Apply STRICT flags ONLY to C++ (your application code)
-target_compile_options(${PROJECT_NAME}.elf PRIVATE 
-    $<$<COMPILE_LANGUAGE:CXX>:-Werror>
-    $<$<COMPILE_LANGUAGE:CXX>:-Wpedantic>
-    $<$<COMPILE_LANGUAGE:CXX>:-Wshadow>
-    $<$<COMPILE_LANGUAGE:CXX>:-Wconversion>
-    $<$<COMPILE_LANGUAGE:CXX>:-Wno-pragma-once-outside-header>
-)
+    # Apply base flags to everything 
+    target_compile_options(${PROJECT_NAME}.elf PRIVATE 
+        -Wall 
+        -Wextra
+        -Wno-unused-parameter
+        -Wno-missing-field-initializers
+        -Wno-unused-variable
+    )
 
-# Mark Vendor includes as SYSTEM to ignore their warnings
-target_include_directories(${PROJECT_NAME}.elf SYSTEM PRIVATE    
-    ../03_FreeRTOS/Drivers/BSP/B-L475E-IOT01
-    ../03_FreeRTOS/Drivers/BSP/Components/hts221
-    ../03_FreeRTOS/Drivers/BSP/Components/mx25r6435f
-    ../03_FreeRTOS/Drivers/CMSIS/Core/Include
-    ../03_FreeRTOS/Drivers/CMSIS/Device/ST/STM32L4xx/Include
-    ../03_FreeRTOS/Drivers/STM32L4xx_HAL_Driver
-    ../03_FreeRTOS/Drivers/STM32L4xx_HAL_Driver/Inc
-    ../03_FreeRTOS/Middlewares/FreeRTOS
-    ../03_FreeRTOS/Middlewares/FreeRTOS/include
-    ../03_FreeRTOS/Middlewares/FreeRTOS/portable
-)
+    # Apply STRICT flags ONLY to C++ (your application code)
+    target_compile_options(${PROJECT_NAME}.elf PRIVATE 
+        $<$<COMPILE_LANGUAGE:CXX>:-Werror>
+        $<$<COMPILE_LANGUAGE:CXX>:-Wpedantic>
+        $<$<COMPILE_LANGUAGE:CXX>:-Wshadow>
+        $<$<COMPILE_LANGUAGE:CXX>:-Wconversion>
+        $<$<COMPILE_LANGUAGE:CXX>:-Wno-pragma-once-outside-header>
+    )
 
-target_include_directories(${PROJECT_NAME}.elf PRIVATE
-    App
-    App/Inc
-)
+    # Mark Vendor includes as SYSTEM to ignore their warnings
+    target_include_directories(${PROJECT_NAME}.elf SYSTEM PRIVATE    
+        ../03_FreeRTOS/Drivers/BSP/B-L475E-IOT01
+        ../03_FreeRTOS/Drivers/BSP/Components/hts221
+        ../03_FreeRTOS/Drivers/BSP/Components/mx25r6435f
+        ../03_FreeRTOS/Drivers/CMSIS/Core/Include
+        ../03_FreeRTOS/Drivers/CMSIS/Device/ST/STM32L4xx/Include
+        ../03_FreeRTOS/Drivers/STM32L4xx_HAL_Driver
+        ../03_FreeRTOS/Drivers/STM32L4xx_HAL_Driver/Inc
+        ../03_FreeRTOS/Middlewares/FreeRTOS
+        ../03_FreeRTOS/Middlewares/FreeRTOS/include
+        ../03_FreeRTOS/Middlewares/FreeRTOS/portable
+    )
 
-target_link_options(${PROJECT_NAME}.elf PRIVATE 
-    -T${LINKER_SCRIPT}
-    -Wl,-Map=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
-)
+    target_include_directories(${PROJECT_NAME}.elf PRIVATE
+        App
+        App/Inc
+        Interfaces/Inc
+        Platforms/Stm32/Inc
+    )
 
-target_link_libraries(${PROJECT_NAME}.elf PRIVATE c m nosys)
+    target_link_options(${PROJECT_NAME}.elf PRIVATE 
+        -T${LINKER_SCRIPT}
+        -Wl,-Map=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
+    )
 
-# Generate Binary File Post-Build
-add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_NAME}.elf> ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bin
-    COMMENT "Generating ${PROJECT_NAME}.bin from the linked .elf file..."
-)
+    target_link_libraries(${PROJECT_NAME}.elf PRIVATE c m nosys)
 
-# Capture the memory limits from your linker script
-set(FLASH_SIZE 1048576) # 1MB
-set(RAM_SIZE 98304)     # 96KB
+    # Generate Binary File Post-Build
+    add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
+        COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_NAME}.elf> ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bin
+        COMMENT "Generating ${PROJECT_NAME}.bin from the linked .elf file..."
+    )
 
-# Create a post-build custom command for the size report
-# add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
-#     COMMAND ${CMAKE_SIZE} --format=berkeley ${PROJECT_NAME}.elf
-#     COMMAND ${CMAKE_COMMAND} -E echo "---------------------------------------------------------------"
-#     COMMAND ${CMAKE_COMMAND} -E echo "MEMORY USAGE REPORT"
-#     COMMAND python3 -c "import os; stats=os.popen('${CMAKE_SIZE} ${PROJECT_NAME}.elf').readlines()[1].split(); flash=int(stats[0])+int(stats[1]); ram=int(stats[1])+int(stats[2]); print('FLASH: {} / ${FLASH_SIZE} bytes ({:.2f}%)'.format(flash, flash/${FLASH_SIZE}*100)); print('RAM: {} / ${RAM_SIZE} bytes ({:.2f}%)'.format(ram, ram/${RAM_SIZE}*100))"
-#     COMMAND ${CMAKE_COMMAND} -E echo "---------------------------------------------------------------"
-# )
+    # Capture the memory limits from your linker script
+    set(FLASH_SIZE 1048576) # 1MB
+    set(RAM_SIZE 98304)     # 96KB
 
+    # Create a post-build custom command for the size report
+    # add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
+    #     COMMAND ${CMAKE_SIZE} --format=berkeley ${PROJECT_NAME}.elf
+    #     COMMAND ${CMAKE_COMMAND} -E echo "---------------------------------------------------------------"
+    #     COMMAND ${CMAKE_COMMAND} -E echo "MEMORY USAGE REPORT"
+    #     COMMAND python3 -c "import os; stats=os.popen('${CMAKE_SIZE} ${PROJECT_NAME}.elf').readlines()[1].split(); flash=int(stats[0])+int(stats[1]); ram=int(stats[1])+int(stats[2]); print('FLASH: {} / ${FLASH_SIZE} bytes ({:.2f}%)'.format(flash, flash/${FLASH_SIZE}*100)); print('RAM: {} / ${RAM_SIZE} bytes ({:.2f}%)'.format(ram, ram/${RAM_SIZE}*100))"
+    #     COMMAND ${CMAKE_COMMAND} -E echo "---------------------------------------------------------------"
+    # )
+
+# =========================================================================
+# HOST UNIT TEST TARGET (PC ONLY)
+# =========================================================================
+else()
+    message(STATUS "------ HOST BUILD DETECTED: Building Unit Tests ------")
+    
+    # Enable CTest and pull in the tests subdirectory
+    enable_testing()
+    add_subdirectory(tests)
+endif()
+
+# =========================================================================
+# COMMON STATIC ANALYSIS & FORMATTING
+# =========================================================================
 find_program(CPPCHECK_PATH cppcheck)
 if(CPPCHECK_PATH)
     add_custom_target(lint

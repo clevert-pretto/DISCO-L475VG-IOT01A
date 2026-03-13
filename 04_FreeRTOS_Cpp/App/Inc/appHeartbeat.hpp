@@ -1,11 +1,8 @@
 #ifndef APP_HEARTBEAT_HPP
 #define APP_HEARTBEAT_HPP
 
-// Kernel includes
-#include "FreeRTOS.h"
-#include "queue.h"
-#include "task.h"
-#include "event_groups.h"
+#include "IRTOS.hpp"
+#include "IHardware.hpp"
 
 namespace FreeRTOS_Cpp
 {
@@ -13,14 +10,20 @@ namespace FreeRTOS_Cpp
 
         public:
             // RAII Constructor via Dependency Injection
-            AppHeartbeat(EventGroupHandle_t sysEvents, EventGroupHandle_t wdgEvents);
+            AppHeartbeat(IRTOS* rtos, IHardware* hw, void* sysEvents, void* wdgEvents);
             
+            // This method contains the LOGIC, making it 100% testable
+            void update();
+            
+            // The Task remains as the RTOS entry point
             static void HeartBeatTask(void *pvParameters);
 
         private:
+            IRTOS* _rtos;
+            IHardware* _hw;
             // Encapsulated RTOS handles
-            EventGroupHandle_t _sysEvents;
-            EventGroupHandle_t _wdgEvents;
+            void* _sysEvents;
+            void* _wdgEvents;
             // Use constexpr inside the class instead of local const variables
             static constexpr uint32_t DELAY_INIT_MS        = 500U;
             static constexpr uint32_t DELAY_OPERATIONAL_MS = 1000U;

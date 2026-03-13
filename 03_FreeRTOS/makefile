@@ -2,7 +2,7 @@
 # Makefile for STM32L475 FreeRTOS Blinky - Full Driver Version
 ################################################################################
 # Define the tool path
-LIZARD = /home/ravichilwant/.local/bin/lizard
+LIZARD = /home/ravi-ubuntu/.local/bin/lizard
 
 # 1. Project Name
 TARGET = freeRTOSApp

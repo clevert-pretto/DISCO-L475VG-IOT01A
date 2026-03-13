@@ -3,6 +3,9 @@ remote_theme: just-the-docs/just-the-docs
 title: STM32L475 Platform Knowledge Base
 description: STM32L475 Platform Architecture Portfolio
 
+plugins:
+  - jekyll-remote-theme
+  
 # URL Settings (Crucial for GitHub Actions)
 # Replace 'username' and 'repo-name' with yours
 url: "https://clevert-pretto.github.io"

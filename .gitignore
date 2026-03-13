@@ -18,5 +18,24 @@ cat <<EOF > .gitignore
 **/*ctu-info*
 
 04_FreeRTOS_Cpp/build/
+04_FreeRTOS_Cpp/build_host/
 
+
+# Jekyll/Ruby specific
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+vendor/
+bin/
+.bundle/
+
+# Python specific (from bootstrap.sh)
+.venv/
+__pycache__/
+*.py[cod]
+
+# OS specific
+.DS_Store
+Thumbs.db
 EOF

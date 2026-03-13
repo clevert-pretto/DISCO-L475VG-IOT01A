@@ -2,6 +2,13 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Setup: Bootstrap Environment",
+            "type": "shell",
+            "command": "bash bootstrap.sh",
+            "options": { "cwd": "${workspaceFolder}" },
+            "problemMatcher": []
+        },
+        {
             "label": "Build 03_FreeRTOS",
             "type": "shell",
             /* Just make. It will use the MODULE defined in the Makefile */
@@ -32,13 +39,10 @@
         {
             "label": "Run Quality Gate (MISRA & Complexity)",
             "type": "shell",
-            "command": "pre-commit",
-            "args": [
-                "run",
-                "--all-files",
-                "--config",
-                "build_utils/.pre-commit-config.yaml"
-            ],
+            "command": "source ${workspaceFolder}/.venv/bin/activate && pre-commit run --all-files --config build_utils/.pre-commit-config.yaml",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -49,6 +53,35 @@
                 "focus": true,
                 "panel": "shared",
                 "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Unit Tests & Dashboard for 04_FreeRTOS_Cpp",
+            "type": "shell",
+            /* Note: We do NOT use the 'my.cmake' toolchain here  */
+            "command": "mkdir -p build_host && cd build_host && cmake .. && make -j$(nproc) && ./tests/unit_tests --gtest_output=\"xml:Reports/unit_test_results.xml\" && cd .. && ./.venv/bin/python3 generate_dashboard.py 04_FreeRTOS_Cpp",
+            "options": {
+                "cwd": "${workspaceFolder}/04_FreeRTOS_Cpp"
+            },
+            "problemMatcher": [],
+            "group": "test",
+            "presentation": { "clear": true }
+        },
+        {
+            "label": "Docs: Local Preview",
+            "type": "shell",
+            "command": "export GEM_HOME=\"$HOME/gems\" && export PATH=\"$HOME/gems/bin:$PATH\" && bundle exec jekyll serve --incremental",
+            "options": {
+                "cwd": "${workspaceFolder}/docs"
+            },
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
                 "clear": true
             },
             "problemMatcher": []

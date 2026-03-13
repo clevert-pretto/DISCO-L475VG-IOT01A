@@ -1,96 +1,96 @@
-#include<stdint.h>
+#include <stdint.h>
+#include <stdbool.h>
 #include "xtoa.hpp"
 
-
-namespace FreeRTOS_Cpp
-{
-    xtoa::xtoa(void)
+namespace FreeRTOS_Cpp {
+    
+    void xtoa::app_itoa(int32_t val, char *str, uint32_t len) 
     {
+        if (len < 2U) 
+            return; // Buffer too small for even a single digit + null
 
-    }
+        uint32_t uval;
+        uint32_t pos = 0;
 
-    /**
-     * @brief MISRA-compliant integer to string conversion.
-     * @param val Value to convert
-     * @param str Buffer to store the result
-     * @param len Size of the buffer to prevent overflow (Rule 21.18)
-     */
-    void xtoa::app_itoa(uint32_t val, char *str, uint32_t len)
-    {
-        uint32_t temp = val;
-
-        /* Handle the '0' case explicitly */
-        if (temp == 0U)
+        // 1. Handle Negative Sign
+        if (val < 0) 
         {
-            if (len > 1U)
+            str[pos++] = '-';
+            uval = static_cast<uint32_t>(-val);
+        } 
+        else 
+        {
+            uval = static_cast<uint32_t>(val);
+        }
+
+        // 2. Handle '0' explicitly
+        if (uval == 0U) 
+        {
+            if (pos < (len - 1U)) 
             {
-                str[0] = '0';
-                str[1] = '\0';
+                str[pos++] = '0';
+                str[pos] = '\0';
+            }
+            return;
+        }
+
+        // 3. Calculate digits for the absolute value
+        uint32_t digits = 0;
+        uint32_t temp = uval;
+        while (temp > 0U) 
+        {
+            digits++;
+            temp /= 10U;
+        }
+
+        // 4. Check if total string fits: (sign? + digits + null)
+        if ((pos + digits) < len) 
+        {
+            str[pos + digits] = '\0';
+            for (uint32_t i = digits; i > 0U; i--) 
+            {
+                str[pos + i - 1U] = static_cast<char>((uval % 10U) + '0');
+                uval /= 10U;
             }
         }
-        else
-        {
-            /* Count digits to find the end of the string */
-            uint32_t digits = 0U;
-            uint32_t count_temp = temp;
-            while (count_temp > 0U)
-            {
-                digits++;
-                count_temp /= 10U;
-            }
-
-            /* Check for buffer overflow (Rule 21.18) */
-            if (digits < len)
-            {
-                str[digits] = '\0';
-                for (uint32_t i = digits; i > 0U; i--)
-                {
-                    uint32_t digit = ((temp % 10U) + static_cast<uint32_t>('0'));
-                    str[i - 1U] = (char)digit;
-                    temp /= 10U;
-                }
-            }
-        }
     }
 
-    /**
-     * @brief MISRA-compliant float to string conversion (2 decimal places).
-     * @param val Floating point value
-     * @param str Buffer to store the result
-     * @param len Size of the buffer
-     */
-    void xtoa::app_ftoa(float val, char *str, uint32_t len)
-    {
-        /* 1. Extract the integer part */
+    void xtoa::app_ftoa(float val, char *str, uint32_t len) {
+        if (len < 6U) return; // Need space for "0.00\0"
+
+        // 1. Handle Negative Floats
+        if (val < 0.0f) 
+        {
+            str[0] = '-';
+            // Recursively call with positive value, shifting buffer by 1
+            app_ftoa(-val, &str[1], len - 1U);
+            return;
+        }
+
+        // 2. Extract Parts
         int32_t integer_part = static_cast<int32_t>(val);
+        // Rounding to 2 decimal places: multiply by 100 and add 0.5 for rounding
+        uint32_t fractional_part = static_cast<uint32_t>((val - static_cast<float>(integer_part)) * 100.0f + 0.5f);
 
-        /* 2. Extract the fractional part (scaled to 2 decimal places) */
-        /* Use 100.0f for 2 decimal places, 1000.0f for 3, etc. */
-        float diff = val - static_cast<float>(integer_part);
-        uint32_t fractional_part = static_cast<uint32_t>(diff * 100.0f);
-
-        /* 3. Convert integer part to string */
-        app_itoa(static_cast<uint32_t>(integer_part), str, len);
-
-        /* 4. Find the null terminator to append the decimal point */
-        uint32_t i = 0U;
-        while ((i < (len - 1U)) && (str[i] != '\0'))
-        {
-            i++;
+        // Handle case where fractional rounding rolls over (e.g., 3.999 -> 4.00)
+        if (fractional_part >= 100U) {
+            integer_part++;
+            fractional_part = 0U;
         }
 
-        /* 5. Append '.' and fractional part if space permits (Rule 21.18) */
-        if (i < (len - 4U)) 
-        {
-            str[i] = '.';
-            i++;
-            /* Handle leading zero in fraction (e.g., .05) */
-            if (fractional_part < 10U)
-            {
-                str[i] = '0';
-                i++;
-            }
-            app_itoa(fractional_part, &str[i], len - i);
+        // 3. Convert Integer Part
+        app_itoa(integer_part, str, len);
+
+        // 4. Find end of integer part
+        uint32_t i = 0;
+        while ((i < (len - 1U)) && (str[i] != '\0')) { i++; }
+
+        // 5. Append Decimal and Fraction
+        if (i < (len - 4U)) {
+            str[i++] = '.';
+            str[i++] = static_cast<char>((fractional_part / 10U) + '0');
+            str[i++] = static_cast<char>((fractional_part % 10U) + '0');
+            str[i] = '\0';
         }
     }
 }

@@ -1,9 +1,9 @@
 repos:
   - repo: local
     hooks:
-      # --- Cppcheck Hook ---
-      - id: cppcheck
-        name: cppcheck
+      # --- Legacy C Project (03_FreeRTOS) ---
+      - id: cppcheck-legacy
+        name: cppcheck (03_FreeRTOS)
         entry: cppcheck
         language: system
         types: [c]
@@ -16,29 +16,18 @@ repos:
             "--suppressions-list=build_utils/cppcheck_suppressions.txt",
             "--error-exitcode=1",
             "--std=c11",
-            #"--library=free_rtos", # tells cppcheck to treat RTOS as a library
             "-I", "03_FreeRTOS/App/Inc",
             "-I", "03_FreeRTOS/Middlewares/FreeRTOS",
             "-I", "03_FreeRTOS/Middlewares/FreeRTOS/include",
             "-I", "03_FreeRTOS/Middlewares/FreeRTOS/portable",
-            #"-I", "03_FreeRTOS/Drivers/BSP/B-L475E-IOT01",
-            #"-I", "03_FreeRTOS/Drivers/BSP/Components/Common",
-            #"-I", "03_FreeRTOS/Drivers/BSP/Components/hts221",
-            #"-I", "03_FreeRTOS/Drivers/BSP/Components/lis3mdl",
-            #"-I", "03_FreeRTOS/Drivers/BSP/Components/lps22hd",
-            #"-I", "03_FreeRTOS/Drivers/BSP/Components/lsm6dsl",
-            #"-I", "03_FreeRTOS/Drivers/BSP/Components/mx25r6435f",
-            #"-I", "03_FreeRTOS/Drivers/CMSIS/Core/Include",
-            #"-I", "03_FreeRTOS/Drivers/CMSIS/Device/ST/STM32L4xx/Include",
             "-I", "03_FreeRTOS/Drivers/STM32L4xx_HAL_Driver",
             "-I", "03_FreeRTOS/Drivers/STM32L4xx_HAL_Driver/Inc",
             "-D", "STM32L475xx", # Tells the linter which chip you are using
-            #"--cppcheck-build-dir=.cppcheck_cache", # Consolidates artifacts here
             "--quiet"
           ]
 
-      # --- Cppcheck Hook for Modern C++ Project ---
-      - id: cppcheck
+      # --- Cppcheck Hook for Modern C++ Project (04_FreeRTOS_Cpp) ---
+      - id: cppcheck-modern
         name: cppcheck (C++ Project)
         entry: cppcheck
         language: system
@@ -56,12 +45,11 @@ repos:
             "--quiet"
           ]
 
-      # --- Lizard Hook ---
-      - id: lizard
+      # --- Complexity Check (Both Projects) ---
+      - id: lizard-check
         name: lizard
-        entry: lizard
-        language: python
-        additional_dependencies: ["lizard==1.17.10"]
+        entry: ./.venv/bin/lizard
+        language: system
         types_or: [c, c++]
         files: ^(03_FreeRTOS|04_FreeRTOS_Cpp)/App/
         args: ["-w", "-l", "15", "-C", "10"]
