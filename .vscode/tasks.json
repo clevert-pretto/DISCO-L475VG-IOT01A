@@ -39,8 +39,7 @@
         {
             "label": "Run Quality Gate (MISRA & Complexity)",
             "type": "shell",
-            "command": "source ${workspaceFolder}/.venv/bin/activate && pre-commit run --all-files --config build_utils/.pre-commit-config.yaml",
-            "options": {
+            "command": "source ${workspaceFolder}/.venv/bin/activate && pre-commit run --all-files --config build_utils/.pre-commit-config.yaml","options": {
                 "cwd": "${workspaceFolder}"
             },
             "group": {
