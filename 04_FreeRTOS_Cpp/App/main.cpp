@@ -9,6 +9,7 @@
 #include "queue.h"
 #include "task.h"
 #include "event_groups.h"
+#include "semphr.h"
 
 //Application includes
 #include "stm32Platform.hpp"
@@ -16,6 +17,7 @@
 #include "appSensorRead.hpp"
 #include "appLogger.hpp"
 #include "sysManager.hpp"
+#include "appDefines.hpp"
 
 namespace FreeRTOS_Cpp
 {
@@ -41,9 +43,9 @@ namespace FreeRTOS_Cpp
     #ifdef __cplusplus
     extern "C"{
     #endif
-    UART_HandleTypeDef discoveryUART1;
-    //QSPI_HandleTypeDef QSPIHandle;
-    IWDG_HandleTypeDef IWDG_handle;
+        UART_HandleTypeDef discoveryUART1;
+        //QSPI_HandleTypeDef QSPIHandle;
+        IWDG_HandleTypeDef IWDG_handle;
     #ifdef __cplusplus
     }
     #endif
@@ -54,6 +56,21 @@ namespace FreeRTOS_Cpp
     /* Static Memory for Event Groups (Zero Heap usage) */
     static StaticEventGroup_t xSystemEventGroupBuffer;
     static StaticEventGroup_t xWatchdogEventGroupBuffer;
+    
+    /* Static Memory for Logger Queues */
+    static StaticQueue_t xPrintQueueBuffer;
+    static uint8_t ucPrintQueueStorage[FreeRTOS_Cpp::appLogger::QUEUE_LEN * LOG_MESSAGE_SIZE];
+
+    static StaticQueue_t xEventQueueBuffer;
+    static uint8_t ucEventQueueStorage[FreeRTOS_Cpp::appLogger::QUEUE_LEN * LOG_ENTRY_SIZE];
+    
+    static StaticQueue_t xCommandQueueBuffer;
+    static uint8_t ucCmmandQueueStorage[10U * COMMAND_ENTRY_SIZE];
+
+    /* Static Memory for Logger Mutexes & Semaphores */
+    static StaticSemaphore_t xUartMutexBuffer;
+    static StaticSemaphore_t xQspiMutexBuffer;
+    static StaticSemaphore_t xEraseCompleteMutexBuffer;
 
     TaskHandle_t xvSensorReadTaskHandle = NULL;     //For Sensor read task
     TaskHandle_t xsystemManagerTaskHandle = NULL;   //For System manager task
@@ -140,6 +157,24 @@ namespace FreeRTOS_Cpp
             }
         }
     }
+
+    static void UART1_Init(void)
+    {
+        discoveryUART1.Instance = USART1;
+        discoveryUART1.Init.BaudRate = 115200;
+        discoveryUART1.Init.WordLength = UART_WORDLENGTH_8B;
+        discoveryUART1.Init.StopBits = UART_STOPBITS_1;
+        discoveryUART1.Init.Parity = UART_PARITY_NONE;
+        discoveryUART1.Init.Mode = UART_MODE_TX_RX;
+        discoveryUART1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+        discoveryUART1.Init.OverSampling = UART_OVERSAMPLING_16;
+        if (HAL_UART_Init(&discoveryUART1) != HAL_OK)
+        {
+            while(1){}
+        }
+    }
+
+
 
     /* =========================== COMMON RESOURCES END ========================= */
     /* ============================ TASK FUNCTION =============================== */
@@ -238,6 +273,197 @@ namespace FreeRTOS_Cpp
     /**************************************************************************** */
 }
 
+/* ============================== INTERRUPT SERVICE ROUTINES ====================================== */
+extern "C" {
+
+    /* UART Rx Complete Callback */
+    void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+    {
+        if (huart != NULL && huart->Instance == USART1) 
+        {
+            if (FreeRTOS_Cpp::appLogger::instance != nullptr)
+            {
+                // Grab the character that was just received
+                uint8_t rxChar = *(FreeRTOS_Cpp::appLogger::instance->getRxBuffer());
+                
+                // Pass it to the abstracted logger
+                FreeRTOS_Cpp::appLogger::instance->notifyCommandReceivedFromISR(rxChar);
+
+                // Re-enable the hardware interrupt for the next character
+                (void)HAL_UART_Receive_IT(huart, const_cast<uint8_t*>(FreeRTOS_Cpp::appLogger::instance->getRxBuffer()), 1u);
+            }
+        }
+    }
+
+    /* QSPI Status Match Callback */
+    void HAL_QSPI_StatusMatchCallback(QSPI_HandleTypeDef *hqspi)
+    {
+        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+        
+        if (FreeRTOS_Cpp::appLogger::_eraseCompleteMutex != nullptr)
+        {
+            (void)xSemaphoreGiveFromISR(
+                static_cast<SemaphoreHandle_t>(FreeRTOS_Cpp::appLogger::_eraseCompleteMutex), 
+                &xHigherPriorityTaskWoken
+            );
+        }
+
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    }
+    
+    /* Hardware-level Pin Multiplexing for UART */
+    // cppcheck-suppress constParameterPointer
+    void HAL_UART_MspInit(UART_HandleTypeDef* huart)
+    {
+        GPIO_InitTypeDef GPIO_InitStruct = {0};
+        if(huart->Instance == USART1)
+        {
+            /* 1. Enable Peripheral Clocks */
+            __HAL_RCC_USART1_CLK_ENABLE();
+            __HAL_RCC_GPIOB_CLK_ENABLE();
+            
+            /* 2. Configure PB6 (TX) and PB7 (RX) for USART1 Alternate Function */
+            GPIO_InitStruct.Pin = GPIO_PIN_6 | GPIO_PIN_7;
+            GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+            GPIO_InitStruct.Pull = GPIO_NOPULL;
+            GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+            GPIO_InitStruct.Alternate = GPIO_AF7_USART1;
+            HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+            
+            /* 3. Enable the Interrupt in the NVIC for FreeRTOS */
+            HAL_NVIC_SetPriority(USART1_IRQn, 5, 0); // Priority 5 is safe for FreeRTOS API calls
+            HAL_NVIC_EnableIRQ(USART1_IRQn);
+        }
+    }
+
+    TIM_HandleTypeDef htimHalTick; // Handle for the new HAL timebase
+
+    /**
+     * @brief Override HAL_InitTick to use TIM7 instead of SysTick.
+     * Called automatically by HAL_Init() and HAL_RCC_ClockConfig().
+     */
+    HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
+    {
+        RCC_ClkInitTypeDef clkconfig;
+        uint32_t uwTimclock, uwAPB1Prescaler;
+        uint32_t uwTickPrios = TickPriority;
+        HAL_StatusTypeDef status;
+
+        /* 1. Enable TIM7 Clock */
+        __HAL_RCC_TIM7_CLK_ENABLE();
+
+        /* 2. Get Clock Frequencies */
+        HAL_RCC_GetClockConfig(&clkconfig, &uwAPB1Prescaler);
+        uwTimclock = HAL_RCC_GetPCLK1Freq();
+
+        /* Compute TIM7 clock; APB1 prescaler usually multiplies clock for timers */
+        if (uwAPB1Prescaler != RCC_HCLK_DIV1) {
+            uwTimclock = 2U * uwTimclock;
+        }
+
+        /* 3. Configure Timer for 1ms overflows */
+        htimHalTick.Instance = TIM7;
+        htimHalTick.Init.Prescaler = (uint32_t)((uwTimclock / 1000000U) - 1U); // 1MHz clock
+        htimHalTick.Init.Period = (1000U - 1U);                               // 1kHz overflow (1ms)
+        htimHalTick.Init.CounterMode = TIM_COUNTERMODE_UP;
+        htimHalTick.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+
+        status = HAL_TIM_Base_Init(&htimHalTick);
+        if (status != HAL_OK) return status;
+
+        /* 4. Configure NVIC and Start Interrupt */
+        HAL_NVIC_SetPriority(TIM7_IRQn, uwTickPrios, 0);
+        HAL_NVIC_EnableIRQ(TIM7_IRQn);
+
+        return HAL_TIM_Base_Start_IT(&htimHalTick);
+    }
+
+    /**
+     * @brief This is the callback triggered by the HAL_TIM_IRQHandler above.
+     */
+    // cppcheck-suppress constParameterPointer
+    void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+    {
+        if (htim->Instance == TIM7) {
+            HAL_IncTick(); // The HAL heartbeat now lives here!
+        }
+    }
+
+    /**
+     * @brief Must also override Suspend/Resume for HAL power management
+     */
+    void HAL_SuspendTick(void) 
+    {
+        __HAL_TIM_DISABLE_IT(&htimHalTick, TIM_IT_UPDATE); 
+    }
+
+    void HAL_ResumeTick(void)  
+    {
+        __HAL_TIM_ENABLE_IT(&htimHalTick, TIM_IT_UPDATE); 
+    }
+
+    /* ============================== HARDWARE MSP OVERRIDES ====================================== */
+    /**
+     * @brief I2C MSP Initialization
+     * This function configures the hardware resources used in this example:
+     * - Peripheral's clock enable
+     * - Peripheral's GPIO Configuration
+     * @param hi2c: I2C handle pointer
+     * @retval None
+     */
+    // cppcheck-suppress constParameterPointer
+    void HAL_I2C_MspInit(I2C_HandleTypeDef *hi2c)
+    {
+        GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+        /* The sensors on the B-L475E-IOT01A board are connected to I2C2 */
+        if(hi2c->Instance == I2C2)
+        {
+            /* 1. Enable Peripheral Clocks */
+            __HAL_RCC_GPIOB_CLK_ENABLE();
+            __HAL_RCC_I2C2_CLK_ENABLE();
+
+            /* 2. Configure I2C2 GPIO pins
+                PB10     ------> I2C2_SCL
+                PB11     ------> I2C2_SDA
+            */
+            GPIO_InitStruct.Pin       = GPIO_PIN_10 | GPIO_PIN_11;
+            GPIO_InitStruct.Mode      = GPIO_MODE_AF_OD;         // Open Drain is mandatory for I2C
+            GPIO_InitStruct.Pull      = GPIO_PULLUP;             // Enable internal pull-ups
+            GPIO_InitStruct.Speed     = GPIO_SPEED_FREQ_VERY_HIGH;
+            GPIO_InitStruct.Alternate = GPIO_AF4_I2C2;           // AF4 connects these pins to the I2C2 hardware
+
+            HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+            /* 3. Force a bus reset (Optional but highly recommended) 
+                This clears the "Busy" state if the MCU was reset mid-transaction. */
+            __HAL_RCC_I2C2_FORCE_RESET();
+            __HAL_RCC_I2C2_RELEASE_RESET();
+        }
+    }
+
+    /**
+     * @brief I2C MSP De-Initialization
+     * This function frees the hardware resources used in this example:
+     * - Disable the Peripheral's clock
+     * - Revert GPIO to their default state
+     * @param hi2c: I2C handle pointer
+     * @retval None
+     */
+    // cppcheck-suppress constParameterPointer
+    void HAL_I2C_MspDeInit(I2C_HandleTypeDef *hi2c)
+    {
+        if(hi2c->Instance == I2C2)
+        {
+            /* 1. Disable Peripheral Clock */
+            __HAL_RCC_I2C2_CLK_DISABLE();
+
+            /* 2. De-Initialize I2C2 GPIO pins */
+            HAL_GPIO_DeInit(GPIOB, GPIO_PIN_10 | GPIO_PIN_11);
+        }
+    }
+}
+
 //Main is not in scope of namespace FreeRTOS_App
 /* ============================== MAIN ====================================== */
 int main(void)
@@ -256,70 +482,94 @@ int main(void)
     /* Configure the System clock to have a frequency of 80 MHz */
     FreeRTOS_Cpp::SystemClock_Config();
 
+    // FreeRTOS_Cpp::Force_I2C2_Clock_On();
+    FreeRTOS_Cpp::UART1_Init();
+    
     // Initialize the Green LED (LED2)
     BSP_LED_Init(LED2);
     
+   /* Create Logger RTOS Primitives */
+    QueueHandle_t hPrintQueue = xQueueCreateStatic(FreeRTOS_Cpp::appLogger::QUEUE_LEN, LOG_MESSAGE_SIZE,
+                                                    FreeRTOS_Cpp::ucPrintQueueStorage, &FreeRTOS_Cpp::xPrintQueueBuffer);
+    QueueHandle_t hEventQueue = xQueueCreateStatic(FreeRTOS_Cpp::appLogger::QUEUE_LEN, LOG_ENTRY_SIZE, 
+                                                    FreeRTOS_Cpp::ucEventQueueStorage, &FreeRTOS_Cpp::xEventQueueBuffer);
+    QueueHandle_t hCommandQueue = xQueueCreateStatic(10u, COMMAND_ENTRY_SIZE, 
+                                                    FreeRTOS_Cpp::ucCmmandQueueStorage, &FreeRTOS_Cpp::xCommandQueueBuffer);
+    
+    SemaphoreHandle_t hUartMutex = xSemaphoreCreateMutexStatic(&FreeRTOS_Cpp::xUartMutexBuffer);
+    SemaphoreHandle_t hQspiMutex = xSemaphoreCreateMutexStatic(&FreeRTOS_Cpp::xQspiMutexBuffer);
+    SemaphoreHandle_t hEraseCompleteMutex = xSemaphoreCreateBinaryStatic(&FreeRTOS_Cpp::xEraseCompleteMutexBuffer);
+
     /* Initialize RTOS Primitives statically first */
     FreeRTOS_Cpp::xSystemEventGroup = xEventGroupCreateStatic(&FreeRTOS_Cpp::xSystemEventGroupBuffer);
     FreeRTOS_Cpp::xWatchdogEventGroup = xEventGroupCreateStatic(&FreeRTOS_Cpp::xWatchdogEventGroupBuffer);
 
     /* Object Instantiation Declared 'static' so they persist in memory safely out of the main stack frame. */
-    static FreeRTOS_Cpp::appLogger     myLogger(&FreeRTOS_Cpp::discoveryUART1, &FreeRTOS_Cpp::QSPIHandle, FreeRTOS_Cpp::xSystemEventGroup, FreeRTOS_Cpp::xWatchdogEventGroup);
-    static FreeRTOS_Cpp::AppHeartbeat  myHeartbeat(&FreeRTOS_Cpp::realRtos, &FreeRTOS_Cpp::realHw, FreeRTOS_Cpp::xSystemEventGroup, FreeRTOS_Cpp::xWatchdogEventGroup);
-    static FreeRTOS_Cpp::appSensorRead mySensor(FreeRTOS_Cpp::xSystemEventGroup, FreeRTOS_Cpp::xWatchdogEventGroup);
-    static FreeRTOS_Cpp::systemManager mySysManager;
+    static FreeRTOS_Cpp::appLogger     myLogger(&FreeRTOS_Cpp::realRtos, &FreeRTOS_Cpp::realHw, 
+                                                FreeRTOS_Cpp::xSystemEventGroup, FreeRTOS_Cpp::xWatchdogEventGroup, 
+                                                &FreeRTOS_Cpp::IWDG_handle);
+
+    static FreeRTOS_Cpp::AppHeartbeat  myHeartbeat(&FreeRTOS_Cpp::realRtos,  &FreeRTOS_Cpp::realHw,
+                                                FreeRTOS_Cpp::xSystemEventGroup, FreeRTOS_Cpp::xWatchdogEventGroup);
+
+    static FreeRTOS_Cpp::appSensorRead mySensor(&FreeRTOS_Cpp::realRtos, &FreeRTOS_Cpp::realTempSensor, &FreeRTOS_Cpp::realHumiditySensor, 
+                                                FreeRTOS_Cpp::xSystemEventGroup, FreeRTOS_Cpp::xWatchdogEventGroup);
+
+    static FreeRTOS_Cpp::systemManager mySysManager(&FreeRTOS_Cpp::realRtos,  &FreeRTOS_Cpp::realHw, &mySensor, 
+                                                FreeRTOS_Cpp::xSystemEventGroup, FreeRTOS_Cpp::xWatchdogEventGroup,
+                                                &FreeRTOS_Cpp::IWDG_handle);
     
     /* Static Task Allocation Buffers */
     static StaticTask_t xHeartbeatTaskTCB;
-    static StackType_t  xheartbeatTaskStack[TASK_STACK_SIZE_HEARTBEAT_TASK];
+    static StackType_t  xheartbeatTaskStack[FreeRTOS_Cpp::TASK_STACK_SIZE_HEARTBEAT_TASK];
 
     static StaticTask_t xSysMgrTaskTCB;
-    static StackType_t  xSysMgrTaskStack[TASK_STACK_SIZE_SYS_MANAGER_TASK];
+    static StackType_t  xSysMgrTaskStack[FreeRTOS_Cpp::TASK_STACK_SIZE_SYS_MANAGER_TASK];
     
     static StaticTask_t xvSensorReadTaskTCB;
-    static StackType_t  xSensorReadStack[TASK_STACK_SIZE_SENSOR_READ_TASK];
+    static StackType_t  xSensorReadStack[FreeRTOS_Cpp::TASK_STACK_SIZE_SENSOR_READ_TASK];
 
     static StaticTask_t xLoggerTaskTCB;
-    static StackType_t  xLoggerTaskStack[TASK_STACK_SIZE_APPLOGGER_TASK];
+    static StackType_t  xLoggerTaskStack[FreeRTOS_Cpp::TASK_STACK_SIZE_APPLOGGER_TASK];
 
     static StaticTask_t xCommandTaskTCB;
-    static StackType_t  xCommandTaskStack[TASK_STACK_SIZE_COMMAND_TASK];
+    static StackType_t  xCommandTaskStack[FreeRTOS_Cpp::TASK_STACK_SIZE_COMMAND_TASK];
 
-    myLogger.init();
+    myLogger.init(hPrintQueue, hEventQueue, hCommandQueue, hUartMutex, hQspiMutex, hEraseCompleteMutex);
 
     FreeRTOS_Cpp::xHeartBeatTaskHandle = xTaskCreateStatic(FreeRTOS_Cpp::AppHeartbeat::HeartBeatTask, 
                     "Heartbeat", 
-                    TASK_STACK_SIZE_HEARTBEAT_TASK, 
+                    FreeRTOS_Cpp::TASK_STACK_SIZE_HEARTBEAT_TASK, 
                     &myHeartbeat,                     // Pass object instance pointer
-                    TASK_PRIORITY_HEARTBEAT_TASK, 
+                    FreeRTOS_Cpp::TASK_PRIORITY_HEARTBEAT_TASK, 
                     xheartbeatTaskStack, &xHeartbeatTaskTCB);
-
-    FreeRTOS_Cpp::xsystemManagerTaskHandle = xTaskCreateStatic(FreeRTOS_Cpp::systemManager::systemManagerTask, 
-                    "SysManager", 
-                    TASK_STACK_SIZE_SYS_MANAGER_TASK, 
-                    &mySysManager,                    // Pass object instance pointer
-                    TASK_PRIORITY_SYS_MANAGER_TASK, 
-                    xSysMgrTaskStack, &xSysMgrTaskTCB);
 
     FreeRTOS_Cpp::xvSensorReadTaskHandle = xTaskCreateStatic(FreeRTOS_Cpp::appSensorRead::vSensorReadTask, 
                     "SensorRead", 
-                    TASK_STACK_SIZE_SENSOR_READ_TASK, 
+                    FreeRTOS_Cpp::TASK_STACK_SIZE_SENSOR_READ_TASK, 
                     &mySensor,                        // Pass object instance pointer
-                    TASK_PRIORITY_SENSOR_READ_TASK, 
+                    FreeRTOS_Cpp::TASK_PRIORITY_SENSOR_READ_TASK, 
                     xSensorReadStack, &xvSensorReadTaskTCB);
+
+    FreeRTOS_Cpp::xsystemManagerTaskHandle = xTaskCreateStatic(FreeRTOS_Cpp::systemManager::systemManagerTask, 
+                    "SysManager", 
+                    FreeRTOS_Cpp::TASK_STACK_SIZE_SYS_MANAGER_TASK, 
+                    &mySysManager,                    // Pass object instance pointer
+                    FreeRTOS_Cpp::TASK_PRIORITY_SYS_MANAGER_TASK, 
+                    xSysMgrTaskStack, &xSysMgrTaskTCB);
 
     FreeRTOS_Cpp::xAppLoggerTaskHandle = xTaskCreateStatic(FreeRTOS_Cpp::appLogger::vAppLoggerTask, 
                     "Logger", 
-                    TASK_STACK_SIZE_APPLOGGER_TASK, 
+                    FreeRTOS_Cpp::TASK_STACK_SIZE_APPLOGGER_TASK, 
                     &myLogger,                        // Pass object instance pointer
-                    TASK_PRIORITY_APPLOGGER_TASK, 
+                    FreeRTOS_Cpp::TASK_PRIORITY_APPLOGGER_TASK, 
                     xLoggerTaskStack, &xLoggerTaskTCB);
 
     FreeRTOS_Cpp::xAppCommandTaskHandle = xTaskCreateStatic(FreeRTOS_Cpp::appLogger::vCommandTask, 
                     "Command", 
-                    TASK_STACK_SIZE_COMMAND_TASK, 
+                    FreeRTOS_Cpp::TASK_STACK_SIZE_COMMAND_TASK, 
                     &myLogger,                        // Pass object instance pointer
-                    TASK_PRIORITY_COMMAND_TASK, 
+                    FreeRTOS_Cpp::TASK_PRIORITY_COMMAND_TASK, 
                     xCommandTaskStack, &xCommandTaskTCB);
 
     // Start Scheduler (Should not return)

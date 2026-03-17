@@ -1,9 +1,6 @@
 
 // Application include
 #include "appHeartbeat.hpp"
-#include "appDefines.hpp"
-// hardware includes
-//#include "../main.hpp"
 
 namespace FreeRTOS_Cpp
 {

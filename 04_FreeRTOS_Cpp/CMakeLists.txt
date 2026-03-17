@@ -8,19 +8,22 @@ set(CMAKE_CXX_STANDARD 17) # Transition to Modern C++
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Definitions & Includes
-add_definitions(-DSTM32L475xx -DUSE_HAL_DRIVER)
+add_definitions(-DSTM32L475xx -DUSE_HAL_DRIVER -DFREERTOS_CPP_APP_RUNNING)
 
 # Source Collection
 file(GLOB_RECURSE SOURCES 
     "App/*.cpp"
+    "App/*.c"
     "App/Src/*.cpp"
+    "App/Src/*.c"
     "Platforms/Stm32/Src/*.cpp"
     "../03_FreeRTOS/Drivers/BSP/B-L475E-IOT01/*.c"
     "../03_FreeRTOS/Drivers/BSP/Components/hts221/*.c"
     "../03_FreeRTOS/Drivers/CMSIS/Device/ST/STM32L4xx/Source/*.c"
     "../03_FreeRTOS/Drivers/STM32L4xx_HAL_Driver/Src/*.c"
     "../03_FreeRTOS/Middlewares/FreeRTOS/*.c"
-    "../03_FreeRTOS/Middlewares/FreeRTOS/portable/*.c"
+    "../03_FreeRTOS/Middlewares/FreeRTOS/portable/GCC/ARM_CM4F/*.c"
+    "../03_FreeRTOS/Middlewares/FreeRTOS/portable/MemMang/heap_4.c" # Or whichever heap you use
 )
 
 # Add the specific startup file
@@ -124,6 +127,9 @@ if(CPPCHECK_PATH)
         COMMAND ${CPPCHECK_PATH} --enable=all --std=c++17 --inline-suppr
                 -I ${CMAKE_CURRENT_SOURCE_DIR}/App/Inc
                 ${CMAKE_CURRENT_SOURCE_DIR}/App/Src
+                -I ${CMAKE_CURRENT_SOURCE_DIR}/Interfaces/Inc   # Include Interfaces
+                -I ${CMAKE_CURRENT_SOURCE_DIR}/Platforms/Stm32/Inc # Include Platforms
+                -I ${CMAKE_CURRENT_SOURCE_DIR}/Platforms/Stm32/src # Source Platforms
         COMMENT "Running Cppcheck Static Analysis..."
     )
 endif()
@@ -131,8 +137,14 @@ endif()
 find_program(CLANG_FORMAT_PATH clang-format)
 if(CLANG_FORMAT_PATH)
     file(GLOB_RECURSE ALL_CXX_SOURCE_FILES 
-         ${CMAKE_CURRENT_SOURCE_DIR}/App/*.cpp 
-         ${CMAKE_CURRENT_SOURCE_DIR}/App/*.hpp)
+        ${CMAKE_CURRENT_SOURCE_DIR}/App/*.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/App/*.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/App/Src/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/App/Inc/*.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Interfaces/Inc/*.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Platforms/Stm32/Inc/*.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Platforms/Stm32/src/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Platforms/Stm32/src/*.hpp)
     add_custom_target(format
         COMMAND ${CLANG_FORMAT_PATH} -i ${ALL_CXX_SOURCE_FILES}
         COMMENT "Formatting code to LLVM/Google standard..."

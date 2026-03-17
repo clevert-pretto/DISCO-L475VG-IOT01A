@@ -33,7 +33,21 @@ We structured our build system to compile the code for two entirely different ta
 ---
 
 ## Phase 3: Unit Testing & Code Coverage
-With the build system in place, we wrote GoogleTest suites for `test_xtoa.cpp` and `test_appHeartbeat.cpp`. 
+
+We achieved 100% test coverage for the application logic by leveraging host-based unit testing.
+
+1. Shared Mock Infrastructure
+To maintain a DRY (Don't Repeat Yourself) architecture, we established a shared `MockInterfaces.hpp`. This allows all test suites (`test_sysManager`, `test_appLogger`, etc.) to share the same simulated RTOS and Hardware environment.
+
+2. The "Private" Testing Pattern
+To test internal state machines and private methods without compromising production encapsulation, we utilized a preprocessor macro:
+* In **Production**, members remain `private`.
+* In **Unit Tests**, members become `public` via a `PRIVATE_FOR_TEST` macro defined in `CMakeLists.txt`. This allows the test harness to verify internal states like `currentState` or `handleCommand()`.
+
+
+3. **Zero-Hardware Dependency**: The application logic layer is 100% decoupled from the STM32 hardware via abstract interfaces.
+
+4. **Automated Analysis**: The project includes automated targets for static analysis (Cppcheck) and code formatting (Clang-Format).
 
 To visualize our testing effectiveness, we automated the code coverage reporting:
 1. **LCOV & GenHTML:** After GTest runs, we capture the `.gcda` files using `lcov` and generate a line-by-line HTML heat map.

@@ -14,8 +14,14 @@ FetchContent_MakeAvailable(googletest)
 add_executable(unit_tests 
     test_xtoa.cpp
     test_appHeartbeat.cpp 
+    test_appSensorRead.cpp
+    test_sysManager.cpp
+    test_appLogger.cpp
     ../App/Src/xtoa.cpp # Link the actual logic being tested
     ../App/Src/appHeartbeat.cpp # Link the actual logic being tested
+    ../App/Src/appSensorRead.cpp # Link the actual logic being tested
+    ../App/Src/sysManager.cpp # Link the actual logic being tested
+    ../App/Src/appLogger.cpp # Link the actual logic being tested
 )
 
 target_compile_definitions(unit_tests PRIVATE UNIT_TEST)
@@ -28,6 +34,7 @@ target_link_libraries(unit_tests PRIVATE
 
 # Include paths for the headers being tested
 target_include_directories(unit_tests PRIVATE
+    ../App
     ../App/Inc
     ../Interfaces/Inc
  )

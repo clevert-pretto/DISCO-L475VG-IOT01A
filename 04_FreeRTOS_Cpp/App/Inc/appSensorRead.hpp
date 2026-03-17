@@ -2,28 +2,36 @@
 #ifndef SENSOR_READ_HPP
 #define SENSOR_READ_HPP
 
-#include "FreeRTOS.h"
-#include "event_groups.h"
+#include "IRTOS.hpp"
+#include "ISensor.hpp"
+#include "appDefines.hpp"
 
 namespace FreeRTOS_Cpp
 {
-    //Bit positions for each sensor
-    #define appSENSOR_TEMPERATURE 1u
-    #define appSENSOR_HUMIDITY    2u
-
     #define LOG_SENSOR(buf, label, val, unit) \
         App_FormatSensorMsg((buf), (uint32_t)sizeof(buf), (label), (val), (unit))
 
     class appSensorRead{
     
         public:
-            appSensorRead(EventGroupHandle_t sysEvents, EventGroupHandle_t wdgEvents);
-            static uint8_t appSensorRead_Init(void);
+            appSensorRead(IRTOS* rtos, ISensor* tempSensor,
+                  ISensor* humiditySensor, void* sysEvents, void* wdgEvents);
+
+            uint8_t appSensorRead_Init(void);
             static void vSensorReadTask(void *pvParameters);
 
-        private:
-            EventGroupHandle_t _wdgEvents;
-            EventGroupHandle_t _sysEvents;
+            uint32_t getTempSensorID(void);
+            uint32_t getHumiditySensorID(void);
+            
+        PRIVATE_FOR_TEST:
+            IRTOS* _rtos;
+            ISensor* _tempSensor;     // Hardware Abstracted
+            ISensor* _humiditySensor; // Hardware Abstracted
+            void* _sysEvents;
+            void* _wdgEvents;
+            static constexpr uint32_t appSENSOR_TEMPERATURE =  (1u << 0); // Bit 0
+            static constexpr uint32_t appSENSOR_HUMIDITY = (1u << 1); // Bit 1
+            
             void App_FormatSensorMsg(char *pDest, uint32_t destLen, const char *pLabel, 
                             float val, const char *pUnit);
                         

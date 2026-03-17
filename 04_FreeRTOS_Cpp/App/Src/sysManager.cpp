@@ -3,41 +3,41 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-
-// Kernel includes
-#include "FreeRTOS.h"
-#include "task.h"
-
 // Application include
 #include "appSensorRead.hpp"
 #include "appLogger.hpp"
 #include "sysManager.hpp"
-#include "main.hpp"
 
 namespace FreeRTOS_Cpp
 {
-    systemManager::systemManager()
+    systemManager::systemManager(IRTOS* rtos, IHardware* hw, appSensorRead* sensorTask, 
+                                 void* sysEvents, void* wdgEvents, void* watchDog_Handle)
+        : _rtos(rtos), _hw(hw), _sensorTask(sensorTask), 
+          _sysEvents(sysEvents), _wdgEvents(wdgEvents), 
+          _watchDog_Handle(watchDog_Handle), currentState(SYS_STATE_INIT_HARDWARE)
     {
 
     }
 
+    /* sysManager.cpp */
+
     void systemManager::reportInitFailure(uint8_t sensorStatus, uint8_t qspiStatus)
     {
-        if ((sensorStatus & appSENSOR_TEMPERATURE) == 0U)
+        // Use independent 'if' blocks to report all current failures
+        if ((sensorStatus & _sensorTask->getTempSensorID()) == 0U)
         {
             appLogger::logMessage("Temperature Sensor Initialization Failed!\r\n", sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
         }
-        else if ((sensorStatus & appSENSOR_HUMIDITY) == 0U)
+        
+        // FIXED: Corrected ID check for Humidity
+        if ((sensorStatus & _sensorTask->getHumiditySensorID()) == 0U)
         {
             appLogger::logMessage("Humidity Sensor Initialization Failed!\r\n", sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
         }
-        else if (qspiStatus == (uint8_t)pdFAIL)
+
+        if (qspiStatus == 0U) // pdFAIL is usually 0
         {
             appLogger::logMessage("QSPI Initialization Failed!\r\n", sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
-        }
-        else
-        {
-            appLogger::logMessage("Other Initialization Failed!\r\n", sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
         }
     }
 
@@ -46,25 +46,31 @@ namespace FreeRTOS_Cpp
         appLogger::logMessage("Starting Hardware Init...\r\n", sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
 
         /* 1. Init Watchdog FIRST so storageBulkErase can safely pet it */
-        HAL_StatusTypeDef iwdgInitStatus = HAL_IWDG_Init(&IWDG_handle);
+        uint32_t iwdgInitStatus = _hw->watchdog_Init(_watchDog_Handle);
+
+        /* The Power-On Reset (POR) Delay 
+           Give the physical I2C sensors 200ms to boot up and stabilize 
+           their logic before we start probing the I2C bus. */
+        _rtos->delay(200);
+        _hw->watchdog_refresh(_watchDog_Handle); // Pet the dog while we wait!
 
         /* 2. Init Sensors */
-        uint8_t sensorInitStatus = appSensorRead::appSensorRead_Init();
+        uint8_t sensorInitStatus = _sensorTask->appSensorRead_Init();
 
         /* 3. Init Storage */
         appLogger::storageInitStatus = appLogger::instance->storageInit();
         
         /* Combined Success Check */
-        uint8_t sensorMask = appSENSOR_TEMPERATURE | appSENSOR_HUMIDITY;
+        uint32_t sensorMask = (_sensorTask->getTempSensorID() | _sensorTask->getHumiditySensorID());
+        
         if (((sensorInitStatus & sensorMask) == sensorMask) &&
-            (appLogger::storageInitStatus == (uint8_t)pdPASS)        &&
-            (iwdgInitStatus == HAL_OK))
+            (appLogger::storageInitStatus) && (!iwdgInitStatus))
         {
             currentState = SYS_STATE_OPERATIONAL;
             appLogger::logMessage("Hardware Init successful\r\n", sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
             
-            (void)xEventGroupClearBits(xSystemEventGroup, EVENT_BIT_INIT_FAILED | EVENT_BIT_FAULT_DETECTED);
-            (void)xEventGroupSetBits(xSystemEventGroup, EVENT_BIT_INIT_SUCCESS);
+            _rtos->clearEventBits(_sysEvents, EVENT_BIT_INIT_FAILED | EVENT_BIT_FAULT_DETECTED);
+            _rtos->setEventBits(_sysEvents, EVENT_BIT_INIT_SUCCESS);
         }
         else
         {
@@ -72,7 +78,7 @@ namespace FreeRTOS_Cpp
             appLogger::logMessage("Hardware Initialization Failed!\r\n", sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
             
             currentState = SYS_STATE_FAULT;
-            (void)xEventGroupSetBits(xSystemEventGroup, EVENT_BIT_INIT_FAILED);
+            _rtos->setEventBits(_sysEvents, EVENT_BIT_INIT_FAILED);
         }
     }
 
@@ -103,17 +109,17 @@ namespace FreeRTOS_Cpp
                     break;
             }
 
-            EventBits_t uxBits = xEventGroupWaitBits(
-                xWatchdogEventGroup,
-                WATCHDOG_MANDATORY_TASKS_BITMASK,
-                pdTRUE,        /* Clear bits on exit so they must report again */
-                pdTRUE,        /* Wait for ALL bits */
-                pdMS_TO_TICKS(IWDG_TIMEOUT_ms) 
+            uint32_t uxBits = self->_rtos->WaitBits(
+                self->_wdgEvents,
+                WATCHDOG_MANDATORY_BITMASK,
+                true,        /* Clear bits on exit so they must report again */
+                true,        /* Wait for ALL bits */
+                (IWDG_TIMEOUT_ms) 
             );
 
-            if ((uxBits & WATCHDOG_MANDATORY_TASKS_BITMASK) == WATCHDOG_MANDATORY_TASKS_BITMASK) {
+            if ((uxBits & WATCHDOG_MANDATORY_BITMASK) == WATCHDOG_MANDATORY_BITMASK) {
                 /* All tasks are healthy! Pet the hardware dog. */
-                HAL_IWDG_Refresh(&IWDG_handle);
+                self->_hw->watchdog_refresh(self->_watchDog_Handle);
             } else {
                 /* * If we reach here, at least one task is hung! 
                 * Do NOT refresh the IWDG. Let the hardware reset the MCU.

@@ -53,12 +53,18 @@ else
     echo "⚠️ Warning: 'docs' folder not found."
 fi
 
-# 5. Initialize pre-commit
+# 5. Initialize pre-commit with Custom Config Path
+# We use the explicit path in build_utils/ so the root stays clean
 if [ -f "build_utils/.pre-commit-config.yaml" ]; then
-    echo "⚓ Initializing pre-commit..."
+    echo "⚓ Initializing pre-commit hooks..."
+    # Explicitly call the venv binary to ensure installation works without activation
     ./.venv/bin/pre-commit install --config build_utils/.pre-commit-config.yaml
+    
+    # Optional: Run an initial check to ensure everything is linked correctly
+    echo "🔍 Running initial pre-commit check..."
+    ./.venv/bin/pre-commit run --config build_utils/.pre-commit-config.yaml --all-files
 else
-    echo "⚠️ Skipping pre-commit: Config not found."
+    echo "⚠️ Skipping pre-commit: Config not found at build_utils/.pre-commit-config.yaml"
 fi
 
 echo "🎉 Workspace ready! Run 'source ~/.bashrc' to refresh your terminal."

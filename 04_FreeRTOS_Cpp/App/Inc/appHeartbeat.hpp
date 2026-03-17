@@ -3,6 +3,7 @@
 
 #include "IRTOS.hpp"
 #include "IHardware.hpp"
+#include "appDefines.hpp"
 
 namespace FreeRTOS_Cpp
 {
@@ -18,7 +19,7 @@ namespace FreeRTOS_Cpp
             // The Task remains as the RTOS entry point
             static void HeartBeatTask(void *pvParameters);
 
-        private:
+        PRIVATE_FOR_TEST:
             IRTOS* _rtos;
             IHardware* _hw;
             // Encapsulated RTOS handles
