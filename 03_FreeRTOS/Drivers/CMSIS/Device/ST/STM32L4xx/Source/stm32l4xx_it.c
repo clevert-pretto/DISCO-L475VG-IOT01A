@@ -191,6 +191,19 @@ void QUADSPI_IRQHandler(void)
   HAL_QSPI_IRQHandler(&QSPIHandle);
 }
 
+#ifdef FREERTOS_CPP_APP_RUNNING
+extern TIM_HandleTypeDef htimHalTick; // Reference the handle from main.cpp
+
+/**
+ * @brief Handle the TIM7 interrupt to increment the HAL tick.
+ */
+void TIM7_IRQHandler(void)
+{
+    HAL_TIM_IRQHandler(&htimHalTick);
+}
+#endif
+
+
 /******************************************************************************/
 /*                 STM32L4xx Peripherals Interrupt Handlers                   */
 /*  Add here the Interrupt Handler for the used peripheral(s) (PPP), for the  */

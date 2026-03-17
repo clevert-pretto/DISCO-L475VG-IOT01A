@@ -1,46 +1,32 @@
+/* test_appHeartbeat.cpp */
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
 /* Application Headers (Logic Only) */
 #include "appHeartbeat.hpp"
-#include "appDefines.hpp" // Contains logic constants, zero hardware dependencies
+#include "appDefines.hpp" 
+
+/* Include the Shared Mocks */
+#include "MockInterfaces.hpp"
 
 using namespace FreeRTOS_Cpp;
 using ::testing::Return;
 using ::testing::Exactly;
 
 /**
- * @brief Mock for the RTOS Interface.
- * Allows us to simulate event bits and verify task delays.
- */
-class MockRtos : public IRTOS {
-public:
-    MOCK_METHOD(void, delay, (uint32_t ms), (override));
-    MOCK_METHOD(uint32_t, getEventBits, (void* handle), (override));
-    MOCK_METHOD(void, setEventBits, (void* handle, uint32_t bits), (override));
-};
-
-/**
- * @brief Mock for the Hardware Interface.
- * Allows us to verify LED toggles without a physical board.
- */
-class MockHardware : public IHardware {
-public:
-    MOCK_METHOD(void, toggleLed, (uint16_t ledId), (override));
-};
-
-/**
  * @brief Test Fixture for Heartbeat logic.
  */
 class HeartbeatTest : public ::testing::Test {
 protected:
-    MockRtos mockRtos;
-    MockHardware mockHw;
+    MockRtos mockRtos;        // This now comes from MockInterfaces.hpp
+    MockHardware mockHw;      // This now comes from MockInterfaces.hpp
     
     // Fake pointers to simulate FreeRTOS handles
     void* fakeSysEvents = reinterpret_cast<void*>(0xDEADBEEF);
     void* fakeWdgEvents = reinterpret_cast<void*>(0xC0FFEE);
 };
+
+// ... the rest of your tests remain exactly the same! ...
 
 // --- Test Case 1: Operational State ---
 TEST_F(HeartbeatTest, BlinksAtOperationalSpeed) {

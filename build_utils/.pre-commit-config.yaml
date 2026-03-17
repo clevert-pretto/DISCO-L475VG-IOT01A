@@ -48,7 +48,7 @@ repos:
       # --- Complexity Check (Both Projects) ---
       - id: lizard-check
         name: lizard
-        entry: lizard
+        entry: .venv/bin/lizard
         language: system
         types_or: [c, c++]
         files: ^(03_FreeRTOS|04_FreeRTOS_Cpp)/App/
