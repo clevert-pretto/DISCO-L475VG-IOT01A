@@ -42,7 +42,7 @@ jobs:
           mkdir -p .venv/bin
           ln -s $(which lizard) ./.venv/bin/lizard
           ln -s $(which pytest) ./.venv/bin/pytest
-          
+
       # --- 1. MISRA & Complexity Runs for ALL projects in the matrix ---
       - name: Run Pre-Commit Quality Gates
         run: pre-commit run --all-files --config build_utils/.pre-commit-config.yaml
@@ -137,19 +137,24 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Install Python Tools
+      - name: Install/Update Python Tools
         run: |
-          python -m pip install --upgrade pip
-          pip install pytest
+          python3 -m pip install --upgrade pip
+          python3 -m pip install pytest pytest-html pyserial
 
       - name: Run HIL Tests
         run: |
           # The conftest.py skip logic handles cases where the hardware isn't connected, 
           # so this won't fail the workflow if run on a machine without the hardware
-          source .venv/bin/activate
+          if [ -d ".venv"]; then
+            source .venv/bin/activate
+          fi
+          
+          # Run HIL suite and generate HTML report
           pytest 04_FreeRTOS_Cpp/HIL_test/test_system.py --html=04_FreeRTOS_Cpp/HIL_test/hil_test_report.html --self-contained-html
 
       - name: Upload HIL Test Report
+        if: always() # We want to upload the report even if the tests fail, so we can see the results
         uses: actions/upload-artifact@v4
         with:
           name: hil-test-report
