@@ -60,5 +60,6 @@ repos:
         entry: .venv/bin/pytest 04_FreeRTOS_Cpp/HIL_test/test_system.py
         language: system
         pass_filenames: false
-        always_run: true
+        always_run: false # We will run this manually in CI, not on every commit
+        files: ^04_FreeRTOS_Cpp/(HIL_test|App)
       
