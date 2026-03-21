@@ -2,6 +2,8 @@
 #include "appLogger.hpp"
 #include "sysManager.hpp"
 #include "xtoa.hpp"
+#include <algorithm> // For std::find_if
+#include <iterator>  // For std::begin, std::end
 
 namespace FreeRTOS_Cpp
 {
@@ -9,8 +11,8 @@ namespace FreeRTOS_Cpp
     bool appLogger::storageInitStatus = false;
     void* appLogger::_eraseCompleteMutex = nullptr;
 
-   appLogger::appLogger(IRTOS* rtos, IHardware* hw, void* sysEvents, void* wdgEvents, void* wdgHardwareHandle) 
-        : _rtos(rtos), _hw(hw), _sysEvents(sysEvents), _wdgEvents(wdgEvents), _watchdogHardware(wdgHardwareHandle)
+   appLogger::appLogger(IRTOS* rtos, IHardware* hw, appSensorRead* sensorTask, void* sysEvents, void* wdgEvents, void* wdgHardwareHandle) 
+        : _rtos(rtos), _hw(hw), _sensorTask(sensorTask), _sysEvents(sysEvents), _wdgEvents(wdgEvents), _watchdogHardware(wdgHardwareHandle)
     {
         // Member initialization list is faster and safer than assignment in body
     }
@@ -113,6 +115,8 @@ namespace FreeRTOS_Cpp
     void appLogger::vCommandTask(void *pvParameters)
     {
         uint8_t rxChar = 0;
+        char commandLine[32] = {0};
+        uint8_t cmdIndex = 0;
         appLogger *self = static_cast<appLogger*>(pvParameters);
 
         /* Start the first interrupt-driven receive */
@@ -123,49 +127,144 @@ namespace FreeRTOS_Cpp
             /* This task will SLEEP for 1000 sec */
             if (self->_rtos->queueReceive(self->_commandQueue, &rxChar, 1000))
             {
-                self->handleCommand(rxChar);
+                if(rxChar == '\n' || rxChar == '\r')
+                {
+                    commandLine[cmdIndex] = '\0';
+                    if(cmdIndex > 0)
+                    {
+                        self->handleCommand(commandLine);
+                    }
+                    cmdIndex = 0;
+                    self->sendCommandResponse(">"); // Display '>' on the terminal
+                }
+                else if (cmdIndex < sizeof(commandLine) - 1)
+                {
+                    commandLine[cmdIndex++] = rxChar;
+                    #if DEBUGGING
+                        self->_hw->printLog(&rxChar, 1); // Display the received character on the terminal
+                    #endif
+                }
             }
             self->_rtos->setEventBits(self->_wdgEvents, WATCHDOG_BIT_COMMAND);
         }
     }
 
-    void appLogger::handleCommand(uint8_t rxChar)
+/**
+ * @brief Handles commands from the command task
+ *
+ * @param cmd Command string received from the command task
+ *
+ * @details Handles commands from the command task. Supports the following commands:
+ *  - ping: Responds with "pong\r\n"
+ *  - help: Prints the command help menu
+ *  - dump_logs: Dumps the event logs
+ *  - event_sector_erase: Erases the event log sector
+ *  - bulk_erase: Performs a bulk erase of the storage
+ *  - stack_health: Checks the stack health
+ *  - get_temp: Gets the current temperature
+ *  - get_humidity: Gets the current humidity
+ *
+ */
+    void appLogger::handleCommand(const char* cmd)
     {
-        switch (rxChar)
+        // 1. Define a structure for our command table
+        struct CommandEntry {
+            const char* name;
+            void (appLogger::*handler)();
+        };
+
+
+        // 2. The Command Table (Internal to function or class member)
+        static const CommandEntry commandTable[] = {
+            {"ping",                 &appLogger::cmdPing},
+            {"help",                 &appLogger::cmdHelp},
+            {"dump_logs",            &appLogger::dumpLogs},
+            {"event_sector_erase",   &appLogger::eventSectorErase},
+            {"bulk_erase",           &appLogger::storageBulkErase},
+            {"stack_health",         &appLogger::checkStackUsage},
+            {"get_temp",             &appLogger::cmdGetTemp},
+            {"get_humidity",         &appLogger::cmdGetHumidity},
+            {"enable_temp_log",      &appLogger::cmdEnableTempLog},
+            {"disable_temp_log",     &appLogger::cmdDisableTempLog},
+            {"enable_humidity_log",  &appLogger::cmdEnableHumLog},
+            {"disable_humidity_log", &appLogger::cmdDisableHumLog}
+        };
+
+        // 3. STL Dispatcher logic using std::find_if
+        auto it = std::find_if(std::begin(commandTable), 
+                               std::end(commandTable),
+                               [cmd](const CommandEntry& entry) 
+            {
+                return strncmp(cmd, entry.name, strlen(entry.name)) == 0;
+            });
+
+        // 4. Check if the command was found
+        if (it != std::end(commandTable)) 
         {
-            case 'd':
-                sendCommandResponse("Command: Triggering Flash Dump...\r\n");
-                dumpLogs();
-                break;
-
-            case 'n':
-                sendCommandResponse("Command: Triggering Event sector erase...\r\n");
-                eventSectorErase();
-                break;
-
-            case 'p':
-                sendCommandResponse("Command: Triggering Bulk Erase...\r\n");
-                storageBulkErase();
-                break;
-
-            case 'h':
-                sendCommandResponse("\r\n--- Command Menu ---\r\n"
-                                    "d: Dump Logs\r\n"
-                                    "p: Bulk Erase\r\n"
-                                    "s: Stack Health\r\n"
-                                    "n: Event log sector erase\r\n");
-                break;
-
-            case 's':
-                sendCommandResponse("Command: Checking Stack Health...\r\n");
-                checkStackUsage();
-                break;
-
-            default:
-                sendCommandResponse("Command: Invalid command\r\n");
-                
-                break;
+            (this->*(it->handler))(); // Call the member function
+        } 
+        else 
+        {
+            sendCommandResponse("\r\nCommand: Invalid command\r\n");
         }
+    }
+
+    void appLogger::cmdPing() 
+    {
+        sendCommandResponse("\r\npong\r\n");
+    }
+
+    void appLogger::cmdGetTemp() {
+        char tempBuf[16]; // Increased for safety
+        sendCommandResponse("\r\nCurrent Temperature: ");
+        
+        // FIX: Use sizeof(tempBuf) instead of hardcoded '6' to prevent safety return
+        xtoa::app_ftoa(_sensorTask->getCurrentTemp(), tempBuf, (uint32_t)sizeof(tempBuf));
+        
+        sendCommandResponse(tempBuf);
+        sendCommandResponse(" C\r\n"); // Segmented printing saves ~40 bytes of stack
+    }
+
+    void appLogger::cmdGetHumidity() {
+        char humBuf[16];
+        sendCommandResponse("\r\nCurrent Humidity: ");
+        xtoa::app_ftoa(_sensorTask->getCurrentHumidity(), humBuf, (uint32_t)sizeof(humBuf));
+        sendCommandResponse(humBuf);
+        sendCommandResponse(" %\r\n");
+    }
+
+    void appLogger::cmdHelp() {
+        sendCommandResponse("\r\n--- Command Help Menu ---\r\n"
+                            "dump_logs:             Dump Logs\r\n"
+                            "bulk_erase:            Bulk Erase\r\n"
+                            "stack_health:          Stack Health\r\n"
+                            "get_temp:              Get Temperature\r\n"
+                            "get_humidity:          Get Humidity\r\n"
+                            "enable_temp_log:       Enable Temperature Logging\r\n"
+                            "disable_temp_log:      Disable Temperature Logging\r\n"
+                            "enable_humidity_log:   Enable Humidity Logging\r\n"
+                            "disable_humidity_log:  Disable Humidity Logging\r\n"
+                            "event_sector_erase:    Event log sector erase\r\n");
+    }
+
+    void appLogger::cmdEnableTempLog() {
+        _sensorTask->enableTemperatureLogging();
+        sendCommandResponse("\r\nCommand: Enabled Temperature Logging\r\n");
+    }
+
+    void appLogger::cmdDisableTempLog() {
+        _sensorTask->disableTemperatureLogging();
+        sendCommandResponse("\r\nCommand: Disabled Temperature Logging\r\n");
+    }
+
+    void appLogger::cmdEnableHumLog() {
+        _sensorTask->enableHumidityLogging();
+        sendCommandResponse("\r\nCommand: Enabled Humidity Logging\r\n");
+    }
+
+    void appLogger::cmdDisableHumLog() {
+        _sensorTask->disableHumidityLogging();
+        sendCommandResponse("\r\nCommand: Disabled Humidity Logging\r\n");
     }
 
     /* Internal function to dump Flash log (if found) on UART */
@@ -173,10 +272,9 @@ namespace FreeRTOS_Cpp
     {
         sStorageEvent_t tempEvent;
         sLogSectorHeader_t sectorHeader;
-        uint32_t readAddr = LOG_DATA_START; // Start after sector header data
         
-        static char outMsg[128];
-        static char valBuf[16];
+        static char outMsg[128] = {0};
+        static char valBuf[16] = {0};
 
         if (_rtos->takeMutex(_qspiMutex, 0xFFFFFFFF))
         {
@@ -201,22 +299,24 @@ namespace FreeRTOS_Cpp
                     _hw->printLog(reinterpret_cast<const uint8_t*>(outMsg), static_cast<uint16_t>(strlen(outMsg)));
                 }
 
+                uint32_t readAddr = LOG_DATA_START; // Start after sector header data
                 while (readAddr < _u32CurrentWriteAddress)
                 {
                     if (_hw->storageRead(reinterpret_cast<uint8_t*>(&tempEvent), readAddr, LOG_ENTRY_SIZE))
                     {
                         /* Only process known sensor data points */
                         if (tempEvent.eventID == EVENT_ID_T_SENSOR_DATA_POINT || tempEvent.eventID == EVENT_ID_H_SENSOR_DATA_POINT)
-                        {                            
-                            float fHum = 0.0f;
-                            float fTemp = 0.0f;
-                            (void)memcpy(&fTemp, &tempEvent.payload[0], sizeof(float));
+                        {                      
+                            float sensorValue = 0.0f; // Use a generic name for clarity
+                            (void)memcpy(&sensorValue, &tempEvent.payload[0], sizeof(float));
                             (void)memset(outMsg, 0, 128);
-                            (void)strcpy(outMsg, "TS: ");
+                            (void)strcpy(outMsg, "Event log: ");
+
                             xtoa::app_itoa(tempEvent.timestamp, valBuf, 10);
                             (void)strcat(outMsg, valBuf);
+
                             (void)strcat(outMsg, (tempEvent.eventID == EVENT_ID_T_SENSOR_DATA_POINT) ? " | T: " : " | H: ");
-                            xtoa::app_ftoa(fHum, valBuf, 2);
+                            xtoa::app_ftoa(sensorValue, valBuf, 6);
                             (void)strcat(outMsg, valBuf);
                             (void)strcat(outMsg, "\r\n");
                             _hw->printLog(reinterpret_cast<const uint8_t*>(outMsg), static_cast<uint16_t>(strlen(outMsg)));
@@ -227,12 +327,13 @@ namespace FreeRTOS_Cpp
                     /* Add a tiny delay so we don't overwhelm the UART or starve the Heartbeat */
                     _rtos->delay(1);
                 }
+                (void)strcpy(outMsg, "--- FLASH LOG DUMP END ---\r\n");
+                _hw->printLog(reinterpret_cast<const uint8_t*>(outMsg), static_cast<uint16_t>(strlen(outMsg)));
+                _rtos->delay(1);
                 _rtos->giveMutex(_uartMutex);
             }
             _rtos->giveMutex(_qspiMutex);
         }
-
-        logMessage("--- FLASH LOG DUMP END ---\r\n", sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
     }
 
     /* Internal function to find where we left off */
@@ -341,7 +442,7 @@ namespace FreeRTOS_Cpp
             _u32CurrentWriteAddress = LOG_DATA_START;
             _rtos->giveMutex(_qspiMutex);
 
-            logMessage("Storage: Event log sector Erase Complete.\r\n", sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
+            sendCommandResponse("Storage: Event log sector Erase Complete.\r\n");
         }
     } 
 
@@ -358,8 +459,7 @@ namespace FreeRTOS_Cpp
                     _rtos->setEventBits(_wdgEvents, WATCHDOG_BIT_COMMAND); 
                 }
             }
-            logMessage("Storage: Bulk Erase Complete.\r\n", sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
-
+            sendCommandResponse("Storage: Bulk Erase Complete.\r\n");
             sLogSectorHeader_t currentHeader = {0};
             currentHeader.magicSignature = STORAGE_EVENT_SECTOR_MAGIC_SIGNATURE;
             currentHeader.version = LOG_EVENT_SECTOR_VERSION;
@@ -468,9 +568,37 @@ namespace FreeRTOS_Cpp
 
     void appLogger::checkStackUsage(void)
     {
-        /* Note: In a pure abstraction, stack checking relies on adding `getTaskHighWaterMark` to IRTOS. 
-           For now, we simply log that stack monitoring is deferred to the RTOS wrapper. */
-        sendCommandResponse("Stack diagnostic request received. (Requires IRTOS update to print).\r\n");
+        char valBuf[16];
+        const char* taskName = nullptr;
+        void* taskHandle = nullptr;
+        sendCommandResponse("\r\n--- Task Stack High Water Marks (Words Remaining) ---\r\n");
+
+        uint32_t count = _rtos->getRegisteredTaskCount();
+        for (uint32_t i = 0; i < count; i++)
+        {
+            if (_rtos->getRegisteredTaskInfo(i, &taskName, &taskHandle)) 
+            {
+                // 1. Print Task Name
+                sendCommandResponse(taskName);
+                sendCommandResponse(": ");
+
+                // 2. Get and convert Water Mark
+                // Note: uxTaskGetStackHighWaterMark returns the minimum free stack space 
+                // seen since the task started. Lower = Closer to overflow.
+                uint32_t stackRemaining = _rtos->getStackHighWaterMark(taskHandle);
+                xtoa::app_itoa(static_cast<int32_t>(stackRemaining), valBuf, 10);
+                
+                // 3. Print Value
+                sendCommandResponse(valBuf);
+                sendCommandResponse(" words\r\n");
+            } 
+            else 
+            {
+                sendCommandResponse(taskName);
+                sendCommandResponse(": NOT_STARTED\r\n");
+            }
+        }
+        sendCommandResponse("----------------------------------------------------\r\n");
     }
 
     void appLogger::sendCommandResponse(const char *pMsg)

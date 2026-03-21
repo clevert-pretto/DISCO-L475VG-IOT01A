@@ -9,23 +9,36 @@
 namespace FreeRTOS_Cpp {
 
     class Stm32Rtos : public IRTOS {
-    public:
-        void delay(uint32_t ms) override;
-        uint32_t getTickCount(void) override;
-        uint32_t getEventBits(void* handle) override;
-        void setEventBits(void* handle, uint32_t bits) override;
-        void clearEventBits(void* handle, uint32_t bits) override;
-        uint32_t WaitBits(void* handle, uint32_t bits, bool clearOnExit, bool waitForAllBits, uint32_t tickTowait) override;
+        private:
+            struct RegisteredTask {
+                void* handle;
+                const char* name;
+            };
+            static constexpr uint8_t MAX_TASKS = 8; //TODO:Update if have more than 8 tasks to monitor
+            RegisteredTask _tasks[MAX_TASKS];
+            uint32_t _taskCount = 0;
 
-        // --- Mutex / Semaphore Interface ---
-        bool takeMutex(void* handle, uint32_t timeoutMs) override;
-        bool giveMutex(void* handle) override;
-        bool giveSemaphoreFromISR(void* handle, bool* higherPriorityTaskWoken) override;
+        public:
+            void delay(uint32_t ms) override;
+            uint32_t getTickCount(void) override;
+            void registerTask(void* handle, const char* name) override;
+            uint32_t getRegisteredTaskCount() override;
+            bool getRegisteredTaskInfo(uint32_t index, const char** outName, void** outHandle) override;
+            uint32_t getStackHighWaterMark(void* handle) override;
+            uint32_t getEventBits(void* handle) override;
+            void setEventBits(void* handle, uint32_t bits) override;
+            void clearEventBits(void* handle, uint32_t bits) override;
+            uint32_t WaitBits(void* handle, uint32_t bits, bool clearOnExit, bool waitForAllBits, uint32_t tickTowait) override;
 
-        // --- Queue Interface ---
-        bool queueSend(void* handle, const void* item, uint32_t timeoutMs) override;
-        bool queueSendFromISR(void* handle, const void* item, bool* higherPriorityTaskWoken) override;
-        bool queueReceive(void* handle, void* buffer, uint32_t timeoutMs) override;
+            // --- Mutex / Semaphore Interface ---
+            bool takeMutex(void* handle, uint32_t timeoutMs) override;
+            bool giveMutex(void* handle) override;
+            bool giveSemaphoreFromISR(void* handle, bool* higherPriorityTaskWoken) override;
+
+            // --- Queue Interface ---
+            bool queueSend(void* handle, const void* item, uint32_t timeoutMs) override;
+            bool queueSendFromISR(void* handle, const void* item, bool* higherPriorityTaskWoken) override;
+            bool queueReceive(void* handle, void* buffer, uint32_t timeoutMs) override;
     };
 
     class Stm32Hardware : public IHardware {

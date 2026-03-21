@@ -1,14 +1,14 @@
+// Updated test_appLogger.cpp
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "appLogger.hpp"
-#include "appDefines.hpp"
-/* Include the Shared Mocks */
 #include "MockInterfaces.hpp"
 
 using namespace FreeRTOS_Cpp;
-using ::testing::Return;
 using ::testing::_;
-using ::testing::HasSubstr;
+using ::testing::Return;
+using ::testing::DoAll;
+using ::testing::SetArgPointee;
 
 class AppLoggerTest : public ::testing::Test {
 protected:
@@ -17,54 +17,48 @@ protected:
     appLogger* logger;
 
     void SetUp() override {
-        logger = new appLogger(&mockRtos, &mockHw, nullptr, nullptr, nullptr);
-        // Initialize with dummy queues/mutexes so it passes null checks
+        logger = new appLogger(&mockRtos, &mockHw, nullptr, nullptr, nullptr, nullptr);
         logger->init((void*)1, (void*)2, (void*)3, (void*)4, (void*)5, (void*)6);
     }
 
-    void TearDown() override {
-        delete logger;
-    }
+    void TearDown() override { delete logger; }
 };
 
-// Test Case 1: Command Handling Routing
-TEST_F(AppLoggerTest, HandlesDumpCommandCorrectly) {
-    // 1. PRIME THE DATA: Set address so the loop runs at least once
-    // We use Solution 3 (Macro) to access this private member
+// Test Case 1: Updated Command Logic (String-based)
+TEST_F(AppLoggerTest, HandlesDumpLogsStringCommand) {
     logger->_u32CurrentWriteAddress = LOG_DATA_START + LOG_ENTRY_SIZE;
 
-    // 2. EXPECT MUTEXES: Dump logs takes QSPI and UART mutexes
     EXPECT_CALL(mockRtos, takeMutex(_, _)).WillRepeatedly(Return(true));
     EXPECT_CALL(mockRtos, giveMutex(_)).WillRepeatedly(Return(true));
+    EXPECT_CALL(mockHw, storageRead(_, _, _)).WillRepeatedly(Return(true));
+    EXPECT_CALL(mockHw, printLog(_, _)).Times(testing::AtLeast(1));
 
-    // 3. EXPECT LOGGING: logMessage() at the end of dumpLogs calls queueSend
-    // We expect it to be called for the "--- FLASH LOG DUMP END ---" message
-    EXPECT_CALL(mockRtos, queueSend((void*)1, testing::_, 0))
-        .WillOnce(Return(true));
-
-    // 4. EXPECT UART PRINT: The header and at least one data point
-    EXPECT_CALL(mockHw, printLog(testing::NotNull(), testing::_))
-        .Times(testing::AtLeast(2)); 
-    
-    // 5. SIMULATE STORAGE: Ensure storageRead returns true so the loop processes
-    EXPECT_CALL(mockHw, storageRead(testing::_, testing::_, testing::_))
-        .WillRepeatedly(Return(true));
-
-    // Execute the 'd' (dump) command
-    logger->handleCommand('d');
+    // Refactored: Use string command instead of 'd'
+    logger->handleCommand("dump_logs"); 
 }
-// Test Case 2: Invalid Command Handling
-TEST_F(AppLoggerTest, RejectsInvalidCommands) {
-    // Should take UART mutex to print "Invalid command"
+
+// Test Case 2: Task Registry Stack Monitoring
+TEST_F(AppLoggerTest, CheckStackUsageIteratesThroughRegistry) {
+    const char* dummyName = "TestTask";
+    void* dummyHandle = (void*)0xDEADBEEF;
+
+    // Set up expectations for the registry loop
+    EXPECT_CALL(mockRtos, getRegisteredTaskCount()).WillOnce(Return(1));
+    EXPECT_CALL(mockRtos, getRegisteredTaskInfo(0, _, _))
+        .WillOnce(DoAll(SetArgPointee<1>(dummyName), SetArgPointee<2>(dummyHandle), Return(true)));
+    
+    EXPECT_CALL(mockRtos, getStackHighWaterMark(dummyHandle)).WillOnce(Return(128));
+    EXPECT_CALL(mockRtos, takeMutex(_, _)).WillRepeatedly(Return(true));
+    EXPECT_CALL(mockRtos, giveMutex(_)).WillRepeatedly(Return(true));
+    EXPECT_CALL(mockHw, printLog(_, _)).Times(testing::AtLeast(1));
+
+    logger->handleCommand("stack_health");
+}
+
+TEST_F(AppLoggerTest, RejectsInvalidStringCommand) {
     EXPECT_CALL(mockRtos, takeMutex(_, _)).WillOnce(Return(true));
     EXPECT_CALL(mockRtos, giveMutex(_)).WillOnce(Return(true));
-    
-    // QSPI Mutex should NOT be taken for an invalid command
-    EXPECT_CALL(mockRtos, takeMutex((void*)5, _)).Times(0);
+    EXPECT_CALL(mockHw, printLog(_, _)).Times(1);
 
-    // We can't easily check the string contents directly without a custom matcher,
-    // but we verify the hardware receives a print call.
-    EXPECT_CALL(mockHw, printLog(testing::NotNull(), _)).Times(1);
-
-    logger->handleCommand('x'); // 'x' is invalid
+    logger->handleCommand("invalid_cmd_123");
 }

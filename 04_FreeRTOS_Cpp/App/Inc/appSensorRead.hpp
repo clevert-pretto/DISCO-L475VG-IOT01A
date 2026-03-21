@@ -22,11 +22,23 @@ namespace FreeRTOS_Cpp
 
             uint32_t getTempSensorID(void);
             uint32_t getHumiditySensorID(void);
+
+            float getCurrentTemp(void){return _currentTemp;};
+            float getCurrentHumidity(void){return _currentHumidity;};
+
+            void enableTemperatureLogging(void){bEnableTemperatureLogging = true;}
+            void enableHumidityLogging(void){bEnableHumidityLogging = true;}
+            void disableTemperatureLogging(void){bEnableTemperatureLogging = false;}
+            void disableHumidityLogging(void){bEnableHumidityLogging = false;}
             
         PRIVATE_FOR_TEST:
+            bool bEnableTemperatureLogging{false};
+            bool bEnableHumidityLogging{false};
             IRTOS* _rtos;
             ISensor* _tempSensor;     // Hardware Abstracted
             ISensor* _humiditySensor; // Hardware Abstracted
+            float _currentTemp;
+            float _currentHumidity;
             void* _sysEvents;
             void* _wdgEvents;
             static constexpr uint32_t appSENSOR_TEMPERATURE =  (1u << 0); // Bit 0

@@ -53,3 +53,12 @@ repos:
         types_or: [c, c++]
         files: ^(03_FreeRTOS|04_FreeRTOS_Cpp)/App/
         args: ["-w", "-l", "15", "-C", "10"]
+
+      # --- HIL Testing hook ---
+      - id: hil-test
+        name: hil-test (04_FreeRTOS_Cpp)
+        entry: .venv/bin/pytest 04_FreeRTOS_Cpp/HIL_test/test_system.py
+        language: system
+        pass_filenames: false
+        always_run: true
+      

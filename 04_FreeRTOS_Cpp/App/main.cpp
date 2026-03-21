@@ -12,12 +12,12 @@
 #include "semphr.h"
 
 //Application includes
+#include "appDefines.hpp"
 #include "stm32Platform.hpp"
 #include "appHeartbeat.hpp"
 #include "appSensorRead.hpp"
 #include "appLogger.hpp"
 #include "sysManager.hpp"
-#include "appDefines.hpp"
 
 namespace FreeRTOS_Cpp
 {
@@ -489,11 +489,11 @@ int main(void)
     BSP_LED_Init(LED2);
     
    /* Create Logger RTOS Primitives */
-    QueueHandle_t hPrintQueue = xQueueCreateStatic(FreeRTOS_Cpp::appLogger::QUEUE_LEN, LOG_MESSAGE_SIZE,
+    QueueHandle_t hPrintQueue = xQueueCreateStatic(FreeRTOS_Cpp::appLogger::QUEUE_LEN, FreeRTOS_Cpp::LOG_MESSAGE_SIZE,
                                                     FreeRTOS_Cpp::ucPrintQueueStorage, &FreeRTOS_Cpp::xPrintQueueBuffer);
-    QueueHandle_t hEventQueue = xQueueCreateStatic(FreeRTOS_Cpp::appLogger::QUEUE_LEN, LOG_ENTRY_SIZE, 
+    QueueHandle_t hEventQueue = xQueueCreateStatic(FreeRTOS_Cpp::appLogger::QUEUE_LEN, FreeRTOS_Cpp::LOG_ENTRY_SIZE, 
                                                     FreeRTOS_Cpp::ucEventQueueStorage, &FreeRTOS_Cpp::xEventQueueBuffer);
-    QueueHandle_t hCommandQueue = xQueueCreateStatic(10u, COMMAND_ENTRY_SIZE, 
+    QueueHandle_t hCommandQueue = xQueueCreateStatic(20u, FreeRTOS_Cpp::COMMAND_ENTRY_SIZE, 
                                                     FreeRTOS_Cpp::ucCmmandQueueStorage, &FreeRTOS_Cpp::xCommandQueueBuffer);
     
     SemaphoreHandle_t hUartMutex = xSemaphoreCreateMutexStatic(&FreeRTOS_Cpp::xUartMutexBuffer);
@@ -505,15 +505,16 @@ int main(void)
     FreeRTOS_Cpp::xWatchdogEventGroup = xEventGroupCreateStatic(&FreeRTOS_Cpp::xWatchdogEventGroupBuffer);
 
     /* Object Instantiation Declared 'static' so they persist in memory safely out of the main stack frame. */
-    static FreeRTOS_Cpp::appLogger     myLogger(&FreeRTOS_Cpp::realRtos, &FreeRTOS_Cpp::realHw, 
+    static FreeRTOS_Cpp::appSensorRead mySensor(&FreeRTOS_Cpp::realRtos, &FreeRTOS_Cpp::realTempSensor, &FreeRTOS_Cpp::realHumiditySensor, 
+                                                FreeRTOS_Cpp::xSystemEventGroup, FreeRTOS_Cpp::xWatchdogEventGroup);
+                                                
+    static FreeRTOS_Cpp::appLogger     myLogger(&FreeRTOS_Cpp::realRtos, &FreeRTOS_Cpp::realHw, &mySensor, 
                                                 FreeRTOS_Cpp::xSystemEventGroup, FreeRTOS_Cpp::xWatchdogEventGroup, 
                                                 &FreeRTOS_Cpp::IWDG_handle);
 
     static FreeRTOS_Cpp::AppHeartbeat  myHeartbeat(&FreeRTOS_Cpp::realRtos,  &FreeRTOS_Cpp::realHw,
                                                 FreeRTOS_Cpp::xSystemEventGroup, FreeRTOS_Cpp::xWatchdogEventGroup);
 
-    static FreeRTOS_Cpp::appSensorRead mySensor(&FreeRTOS_Cpp::realRtos, &FreeRTOS_Cpp::realTempSensor, &FreeRTOS_Cpp::realHumiditySensor, 
-                                                FreeRTOS_Cpp::xSystemEventGroup, FreeRTOS_Cpp::xWatchdogEventGroup);
 
     static FreeRTOS_Cpp::systemManager mySysManager(&FreeRTOS_Cpp::realRtos,  &FreeRTOS_Cpp::realHw, &mySensor, 
                                                 FreeRTOS_Cpp::xSystemEventGroup, FreeRTOS_Cpp::xWatchdogEventGroup,
@@ -543,6 +544,8 @@ int main(void)
                     &myHeartbeat,                     // Pass object instance pointer
                     FreeRTOS_Cpp::TASK_PRIORITY_HEARTBEAT_TASK, 
                     xheartbeatTaskStack, &xHeartbeatTaskTCB);
+                    
+    FreeRTOS_Cpp::realRtos.registerTask(FreeRTOS_Cpp::xHeartBeatTaskHandle, "Heartbeat");
 
     FreeRTOS_Cpp::xvSensorReadTaskHandle = xTaskCreateStatic(FreeRTOS_Cpp::appSensorRead::vSensorReadTask, 
                     "SensorRead", 
@@ -551,12 +554,16 @@ int main(void)
                     FreeRTOS_Cpp::TASK_PRIORITY_SENSOR_READ_TASK, 
                     xSensorReadStack, &xvSensorReadTaskTCB);
 
+    FreeRTOS_Cpp::realRtos.registerTask(FreeRTOS_Cpp::xvSensorReadTaskHandle, "SensorRead");
+
     FreeRTOS_Cpp::xsystemManagerTaskHandle = xTaskCreateStatic(FreeRTOS_Cpp::systemManager::systemManagerTask, 
                     "SysManager", 
                     FreeRTOS_Cpp::TASK_STACK_SIZE_SYS_MANAGER_TASK, 
                     &mySysManager,                    // Pass object instance pointer
                     FreeRTOS_Cpp::TASK_PRIORITY_SYS_MANAGER_TASK, 
                     xSysMgrTaskStack, &xSysMgrTaskTCB);
+
+    FreeRTOS_Cpp::realRtos.registerTask(FreeRTOS_Cpp::xsystemManagerTaskHandle, "SysManager");
 
     FreeRTOS_Cpp::xAppLoggerTaskHandle = xTaskCreateStatic(FreeRTOS_Cpp::appLogger::vAppLoggerTask, 
                     "Logger", 
@@ -565,6 +572,8 @@ int main(void)
                     FreeRTOS_Cpp::TASK_PRIORITY_APPLOGGER_TASK, 
                     xLoggerTaskStack, &xLoggerTaskTCB);
 
+    FreeRTOS_Cpp::realRtos.registerTask(FreeRTOS_Cpp::xAppLoggerTaskHandle, "Logger");
+
     FreeRTOS_Cpp::xAppCommandTaskHandle = xTaskCreateStatic(FreeRTOS_Cpp::appLogger::vCommandTask, 
                     "Command", 
                     FreeRTOS_Cpp::TASK_STACK_SIZE_COMMAND_TASK, 
@@ -572,6 +581,7 @@ int main(void)
                     FreeRTOS_Cpp::TASK_PRIORITY_COMMAND_TASK, 
                     xCommandTaskStack, &xCommandTaskTCB);
 
+    FreeRTOS_Cpp::realRtos.registerTask(FreeRTOS_Cpp::xAppCommandTaskHandle, "Command");  
     // Start Scheduler (Should not return)
     vTaskStartScheduler();
 

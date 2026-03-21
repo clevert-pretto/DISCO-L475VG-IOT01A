@@ -126,3 +126,31 @@ jobs:
         - name: Deploy to GitHub Pages
           id: deployment
           uses: actions/deploy-pages@v4
+  # ==========================================
+  # JOB 4: HIL Testing (Runs on local hardware)
+  # ==========================================
+  hil-testing:
+    needs: quality-gate # Waits for BOTH C and C++ gates to pass!
+    runs-on: self-hosted # Assumes you have a self-hosted runner set up on your local machine connected to the hardware
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Python Tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+
+      - name: Run HIL Tests
+        run: |
+          # The conftest.py skip logic handles cases where the hardware isn't connected, 
+          # so this won't fail the workflow if run on a machine without the hardware
+          source .venv/bin/activate
+          pytest 04_FreeRTOS_Cpp/HIL_test/test_system.py --html=04_FreeRTOS_Cpp/HIL_test/hil_test_report.html --self-contained-html
+
+      - name: Upload HIL Test Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: hil-test-report
+          path: 04_FreeRTOS_Cpp/HIL_test/hil_test_report.html
+

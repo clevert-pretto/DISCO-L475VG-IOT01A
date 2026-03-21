@@ -71,7 +71,6 @@ namespace FreeRTOS_Cpp
         sStorageEvent_t tEvent;
         sStorageEvent_t hEvent;
         
-
         tEvent.eventID =  EVENT_ID_T_SENSOR_DATA_POINT;
         tEvent.taskID = TASK_ID_SENSOR_READ;
         hEvent.eventID =  EVENT_ID_H_SENSOR_DATA_POINT;
@@ -84,23 +83,27 @@ namespace FreeRTOS_Cpp
             if((uxBits & EVENT_BIT_INIT_SUCCESS) != 0)
             {
                 //Read temperature sensor
-                float fTemp = self->_tempSensor->read();
-                float fHumidity = self->_humiditySensor->read();
-                
-                tEvent.timestamp = self->_rtos->getTickCount();
-                hEvent.timestamp = tEvent.timestamp;
+                self->_currentTemp = self->_tempSensor->read();
+                self->_currentHumidity = self->_humiditySensor->read();
 
-                (void)memcpy(&tEvent.payload[0], &fTemp, sizeof(float));
-                (void)memcpy(&hEvent.payload[0], &fHumidity, sizeof(float));
+                hEvent.timestamp = tEvent.timestamp = self->_rtos->getTickCount();
 
-                appLogger::logEvent(&tEvent);
-                appLogger::logEvent(&hEvent);
+                (void)memcpy(&tEvent.payload[0], &self->_currentTemp, sizeof(float));
+                (void)memcpy(&hEvent.payload[0], &self->_currentHumidity, sizeof(float));
 
-                #if(1)
+                if(self->bEnableTemperatureLogging)
+                {
+                    appLogger::logEvent(&tEvent);
+                }
+                if(self->bEnableHumidityLogging)
+                {
+                    appLogger::logEvent(&hEvent);
+                }
+                #if(0)
                 char pcMessage[128] = {0};
-                self->App_FormatSensorMsg(pcMessage, sizeof(pcMessage), "Temp", fTemp, "C");
+                self->App_FormatSensorMsg(pcMessage, sizeof(pcMessage), "Temp", self->_currentTemp, "C");
                 appLogger::logMessage(pcMessage, sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
-                self->App_FormatSensorMsg(pcMessage, sizeof(pcMessage),"Humidity", fHumidity, "%");
+                self->App_FormatSensorMsg(pcMessage, sizeof(pcMessage),"Humidity", self->_currentHumidity, "%");
                 appLogger::logMessage(pcMessage, sAPPLOGGER_EVENT_CODE_PRINT_MESSAGE);
                 #endif
             }

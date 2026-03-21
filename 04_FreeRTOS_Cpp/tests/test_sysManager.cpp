@@ -26,7 +26,7 @@ protected:
         sensorTask = new appSensorRead(&mockRtos, &mockTempSensor, &mockHumSensor, nullptr, nullptr);
         
         // Instantiate logger to satisfy the appLogger::instance singleton requirement
-        logger = new appLogger(&mockRtos, &mockHw, nullptr, nullptr, nullptr);
+        logger = new appLogger(&mockRtos, &mockHw, sensorTask, nullptr, nullptr, nullptr);
         logger->init(nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
 
         sysMgr = new systemManager(&mockRtos, &mockHw, sensorTask, nullptr, nullptr, nullptr);

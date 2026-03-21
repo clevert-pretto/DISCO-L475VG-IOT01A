@@ -18,6 +18,12 @@ namespace FreeRTOS_Cpp {
     public:
         MOCK_METHOD(void, delay, (uint32_t ms), (override));
         MOCK_METHOD(uint32_t, getTickCount, (), (override));
+        MOCK_METHOD(void, registerTask, (void* handle, const char* name), (override));
+        MOCK_METHOD(uint32_t, getRegisteredTaskCount, (), (override));
+        MOCK_METHOD(bool, getRegisteredTaskInfo, (uint32_t index, const char**
+            outName, void** outHandle), (override));
+        MOCK_METHOD(uint32_t, getStackHighWaterMark, (void* handle), (override));
+        
         MOCK_METHOD(uint32_t, getEventBits, (void* handle), (override));
         MOCK_METHOD(void, setEventBits, (void* handle, uint32_t bits), (override));
         MOCK_METHOD(void, clearEventBits, (void* handle, uint32_t bits), (override));

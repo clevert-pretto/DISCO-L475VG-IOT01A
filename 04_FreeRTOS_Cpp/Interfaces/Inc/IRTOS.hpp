@@ -12,6 +12,12 @@ namespace FreeRTOS_Cpp {
         virtual void delay(uint32_t ms) = 0;
         virtual uint32_t getTickCount(void) = 0;
 
+        //for Task Monitoring
+        virtual void registerTask(void* handle, const char* name) = 0;
+        virtual uint32_t getRegisteredTaskCount() = 0;
+        virtual bool getRegisteredTaskInfo(uint32_t index, const char** outName, void** outHandle) = 0;
+        virtual uint32_t getStackHighWaterMark(void* handle) = 0;
+
         //Events
         virtual uint32_t getEventBits(void* handle) = 0;
         virtual void setEventBits(void* handle, uint32_t bits) = 0;

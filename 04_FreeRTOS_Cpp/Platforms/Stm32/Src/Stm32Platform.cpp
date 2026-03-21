@@ -32,6 +32,27 @@ namespace FreeRTOS_Cpp
         return xTaskGetTickCount();
 
     }
+    
+    void Stm32Rtos::registerTask(void* handle, const char* name) {
+        if (_taskCount < MAX_TASKS && handle != nullptr) {
+            _tasks[_taskCount++] = {handle, name};
+        }
+    }
+
+    uint32_t Stm32Rtos::getRegisteredTaskCount() { return _taskCount; }
+
+    bool Stm32Rtos::getRegisteredTaskInfo(uint32_t index, const char** outName, void** outHandle) {
+        if (index < _taskCount) {
+            *outName = _tasks[index].name;
+            *outHandle = _tasks[index].handle;
+            return true;
+        }
+        return false;
+    }
+
+    uint32_t Stm32Rtos::getStackHighWaterMark(void* handle) {
+        return (uint32_t)uxTaskGetStackHighWaterMark(static_cast<TaskHandle_t>(handle));
+    }
 
     uint32_t Stm32Rtos::getEventBits(void* handle)
     { 
